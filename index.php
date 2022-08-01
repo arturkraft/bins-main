@@ -3,6 +3,11 @@
 if( empty( $bins_main ) ) die("Cannot access this page directly");
 
 
+define('__ROOT__', dirname(dirname(__FILE__)));
+
+
+
+
 //checking code's efficiency
 
 //ini_set('display_errors','On');
@@ -82,87 +87,83 @@ class Bin{
     }
 }
 
-                
-$filename = "generated-bin-dates.csv";
-                
+
+$grey = new Bin();
+$grey->setStartDate($greyStartDate);
+$grey->setEndDate($greyEndDate);
+$grey->setColour($greyColour);
+
+$blue = new Bin();
+$blue->setStartDate($blueStartDate);
+$blue->setEndDate($blueEndDate);
+$blue->setColour($blueColour);
+
+$green = new Bin();
+$green->setStartDate($greenStartDate);
+$green->setEndDate($greenEndDate);
+$green->setColour($greenColour);
+
+$brown = new Bin();
+$brown->setStartDate($brownStartDate);
+$brown->setEndDate($brownEndDate);
+$brown->setColour($brownColour);
 
 
-///THIS CODE TO BE RUN OCCASIONALLY
+function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $festive_deduction){
+    $bin_dates=array(
+        array('grey',$start_date[0]), 
+        array('blue',$start_date[1]), 
+        array('green',$start_date[2]), 
+        array('brown',$start_date[3])
+    );
+    for($i=0;$i<=3;$i++){
+        $incremented_date = $start_date[$i];
+        $end_the_loop = 0;
+        while($end_the_loop == 0){
+            $incremented_date = strtotime($incremented_date.' + '.$weeks_added[$i].' weeks');
+            if($incremented_date <= strtotime($end_date)){
+                $incremented_date = date("Y-m-d", $incremented_date);
+                if(substr($incremented_date,-5) == "12-25" || substr($incremented_date,-5) == "01-01"){
+                    $festive_date = strtotime($incremented_date.' - '.$festive_deduction.' days');
+                    $festive_date = date("Y-m-d", $festive_date);
+                    array_push($bin_dates[$i], $festive_date);
+                }else{
+                    array_push($bin_dates[$i], $incremented_date);
+                }
+            }else{
+                $end_the_loop = 1;
+            }
+        }
+    }
+    
+    return $bin_dates; 
 
-//require_once(__ROOT__.'../bins-main/generate-webapp-dates.php');
-
-if ($generate_dates == 1){
-    require_once(__ROOT__.'/generate-webapp-dates.php');
 }
 
 
-//THE END OF THE OCCASIONAL CODE
+
+                
+$filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
+                
 
 
+///THIS CODE TO GENERATE CSV DATES, CHECK CONFIG.PHP
+
+
+if ($generate_dates == 1){
+    require_once(__ROOT__.'/bins-main/generate-webapp-dates.php');
+}
+
+
+//THE END OF CSV GENERATOR
+
+$filenameICS = $location_name.".ics"; 
 
 //THE SECOND OCCASIONAL CODE FOR GENERATING ICS
 
-// $filenameICS = "weirs_wynd_bins.ics"; 
-
-// $grey->setEndDate('2022-12-15');
-// $blue->setEndDate('2022-12-15');
-// $green->setEndDate('2022-12-15');
-// $brown->setEndDate('2022-12-15');
-
-// $bin_dates=generateDates('2132','3442',[$grey->getStartDate(),$blue->getStartDate(),$green->getStartDate(),$brown->getStartDate()],$grey->getEndDate(),2); 
-
-// $fileICS = fopen($filenameICS,"w");
-
-// $start_ics = "BEGIN:VCALENDAR
-// VERSION:2.0
-// METHOD:PUBLISH
-// PRODID:-//weirswynd/arturkraft//EN
-// CALSCALE:GREGORIAN";
-
-// $end_ics='
-// BEGIN:VEVENT
-// DTEND;VALUE=DATE:20221217
-// DTSTART;VALUE=DATE:20221212
-// LOCATION:Weirs Wynd
-// DESCRIPTION:DOWNLOAD A NEW BIN CALENDAR FROM www.artur.kr/weirswynd
-// URL;VALUE=URI:https://artur.kr/weirswynd/
-// SUMMARY:UPDATE BIN CALENDAR
-// UID:'.md5('new').'
-// SEQUENCE:0
-// DTSTAMP:20220127T162901Z
-// END:VEVENT
-// END:VCALENDAR';
-
-// $write_ics = $start_ics;
-
-// foreach ($bin_dates as $line) {
-
-//     for ($n=1;$n<=count($line);$n++){
-//         $next_day_date = date('Y-m-d', strtotime($line[$n] . ' +1 day'));
-//         $write_ics .= 
-//         '
-// BEGIN:VEVENT
-// DTEND;VALUE=DATE:'.str_replace("-", "", $next_day_date).
-// '
-// DTSTART;VALUE=DATE:'.str_replace("-", "", $line[$n]).'
-// LOCATION:Weirs Wynd
-// DESCRIPTION:'.strtoupper($line[0]).' BIN COLLECTION
-// SUMMARY:'.strtoupper($line[0]).' BIN
-// UID:'.md5($line[$n].$line[0]).$line[$n].'
-// SEQUENCE:0
-// DTSTAMP:20220127T162901Z
-// END:VEVENT';
-
-//     }
-
-// }
-
-// $write_ics .= $end_ics;
-
-// fwrite($fileICS, $write_ics);
-
-// fclose($fileICS);
-
+if ($generate_ics_dates == 1){
+    require_once(__ROOT__.'/bins-main/generate-ics-dates.php');
+}
 
 //END OF THE SECOND OCCASIONAL CODE FOR GENERATING ICS
 
@@ -208,19 +209,46 @@ for($x=0; $x<=3; $x++){
 <html lang="en">
 
 <head>
-    <title>Bins collection day - <?php echo $locationName; ?></title>
+    <title>Bins collection day - <?php echo $location_name; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=b">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.9__iPad_Air_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.5__iPad_Air_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.2__iPad_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_14_Pro_Max__iPhone_14_Max__iPhone_13_Pro_Max__iPhone_12_Pro_Max_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_14_Pro__iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_11_Pro_Max__iPhone_XS_Max_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/iPhone_11__iPhone_XR_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/4__iPhone_SE__iPod_touch_5th_generation_and_later_landscape.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/12.9__iPad_Pro_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/11__iPad_Pro__10.5__iPad_Pro_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.9__iPad_Air_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.5__iPad_Air_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.2__iPad_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_14_Pro_Max__iPhone_14_Max__iPhone_13_Pro_Max__iPhone_12_Pro_Max_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_14_Pro__iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_11_Pro_Max__iPhone_XS_Max_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/iPhone_11__iPhone_XR_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_portrait.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/4__iPhone_SE__iPod_touch_5th_generation_and_later_portrait.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=b">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=b">
     <link rel="manifest" href="/site.webmanifest?v=b">
     <link rel="mask-icon" href="/safari-pinned-tab.svg?v=b" color="#5bbad5">
     <link rel="shortcut icon" href="/favicon.ico?v=b">
-    <meta name="apple-mobile-web-app-title" content="<?php echo $locationName; ?> Bins">
-    <meta name="application-name" content="<?php echo $locationName; ?> Bins">
+    <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
+    <meta name="application-name" content="<?php echo $location_name; ?> Bins">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,130 +256,7 @@ for($x=0; $x<=3; $x++){
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&family=Raleway:wght@200&family=Zen+Loop&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
-<style>
-    
-:root {
-  --background-primary: #fff;
-  --color-primary: #333;
-}
 
-html[data-theme='dark'] {
-  --background-primary: #6f6f6f;
-  --color-primary: #333;
-}
-
-html {
-  transition: color 300ms, background-color 300ms;
-  background: var(--background-primary);
-  color: var(--color-primary);
-}
-
-h1, h2, h3, h4, p {
-  color: var(--color-primary);
-
-}
-    h1{
-    font-family: 'Open Sans Condensed', sans-serif;
-    }
-    h2{
-    font-family: 'Raleway', sans-serif;
-    }
-    .bolder{
-        font-weight:700;
-    }
-    .thinner{
-        font-weight: 300;
-    }
-    html {
-    transition: color 300ms, background-color 300ms;
-}
-
-html[data-theme='dark'] {
-    background: #000;
-    transition: color 300ms, background-color 300ms;
-    filter: invert(1) hue-rotate(180deg);
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-html[data-theme='dark'] img {
-  filter: invert(1) hue-rotate(180deg)
-}
-    
-html, body {
-    min-height: 100%;
-    }
-body{
-    background-size: cover;
-    }
-    .fc-daygrid-day-number{
-        text-decoration: none !important;
-    }
-.c-event-main{
-    height: 50px;
-}
-    
-.fc .fc-daygrid-day.fc-day-today {
-    background-color: rgb(253 156 20 / 16%);
-    background-color: var(--fc-today-bg-color,rgb(253 156 20 / 16%));
-    }
-    .figure-caption{
-    font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1.2em;
-    font-weight: 700;
-    }
-.grey{
-color:<?php echo $grey->getColour(); ?>;
-}
-.blue{
-color:<?php echo $blue->getColour(); ?>;
-}
-.green{
-color:<?php echo $green->getColour(); ?>;
-}
-.brown{
-color:<?php echo $brown->getColour(); ?>;
-}
-.whitet{
-color: #fff;
-}
-    
-ul.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  padding: 50px;
-  font-size: 17px;
-    z-index: 9999 !important;
-}
-    
-.fc-day-today a{
-        color: #b7b322 !important;
-        font-weight: 600;
-    }
-.fc .fc-toolbar-title {
-    font-size: 1.4em !important;
-    margin: 0;
-}
-    
-    @media only screen and (max-width: 640px)  {
-        .fc .fc-toolbar-title {
-        font-size: 1em !important;
-        margin: 0;
-        }
-        
-        .bin{
-            width: 80px;
-        }
-    }
-    
- #tabs{
-        padding: 0 !important;
-    }
-
-
-</style>
     
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -362,15 +267,32 @@ ul.sticky {
   } );
   </script>
     
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CXT7N5997D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<?php
 
-  gtag('config', 'G-CXT7N5997D');
-</script>
+echo $gtag;
+
+?>
+<style>
+    .grey {
+        color: <?php echo $grey->getColour();
+        ?>;
+    }
+
+    .blue {
+        color: <?php echo $blue->getColour();
+        ?>;
+    }
+
+    .green {
+        color: <?php echo $green->getColour();
+        ?>;
+    }
+
+    .brown {
+        color: <?php echo $brown->getColour();
+        ?>;
+    }
+</style>
 </head>
 
 <body>
@@ -403,7 +325,7 @@ ul.sticky {
         
         
 <div class="container-lg pb-5">
-        <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $locationName; ?></span></h1>
+        <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
   <ul class="sticky">
@@ -470,7 +392,7 @@ ul.sticky {
         
         ${$current_bin[$x].'_image'}='
         <figure class="figure float-end">
-          <img src="img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+          <img src="../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
           <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
         </figure>';
         
@@ -578,13 +500,16 @@ $echoed = 0;
  Dark mode</button>
     <button id="light" class="btn btn-dark btn-sm" onclick="toggleTheme('light');"><i class="fas fa-lightbulb"></i> Light mode</button>
 
-    <a href="weirs_wynd_bins.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
+    <a href="<?php echo $location_name ?>.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
 </div>
 
 </div>
     
     
-    
+    <?php 
+if ($show_octopus == 1){
+
+    ?>
                 <!-- octopus -->
     
 <div id="octopus">
@@ -599,14 +524,16 @@ $echoed = 0;
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="octopus.png" alt="" width="720">
+          <img class="rounded-lg-3" src="../bins-main/img/octopus.png" alt="" width="720">
       </div>
     </div>
   </div>
 </div>
     
 <!-- octopus -->
-
+<?php
+}
+?>
 
     </div>
     
@@ -753,7 +680,7 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
     </script>
         <?php
             $mt = microtime();
-        file_put_contents("get-log.txt", $_SERVER["REMOTE_ADDR"] . "; ".$_SERVER["REMOTE_HOST"]." time: " . date("Y-m-d h:i:sa") . "; memory: ". (memory_get_usage() - $mem) / (1024 * 1024). "; seconds: ". microtime(TRUE) - $time  .";\n", FILE_APPEND | LOCK_EX);
+        file_put_contents("get-log.txt", "Time: " . date("Y-m-d h:i:sa") . "; memory: ". (memory_get_usage() - $mem) / (1024 * 1024). "; seconds: ". microtime(TRUE) - $time  ." by ".$_SERVER["REMOTE_ADDR"] . "; ".$_SERVER["REMOTE_HOST"].";\n", FILE_APPEND | LOCK_EX);
         echo '<!--' . $mt . '<br />';
         print_r(array(
             'memory' => (memory_get_usage() - $mem) / (1024 * 1024),
@@ -767,3 +694,4 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
 </html>
     
+

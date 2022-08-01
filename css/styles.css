@@ -1,0 +1,162 @@
+    :root {
+        --background-primary: #fff;
+        --color-primary: #333;
+    }
+
+    html[data-theme='dark'] {
+        --background-primary: #6f6f6f;
+        --color-primary: #333;
+    }
+
+    html {
+        transition: color 300ms, background-color 300ms;
+        background: var(--background-primary);
+        color: var(--color-primary);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        color: var(--color-primary);
+
+    }
+
+    h1 {
+        font-family: 'Open Sans Condensed', sans-serif;
+    }
+
+    h2 {
+        font-family: 'Raleway', sans-serif;
+    }
+
+    .bolder {
+        font-weight: 700;
+    }
+
+    .thinner {
+        font-weight: 300;
+    }
+
+    html {
+        transition: color 300ms, background-color 300ms;
+    }
+
+    html[data-theme='dark'] {
+        background: #000;
+        transition: color 300ms, background-color 300ms;
+        filter: invert(1) hue-rotate(180deg);
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    html[data-theme='dark'] img {
+        filter: invert(1) hue-rotate(180deg)
+    }
+
+    html,
+    body {
+        min-height: 100%;
+    }
+
+    body {
+        background-size: cover;
+    }
+
+    .fc-daygrid-day-number {
+        text-decoration: none !important;
+    }
+
+    .c-event-main {
+        height: 50px;
+    }
+
+    .fc .fc-daygrid-day.fc-day-today {
+        background-color: rgb(253 156 20 / 16%);
+        background-color: var(--fc-today-bg-color, rgb(253 156 20 / 16%));
+    }
+
+    .figure-caption {
+        font-family: 'Open Sans Condensed', sans-serif;
+        font-size: 1.2em;
+        font-weight: 700;
+    }
+
+
+
+    .whitet {
+        color: #fff;
+    }
+
+    ul.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        padding: 50px;
+        font-size: 17px;
+        z-index: 9999 !important;
+    }
+
+    .fc-day-today a {
+        color: #b7b322 !important;
+        font-weight: 600;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.4em !important;
+        margin: 0;
+    }
+
+    @media only screen and (max-width: 640px) {
+        .fc .fc-toolbar-title {
+            font-size: 1em !important;
+            margin: 0;
+        }
+
+        .bin {
+            width: 80px;
+        }
+    }
+
+    #tabs {
+        padding: 0 !important;
+    }
+
+
+
+.c-event-main{
+    height: 50px;
+}
+.grayb{
+background-color:#737373;
+color: #fff;
+}
+.blueb{
+background-color:#007DBB;
+color: #fff;
+}
+.greenb{
+background-color:#038831;
+color: #fff;
+}
+.brownb{
+background-color:#966757;
+color: #fff;
+}
+.whitet{
+color: #fff;
+}
+.gray{
+color: #444;
+}
+.blue{
+color: blue;
+}
+.green{
+color: green;
+}
+.brown{
+color: brown;
+}
