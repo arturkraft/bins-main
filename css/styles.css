@@ -1,60 +1,4 @@
-    :root {
-        --background-primary: #fff;
-        --color-primary: #333;
-    }
 
-    html[data-theme='dark'] {
-        --background-primary: #6f6f6f;
-        --color-primary: #333;
-    }
-
-    html {
-        transition: color 300ms, background-color 300ms;
-        background: var(--background-primary);
-        color: var(--color-primary);
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    p {
-        color: var(--color-primary);
-
-    }
-
-    h1 {
-        font-family: 'Open Sans Condensed', sans-serif;
-    }
-
-    h2 {
-        font-family: 'Raleway', sans-serif;
-    }
-
-    .bolder {
-        font-weight: 700;
-    }
-
-    .thinner {
-        font-weight: 300;
-    }
-
-    html {
-        transition: color 300ms, background-color 300ms;
-    }
-
-    html[data-theme='dark'] {
-        background: #000;
-        transition: color 300ms, background-color 300ms;
-        filter: invert(1) hue-rotate(180deg);
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    html[data-theme='dark'] img {
-        filter: invert(1) hue-rotate(180deg)
-    }
 
     html,
     body {
@@ -85,6 +29,21 @@
     }
 
 
+    h1 {
+        font-family: 'Open Sans Condensed', sans-serif;
+    }
+
+    h2 {
+        font-family: 'Raleway', sans-serif;
+    }
+
+    .bolder {
+        font-weight: 700;
+    }
+
+    .thinner {
+        font-weight: 300;
+    }
 
     .whitet {
         color: #fff;

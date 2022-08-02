@@ -157,7 +157,7 @@ if ($generate_dates == 1){
 
 //THE END OF CSV GENERATOR
 
-$filenameICS = $location_name.".ics"; 
+$filenameICS = $folder_name.".ics"; 
 
 //THE SECOND OCCASIONAL CODE FOR GENERATING ICS
 
@@ -248,7 +248,7 @@ for($x=0; $x<=3; $x++){
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css?v=2" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -273,6 +273,76 @@ echo $gtag;
 
 ?>
 <style>
+        :root {
+        --background-primary: #fff;
+        --color-primary: #333;
+    }
+
+    html[data-theme='dark'] {
+        --background-primary: #6f6f6f;
+        --color-primary: #333;
+    }
+
+    @keyframes change-color {
+  25% {
+    opacity: 0.25;
+  }
+    33% {
+    opacity: 0.33;
+  }
+  50% {
+    opacity: 0.5;
+  }
+    66% {
+    opacity: 0.66;
+  }
+  75% {
+    opacity: 0.75;
+  }
+    86% {
+    opacity: 0.86;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
+    html {
+                background: var(--background-primary);
+        color: var(--color-primary);
+        transition: color 300ms, background-color 300ms;
+          animation-name: change-color;
+  animation-duration: 1s;
+
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        color: var(--color-primary);
+
+    }
+
+    html {
+        transition: color 300ms, background-color 300ms !important;
+    }
+
+    html[data-theme='dark'] {
+        background: #000;
+        transition: color 300ms, background-color 300ms !important;
+        filter: invert(1) hue-rotate(180deg);
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    html[data-theme='dark'] img {
+        filter: invert(1) hue-rotate(180deg)
+    }
     .grey {
         color: <?php echo $grey->getColour();
         ?>;
@@ -500,7 +570,7 @@ $echoed = 0;
  Dark mode</button>
     <button id="light" class="btn btn-dark btn-sm" onclick="toggleTheme('light');"><i class="fas fa-lightbulb"></i> Light mode</button>
 
-    <a href="<?php echo $location_name ?>.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
+    <a href="<?php echo $folder_name ?>.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
 </div>
 
 </div>
