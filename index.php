@@ -108,7 +108,7 @@ $brown->setStartDate($brownStartDate);
 $brown->setEndDate($brownEndDate);
 $brown->setColour($brownColour);
 
-
+//function for generating dates - used for CSV file and ICS calendar file
 function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $festive_deduction){
     $bin_dates=array(
         array('grey',$start_date[0]), 
@@ -168,29 +168,38 @@ if ($generate_ics_dates == 1){
 //END OF THE SECOND OCCASIONAL CODE FOR GENERATING ICS
 
 
+//open generated dates in csv file
+
 $file = fopen($filename,"r");
 $bin_dates=array_map('str_getcsv', file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 fclose($file);
 
 
 
-
+//assign bin dates to an appropriate object
 
 for($i=0;$i<=3;$i++){
     ${$current_bin[$i]}->addDates($bin_dates[$i]);
 }
 
 
-
+//set today and tomorrow variables
 
 $today = time();
 $today = date("Y-m-d", $today);
 $tomorrow = date("Y-m-d",strtotime("+1 days"));
 
-for($x=0; $x<=3; $x++){
-    for($i=1;$i<count(${$current_bin[$x]}->getDates())-1;$i++){
-        $current_date_to_compare=strtotime(${$current_bin[$x]}->getDates()[$i]);
-        if($current_date_to_compare>=strtotime($today)){
+
+//set next date and next date plus - two closest future dates
+
+for($x = 0; $x <= 3; $x++)
+{
+    for( $i = 1; $i < count(${$current_bin[$x]}->getDates())-1; $i++ )
+    {
+        $current_date_to_compare = strtotime(${$current_bin[$x]}->getDates()[$i]);
+
+        if($current_date_to_compare >= strtotime($today))
+        {
             $next_one = ${$current_bin[$x]}->getDates()[$i];
             $next_one_plus = ${$current_bin[$x]}->getDates()[$i+1];
             ${$current_bin[$x]}->setNextDate($next_one);
@@ -427,7 +436,7 @@ echo $gtag;
 
     $smallest_one = strtotime('2030-12-12');
     
-//sorting
+//sorting function
       
         function compareByTimeStamp($time1, $time2)
         {
@@ -439,7 +448,8 @@ echo $gtag;
                 return 0;
         }
 
-      
+//assigning two future dates from each bin to a numbered date
+
         for($x=0; $x<=3; $x++){
             $y=$x+1;
             ${'date'.$y} = ${$current_bin[$x]}->getNextDate();
@@ -459,7 +469,7 @@ echo $gtag;
       
       
 
-
+//preparing bin displays
       
    for($x=0; $x<=3; $x++){
         
@@ -473,10 +483,48 @@ echo $gtag;
       
 
 
+//NEW WAY
+
+echo '<div class="row"><h2>Your next collection:</h2></div>';
+echo '<div class="row pl0">'; 
+echo '<div class="col">
+      <h4>' . date("l", strtotime($arr[0])) . ', <br/>
+      <span id="thedate0">' . $arr[0] . '</span>
+      </h4></div>';
+
+for($i = 0; $i <= 3; $i++) 
+{
+    $current_bin_date=${$current_bin[$i]}->getNextDate();
+    if($arr[0] == $current_bin_date)
+    {
+        echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+    }
+}
+
+echo '</div>'
+echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
+
+echo '<div class="col">
+      <h4>' . date("l", strtotime($arr[1])) . ', <br/>
+      <span id="thedate1">' . $arr[1] . '</span>
+      </h4></div>';
+
+for($i = 0; $i <= 3; $i++) 
+{
+    $current_bin_date=${$current_bin[$i]}->getNextDate();
+    $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
+    if($arr[1] == $current_bin_date)
+    {
+        echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+    }
+}
+
+
+//NEW WAY END
       
 
 
-
+//OLD WAY
           
 $added_bin_round1 = 0;
 $added_bin_round2 = 0;
@@ -555,6 +603,8 @@ $echoed = 0;
 
 
             }
+
+//OLD WAY END
 
         
       
