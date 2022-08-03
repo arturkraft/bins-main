@@ -486,7 +486,7 @@ echo $gtag;
 
 
 //NEW WAY
-
+$jump_one = 0;
 echo '<div class="row"><h2>Your next collection:</h2></div>';
 echo '<div class="row pl0">'; 
 echo '<div class="col">
@@ -506,29 +506,38 @@ for($i = 0; $i <= 3; $i++)
 echo '</div>';
 echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
-$next_week = $arr[1];
 
-if ($next_week == $arr[0])
+for ($g = 1; $g <= 3; $g++)
 {
-    $next_week = $arr[2];
-}
+    $next_week = $arr[$g];
 
-echo '<div class="row pl1">'; 
-echo '<div class="col">
-      <h4>' . date("l", strtotime($next_week)) . ', <br/>
-      <span id="thedate1">' . $next_week . '</span>
-      </h4></div>';
-
-for($i = 0; $i <= 3; $i++) 
-{
-    $current_bin_date=${$current_bin[$i]}->getNextDate();
-    $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
-    if($next_week == $current_bin_date)
+    if ($next_week == $arr[$g-1] && $jump_one == 0)
     {
-        echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        $next_week = $arr[$g+1];
+        array_splice($arr, $g, 1);
     }
+
+
+    echo '<div class="row pl1">'; 
+    echo '<div class="col">
+        <h4>' . date("l", strtotime($next_week)) . ', <br/>
+        <span id="thedate1">' . $next_week . '</span>
+        </h4></div>';
+    for($i = 0; $i <= 3; $i++) 
+    {
+        $current_bin_date=${$current_bin[$i]}->getNextDate();
+        $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
+        if($next_week == $current_bin_date)
+        {
+            echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        }elseif($next_week == $current_bin_date_plus)
+        {
+            echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        }
+    }
+    echo '</div><hr />';
 }
-echo '</div><hr />';
+
 
 //NEW WAY END
       
