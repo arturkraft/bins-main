@@ -1,6 +1,6 @@
 <?php
 
-if( empty( $bins_main ) ) die("Cannot access this page directly");
+if( empty( $bins_main ) ) die("Cannot access this page directly!");
 
 
 define('__ROOT__', dirname(dirname(__FILE__)));
