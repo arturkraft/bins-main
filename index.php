@@ -2,9 +2,9 @@
 
 if( empty( $bins_main ) ) die("Cannot access this page directly!");
 
-
+echo 'dupa';
+//define('__ROOT__', $up2);
 define('__ROOT__', dirname(dirname(__FILE__)));
-
 
 
 
@@ -143,7 +143,9 @@ function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $fe
 
 
                 
-$filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
+$filename = $up2.'/'.$folder_name.'/generated-bin-dates.csv';
+
+echo $filename;
                 
 
 
@@ -475,7 +477,7 @@ echo $gtag;
         
         ${$current_bin[$x].'_image'}='
         <figure class="figure float-end">
-          <img src="../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+          <img src="../../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
           <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
         </figure>';
         
@@ -501,31 +503,39 @@ for($i = 0; $i <= 3; $i++)
     }
 }
 
-echo '</div>'
+echo '</div>';
 echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
+$next_week = $arr[1];
+
+if ($next_week == $arr[0])
+{
+    $next_week = $arr[2];
+}
+
+echo '<div class="row pl1">'; 
 echo '<div class="col">
-      <h4>' . date("l", strtotime($arr[1])) . ', <br/>
-      <span id="thedate1">' . $arr[1] . '</span>
+      <h4>' . date("l", strtotime($next_week)) . ', <br/>
+      <span id="thedate1">' . $next_week . '</span>
       </h4></div>';
 
 for($i = 0; $i <= 3; $i++) 
 {
     $current_bin_date=${$current_bin[$i]}->getNextDate();
     $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
-    if($arr[1] == $current_bin_date)
+    if($next_week == $current_bin_date)
     {
         echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
     }
 }
-
+echo '</div><hr />';
 
 //NEW WAY END
       
 
 
 //OLD WAY
-          
+          /*
 $added_bin_round1 = 0;
 $added_bin_round2 = 0;
 $main_bin_round1 = array();
@@ -603,7 +613,7 @@ $echoed = 0;
 
 
             }
-
+*/
 //OLD WAY END
 
         
@@ -647,7 +657,7 @@ if ($show_octopus == 1){
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="../bins-main/img/octopus.png" alt="" width="720">
+          <img class="rounded-lg-3" src="../../bins-main/img/octopus.png" alt="" width="720">
       </div>
     </div>
   </div>
