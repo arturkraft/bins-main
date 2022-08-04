@@ -143,7 +143,7 @@ function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $fe
 
 
                 
-$filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
+$filename = $up2.'/'.$folder_name.'/generated-bin-dates.csv';
 
 
                 
@@ -219,14 +219,16 @@ for($x = 0; $x <= 3; $x++)
 
 <?php 
 
-require_once(__ROOT__.'/bins-main/html-head.php');
+require_once($up2.'/bins-main/experiment-2/html-head.php');
 
 ?>
 
 <body>
-     
+             <div class="ios-peek">
+        <h1>hi there</h1>
+    </div>
         
-<div class="container-lg pb-5">
+<div id ="content" class="container-lg pb-5">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
@@ -295,7 +297,7 @@ require_once(__ROOT__.'/bins-main/html-head.php');
         
         ${$current_bin[$x].'_image'}='
         <figure class="figure float-end">
-          <img src="../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+          <img src="../../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
           <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
         </figure>';
         
@@ -401,7 +403,7 @@ if ($show_octopus == 1){
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="../bins-main/img/octopus.png" alt="" width="720">
+          <img class="rounded-lg-3" src="../../bins-main/img/octopus.png" alt="" width="720">
       </div>
     </div>
   </div>
@@ -414,6 +416,8 @@ if ($show_octopus == 1){
 
     </div>
     
+
+
     
 
 
