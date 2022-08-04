@@ -145,7 +145,7 @@ function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $fe
                 
 $filename = $up2.'/'.$folder_name.'/generated-bin-dates.csv';
 
-echo $filename;
+
                 
 
 
@@ -321,7 +321,7 @@ for($i = 0; $i <= 3; $i++)
     }
 }
 
-echo '</div>';
+echo '</div><hr />';
 echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
 
@@ -339,7 +339,7 @@ for ($g = 1; $g <= 3; $g++)
     echo '<div class="row pl1">'; 
     echo '<div class="col">
         <h4>' . date("l", strtotime($next_week)) . ', <br/>
-        <span id="thedate1">' . $next_week . '</span>
+        <span id="thedate'.$g.'">' . $next_week . '</span>
         </h4></div>';
     for($i = 0; $i <= 3; $i++) 
     {
