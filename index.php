@@ -1,10 +1,10 @@
 <?php
 
-if( empty( $bins_main ) ) die("Cannot access this page directly");
+if( empty( $bins_main ) ) die("Cannot access this page directly!");
 
 
+//define('__ROOT__', $up2);
 define('__ROOT__', dirname(dirname(__FILE__)));
-
 
 
 
@@ -108,7 +108,7 @@ $brown->setStartDate($brownStartDate);
 $brown->setEndDate($brownEndDate);
 $brown->setColour($brownColour);
 
-
+//function for generating dates - used for CSV file and ICS calendar file
 function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $festive_deduction){
     $bin_dates=array(
         array('grey',$start_date[0]), 
@@ -144,6 +144,8 @@ function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $fe
 
                 
 $filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
+
+
                 
 
 
@@ -168,29 +170,38 @@ if ($generate_ics_dates == 1){
 //END OF THE SECOND OCCASIONAL CODE FOR GENERATING ICS
 
 
+//open generated dates in csv file
+
 $file = fopen($filename,"r");
 $bin_dates=array_map('str_getcsv', file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
 fclose($file);
 
 
 
-
+//assign bin dates to an appropriate object
 
 for($i=0;$i<=3;$i++){
     ${$current_bin[$i]}->addDates($bin_dates[$i]);
 }
 
 
-
+//set today and tomorrow variables
 
 $today = time();
 $today = date("Y-m-d", $today);
 $tomorrow = date("Y-m-d",strtotime("+1 days"));
 
-for($x=0; $x<=3; $x++){
-    for($i=1;$i<count(${$current_bin[$x]}->getDates())-1;$i++){
-        $current_date_to_compare=strtotime(${$current_bin[$x]}->getDates()[$i]);
-        if($current_date_to_compare>=strtotime($today)){
+
+//set next date and next date plus - two closest future dates
+
+for($x = 0; $x <= 3; $x++)
+{
+    for( $i = 1; $i < count(${$current_bin[$x]}->getDates())-1; $i++ )
+    {
+        $current_date_to_compare = strtotime(${$current_bin[$x]}->getDates()[$i]);
+
+        if($current_date_to_compare >= strtotime($today))
+        {
             $next_one = ${$current_bin[$x]}->getDates()[$i];
             $next_one_plus = ${$current_bin[$x]}->getDates()[$i+1];
             ${$current_bin[$x]}->setNextDate($next_one);
@@ -205,197 +216,15 @@ for($x=0; $x<=3; $x++){
 
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>Bins collection day - <?php echo $location_name; ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php 
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
-<link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.9__iPad_Air_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.5__iPad_Air_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.2__iPad_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_14_Pro_Max__iPhone_14_Max__iPhone_13_Pro_Max__iPhone_12_Pro_Max_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_14_Pro__iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_11_Pro_Max__iPhone_XS_Max_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/iPhone_11__iPhone_XR_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/4__iPhone_SE__iPod_touch_5th_generation_and_later_landscape.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/12.9__iPad_Pro_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/11__iPad_Pro__10.5__iPad_Pro_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.9__iPad_Air_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.5__iPad_Air_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/10.2__iPad_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_14_Pro_Max__iPhone_14_Max__iPhone_13_Pro_Max__iPhone_12_Pro_Max_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_14_Pro__iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_11_Pro_Max__iPhone_XS_Max_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/iPhone_11__iPhone_XR_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_portrait.png">
-<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/4__iPhone_SE__iPod_touch_5th_generation_and_later_portrait.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=b">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=b">
-    <link rel="manifest" href="/site.webmanifest?v=b">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=b" color="#5bbad5">
-    <link rel="shortcut icon" href="/favicon.ico?v=b">
-    <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
-    <meta name="application-name" content="<?php echo $location_name; ?> Bins">
-    <meta name="msapplication-TileColor" content="#2b5797">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css?v=2" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&family=Raleway:wght@200&family=Zen+Loop&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
-
-    
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( "#tabs" ).tabs();
-  } );
-  </script>
-    
-<?php
-
-echo $gtag;
+require_once(__ROOT__.'/bins-main/html-head.php');
 
 ?>
-<style>
-        :root {
-        --background-primary: #fff;
-        --color-primary: #333;
-    }
-
-    html[data-theme='dark'] {
-        --background-primary: #6f6f6f;
-        --color-primary: #333;
-    }
-
-    @keyframes change-color {
-  25% {
-    opacity: 0.25;
-  }
-    33% {
-    opacity: 0.33;
-  }
-  50% {
-    opacity: 0.5;
-  }
-    66% {
-    opacity: 0.66;
-  }
-  75% {
-    opacity: 0.75;
-  }
-    86% {
-    opacity: 0.86;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-
-
-    html {
-                background: var(--background-primary);
-        color: var(--color-primary);
-        transition: color 300ms, background-color 300ms;
-          animation-name: change-color;
-  animation-duration: 1s;
-
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    p {
-        color: var(--color-primary);
-
-    }
-
-    html {
-        transition: color 300ms, background-color 300ms !important;
-    }
-
-    html[data-theme='dark'] {
-        background: #000;
-        transition: color 300ms, background-color 300ms !important;
-        filter: invert(1) hue-rotate(180deg);
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    html[data-theme='dark'] img {
-        filter: invert(1) hue-rotate(180deg)
-    }
-    .grey {
-        color: <?php echo $grey->getColour();
-        ?>;
-    }
-
-    .blue {
-        color: <?php echo $blue->getColour();
-        ?>;
-    }
-
-    .green {
-        color: <?php echo $green->getColour();
-        ?>;
-    }
-
-    .brown {
-        color: <?php echo $brown->getColour();
-        ?>;
-    }
-</style>
-</head>
 
 <body>
-<?php
-    
-    
- 
-
-    
-    
-
-    
-
-
-
-        function check_other_bins($compared, $tocompare)
-        {
-            $result = False;
-
-            if (in_array($compared, $tocompare)) {
-                $result = True;
-            }
-
-            return $result;
-        }
-
-
-        
-?>
-        
+     
         
 <div class="container-lg pb-5">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
@@ -425,9 +254,9 @@ echo $gtag;
 
 
 
-    $smallest_one = strtotime('2030-12-12');
+    //$smallest_one = strtotime('2030-12-12');
     
-//sorting
+//sorting function
       
         function compareByTimeStamp($time1, $time2)
         {
@@ -439,14 +268,15 @@ echo $gtag;
                 return 0;
         }
 
-      
+//assigning two future dates from each bin to a numbered date
+
         for($x=0; $x<=3; $x++){
             $y=$x+1;
             ${'date'.$y} = ${$current_bin[$x]}->getNextDate();
+            $z=$x+5;
+            ${'date'.$z} = ${$current_bin[$x]}->getNextDatePlus();
         }
-        for($x=5; $x<=8; $x++){
-            ${'date'.$x} = ${$current_bin[$x-5]}->getNextDatePlus();
-        }
+
 
 
       
@@ -459,7 +289,7 @@ echo $gtag;
       
       
 
-
+//preparing bin displays
       
    for($x=0; $x<=3; $x++){
         
@@ -473,88 +303,62 @@ echo $gtag;
       
 
 
-      
+//NEW WAY
+$jump_one = 0;
+echo '<div class="row"><h2>Your next collection:</h2></div>';
+echo '<div class="row pl0">'; 
+echo '<div class="col">
+      <h4>' . date("l", strtotime($arr[0])) . ', <br/>
+      <span id="thedate0">' . $arr[0] . '</span>
+      </h4></div>';
+
+for($i = 0; $i <= 3; $i++) 
+{
+    $current_bin_date=${$current_bin[$i]}->getNextDate();
+    if($arr[0] == $current_bin_date)
+    {
+        echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+    }
+}
+
+echo '</div><hr />';
+echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
 
+for ($g = 1; $g <= 3; $g++)
+{
+    $next_week = $arr[$g];
 
-          
-$added_bin_round1 = 0;
-$added_bin_round2 = 0;
-$main_bin_round1 = array();
-$main_bin_round2 = array();
-$echoed = 0;
-
-            
-            for($n_date = 0; $n_date <= 7; $n_date++){
-                
-                if($echoed!=4){
-                    
-                        if ($n_date==0 && $already_posted != 1){
-                            echo '<div class="row"><h2>Your next collection:</h2></div>';
-                            $already_posted = 1;
-                        }elseif($n_date==1 && $already_posted2 != 1){
-                            echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
-                            $already_posted2 = 1;
-                        }
-                    
-                        for($i = 3; $i >= 0; $i--) {
-                        $current_bin_date=${$current_bin[$i]}->getNextDate();
-                        $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
-
-                            ///check what bin to post and post it
-                            if($current_bin_date==$arr[$n_date] && !in_array($current_bin[$i],$main_bin_round1) && $current_bin[$i] != $added_bin_round1  && $current_bin[$i] != $added_bin_round2){
-                                echo '<div class="row a pl' . $i . '">'; 
-                                echo '<div class="col">
-                                        <h4>' . date("l", strtotime($current_bin_date)) . ', <br/><span id="thedate'.$echoed.'">' . $current_bin_date . '</span></h4>
-                                        </div>';
-                                                        ///check if any other bin, too
-                                for($s = 0; $s <= 3; $s++){
-                                    if ($s != $i){
-                                        $compare_bin_dates=${$current_bin[$s]}->getDates();
-                                        if(check_other_bins($current_bin_date,$compare_bin_dates)){
-                                            echo '<div class="col col-md-auto">'.${$current_bin[$s].'_image'}.'</div>';
-                                            array_push($main_bin_round1, $current_bin[$i]);
-                                            $added_bin_round1 = $current_bin[$s];
-                                        }
-                                    }
-
-                                }
-                                echo '<div class="col col-lg-2">'.${$current_bin[$i].'_image'}.'</div>';
-                                echo '</div><hr />';
-                                $echoed++;
-                            }elseif($current_bin_date_plus==$arr[$n_date] && !in_array($current_bin[$i],$main_bin_round2) && $current_bin[$i] != $added_bin_round1 && $current_bin[$i] != $added_bin_round2){
-                                echo '<div class="row b pl' . $i . '">'; 
-                                echo '<div class="col">
-                                        <h4>' . date("l", strtotime($current_bin_date_plus)) . ', <br/><span id="thedate'.$echoed.'">' . $current_bin_date_plus . '</span></h4>
-                                        </div>';
-                                                        ///check if any other bin, too
-                                for($s = 0; $s <= 3; $s++){
-                                    if ($s != $i){
-                                        $compare_bin_dates=${$current_bin[$s]}->getDates();
-                                        if(check_other_bins($current_bin_date_plus,$compare_bin_dates)){
-                                            echo '<div class="col col-md-auto">'.${$current_bin[$s].'_image'}.'</div>';
-                                            array_push($main_bin_round2, $current_bin[$i]);
-                                            $added_bin_round2 = $current_bin[$s];
-
-                                        }
-                                    }
-
-                                }
-                                echo '<div class="col col-lg-2">'.${$current_bin[$i].'_image'}.'</div>';
-                                echo '</div><hr />';
-                                $echoed++;
-                            }
+    if ($next_week == $arr[$g-1] && $jump_one == 0)
+    {
+        $next_week = $arr[$g+1];
+        array_splice($arr, $g, 1);
+    }
 
 
-                    }
-                    
-                }else{
-                    break;
-                }
+    echo '<div class="row pl1">'; 
+    echo '<div class="col">
+        <h4>' . date("l", strtotime($next_week)) . ', <br/>
+        <span id="thedate'.$g.'">' . $next_week . '</span>
+        </h4></div>';
+    for($i = 0; $i <= 3; $i++) 
+    {
+        $current_bin_date=${$current_bin[$i]}->getNextDate();
+        $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
+        if($next_week == $current_bin_date)
+        {
+            echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        }elseif($next_week == $current_bin_date_plus)
+        {
+            echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        }
+    }
+    echo '</div><hr />';
+}
 
 
+//NEW WAY END
 
-            }
 
         
       
