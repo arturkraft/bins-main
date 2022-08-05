@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)">
     
 <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
 <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
@@ -72,36 +75,14 @@ echo $gtag;
         :root {
         --background-primary: #fff;
         --color-primary: #333;
+         transition: color 300ms, background-color 300ms;
     }
 
     html[data-theme='dark'] {
         --background-primary: #6f6f6f;
         --color-primary: #333;
+         transition: color 300ms, background-color 300ms;
     }
-
-    @keyframes change-color {
-  25% {
-    opacity: 0.25;
-  }
-    33% {
-    opacity: 0.33;
-  }
-  50% {
-    opacity: 0.5;
-  }
-    66% {
-    opacity: 0.66;
-  }
-  75% {
-    opacity: 0.75;
-  }
-    86% {
-    opacity: 0.86;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 
 
 
@@ -109,8 +90,6 @@ echo $gtag;
                 background: var(--background-primary);
         color: var(--color-primary);
         transition: color 300ms, background-color 300ms;
-          animation-name: change-color;
-  animation-duration: 1s;
 
     }
 
