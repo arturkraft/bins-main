@@ -8,11 +8,6 @@ define('__ROOT__', dirname(dirname(__FILE__)));
 
 
 
-//checking code's efficiency
-
-//ini_set('display_errors','On');
-//error_reporting(E_ALL);
-
 $seconds_to_cache = 3600;
 $ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
 header("Expires: $ts");
@@ -234,7 +229,7 @@ require_once($up2.'/bins-main/experiment-2/html-head.php');
 <div id="tabs" class="pt-3">
   <ul class="sticky">
     <li><a href="#tabs-1"><i class="fas fa-sort-amount-down"></i> Coming up</a></li>
-    <li><a href="#tabs-2"><i class="far fa-calendar-alt"></i> Calendar</a></li>
+    <li><a href="#tabs-2"><i class="far fa-calendar-alt"></i> Calendars</a></li>
   </ul>
   <div id="tabs-1">
 
@@ -560,15 +555,7 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
         <?php
-            $mt = microtime();
-        file_put_contents("get-log.txt", "Time: " . date("Y-m-d h:i:sa") . "; memory: ". (memory_get_usage() - $mem) / (1024 * 1024). "; seconds: ". microtime(TRUE) - $time  ." by ".$_SERVER["REMOTE_ADDR"] . "; ".$_SERVER["REMOTE_HOST"].";\n", FILE_APPEND | LOCK_EX);
-        echo '<!--' . $mt . '<br />';
-        print_r(array(
-            'memory' => (memory_get_usage() - $mem) / (1024 * 1024),
-            'seconds' => microtime(TRUE) - $time
-        ));
-      echo "Time now: " . date("Y-m-d h:i:sa");
-        echo '-->';
+         include_once "unversioned-b.php";
     ?>
 
 </body>
