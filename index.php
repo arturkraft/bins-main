@@ -277,7 +277,7 @@ require_once(__ROOT__.'/bins-main/html-head.php');
 ?>
 
 <body>
-<div id ="content" class="container-lg pb-5">
+<div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
