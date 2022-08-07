@@ -370,16 +370,16 @@ for ($i = 0; $i <= 3; $i++) {
     $current_bin_date=${$current_bin[$i]}->getNextDate();
     if ($arr[0] == $current_bin_date) {
         echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
-        if ($bin1 == 0) {
+        if ( $bin1 === 0 ) {
             $bin1 = $current_bin[$i];
-        } elseif ($bin2 == 0) {
+        } else {
             $bin2 = $current_bin[$i];
         }
     }
 }
 
 echo '</div>';
-if ($bin2 == 0) {
+if ($bin2 === 0) {
     echo '<div class="alert alert-secondary" role="alert">
     Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><i class="fa-solid fa-trash"></i> '.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
     </div><hr />';
