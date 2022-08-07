@@ -19,7 +19,84 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
 $current_bin = ['grey', 'blue', 'green', 'brown'];
 
+$good_li = '<span class="fa-li green"><i class="fas fa-check-square"></i></span>';
+$bad_li ='<span class="fa-li text-danger"><i class="fa-solid fa-square-xmark"></i></span>';
 
+$grey_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                These items can go in your grey bin:
+                                <ul class="fa-ul">
+                                <li>'.$good_li.'Non-recyclable waste</li>
+                                <li>'.$good_li.'Plastic bags and polythene</li>
+                                <li>'.$good_li.'Polystyrene</li>
+                                <li>'.$good_li.'Crisp and sweet wrappers</li>
+                                <li>'.$good_li.'Used tissues and paper towels</li>
+                                <li>'.$good_li.'Cling film</li>
+                                <li>'.$good_li.'Tinfoil</li>
+                                <li>'.$good_li.'Lightbulbs</li>
+                                <li>'.$good_li.'Pet litter</li>
+                                <li>'.$good_li.'Nappies</li>
+                                <li>'.$good_li.'Personal hygiene products</li>
+                                <li>'.$good_li.'Food and drinks pouches</li>
+                                <li>'.$good_li.'Hard plastics (toys, coat hangers, CD cases etc.)</li>
+                                <li>'.$good_li.'Padded envelopes</li>
+                                <li>'.$good_li.'Shredded paper</li>
+                             </div>
+                            <div class="col">
+                                Do not put these items in your grey bin:
+                                <ul class="fa-ul">
+                                <li>'.$bad_li.'Plastics, cans and glass</li>
+                                <li>'.$bad_li.'Paper, card and cardboard</li>
+                                <li>'.$bad_li.'Food waste</li>
+                                <li>'.$bad_li.'Garden waste</li>
+                                <li>'.$bad_li.'Electrical items</li>
+                                <li>'.$bad_li.'Textiles and shoes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+';
+
+$blue_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                One of two columns
+                             </div>
+                            <div class="col">
+                                One of two columns
+                            </div>
+                        </div>
+                    </div>
+';
+
+$green_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                One of two columns
+                             </div>
+                            <div class="col">
+                                One of two columns
+                            </div>
+                        </div>
+                    </div>
+';
+
+$brown_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                One of two columns
+                             </div>
+                            <div class="col">
+                                One of two columns
+                            </div>
+                        </div>
+                    </div>
+';
 
 
 //class
@@ -229,7 +306,7 @@ require_once($up2.'/bins-main/experiment-2/html-head.php');
 <div id="tabs" class="pt-3">
   <ul class="sticky">
     <li><a href="#tabs-1"><i class="fas fa-sort-amount-down"></i> Coming up</a></li>
-    <li><a href="#tabs-2"><i class="far fa-calendar-alt"></i> Calendars</a></li>
+    <li><a href="#tabs-2"><i class="far fa-calendar-alt"></i> Calendar</a></li>
   </ul>
   <div id="tabs-1">
 
@@ -251,7 +328,7 @@ require_once($up2.'/bins-main/experiment-2/html-head.php');
 
 
 
-    //$smallest_one = strtotime('2030-12-12');
+
     
 //sorting function
       
@@ -288,15 +365,15 @@ require_once($up2.'/bins-main/experiment-2/html-head.php');
 
 //preparing bin displays
       
-   for($x=0; $x<=3; $x++){
-        
-        ${$current_bin[$x].'_image'}='
-        <figure class="figure float-end">
-          <img src="../../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
-          <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
-        </figure>';
-        
-    }
+for($x=0; $x<=3; $x++){
+    
+    ${$current_bin[$x].'_image'}='
+    <figure class="figure float-end">
+        <img src="../../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+        <figcaption class="bin figure-caption text-center '.$current_bin[$x].'"><i class="fa-solid fa-trash"></i> &nbsp;'.strtoupper($current_bin[$x]).'</figcaption>
+    </figure>';
+    
+}
       
 
 
@@ -308,17 +385,32 @@ echo '<div class="col">
       <h4>' . date("l", strtotime($arr[0])) . ', <br/>
       <span id="thedate0">' . $arr[0] . '</span>
       </h4></div>';
+$bin1 = 0;
+$bin2 = 0;
 
-for($i = 0; $i <= 3; $i++) 
-{
+for ($i = 0; $i <= 3; $i++) {
     $current_bin_date=${$current_bin[$i]}->getNextDate();
-    if($arr[0] == $current_bin_date)
-    {
-        echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+    if ($arr[0] == $current_bin_date) {
+        echo '<div class="col col-md-auto"><a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$i].'-modal">'.${$current_bin[$i].'_image'}.'</a></div>';
+        if ($bin1 == 0) {
+            $bin1 = $current_bin[$i];
+        } elseif ($bin2 == 0) {
+            $bin2 = $current_bin[$i];
+        }
     }
 }
 
-echo '</div><hr />';
+echo '</div>';
+if ($bin2 == 0) {
+    echo '<div class="alert alert-secondary" role="alert">
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
+    </div><hr />';
+} else {
+    echo '<div class="alert alert-secondary" role="alert">
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'">'.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
+    </div><hr />';
+}
+
 echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
 
@@ -368,7 +460,7 @@ for ($g = 1; $g <= 3; $g++)
           <div id="tabs-2">
           <div id="calendar"></div>
   </div>
-        
+
 <div class="d-flex justify-content-between">
     <button id="dark" class="btn btn-dark btn-sm" onclick="toggleTheme('dark');"><i class="fas fa-moon"></i>
  Dark mode</button>
@@ -413,8 +505,41 @@ if ($show_octopus == 1){
     
 
 
-    
+<?php
 
+//preparing modal displays
+      
+for ($x=0; $x<=3; $x++) {
+
+
+    echo 
+    '<div class="modal fade" id="'.$current_bin[$x].'-modal" style="z-index: 99969">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h4 class="modal-title '.$current_bin[$x].'">What goes in the '.$current_bin[$x].' bin?</h4>
+                    <button type="button" class="btn-close '.$current_bin[$x].'" data-bs-dismiss="modal"></button>
+                </div>
+
+
+                <div class="modal-body">
+                    '.${$current_bin[$x].'_modal'}.'
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary '.$current_bin[$x].'" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>';
+    
+}
+?>
+    
 
 
 
@@ -476,7 +601,7 @@ $('#tabs').tabs({
           initialView: 'dayGridMonth',
           firstDay: 1,
         aspectRatio: 0.9,
-//          themeSystem: 'bootstrap',
+         themeSystem: 'bootstrap5',
             events: [                
                 <?php
                 for($x=0; $x<=3; $x++){
@@ -485,7 +610,7 @@ $('#tabs').tabs({
                                     echo "{
                                             start: '".$datey."',
                                             end: '".$datey."',
-                                            title: '".$current_bin[$x]."',
+                                            title: '".strtoupper($current_bin[$x])."',
                                             display: 'block',
                                             color: '".${$current_bin[$x]}->getColour()."'
 
