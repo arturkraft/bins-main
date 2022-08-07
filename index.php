@@ -440,9 +440,9 @@ for ($g = 1; $g <= 3; $g++)
   </div>
 
 <div class="d-flex justify-content-between">
-    <button id="dark" class="btn btn-dark btn-sm" onclick="toggleTheme('dark');"><i class="fas fa-moon"></i>
- Dark mode</button>
-    <button id="light" class="btn btn-dark btn-sm" onclick="toggleTheme('light');"><i class="fas fa-lightbulb"></i> Light mode</button>
+    <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><i class="fa-solid fa-toggle-off"></i>
+ Dark mode </button>
+    <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><i class="fa-solid fa-toggle-on"></i> Dark mode </button>
 
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
 </div>
@@ -451,7 +451,7 @@ for ($g = 1; $g <= 3; $g++)
     
     
     <?php 
-if ($show_octopus == 1){
+if ($show_octopus == 1) {
 
     ?>
                 <!-- octopus -->
@@ -460,11 +460,11 @@ if ($show_octopus == 1){
     <div class="container my-5">
     <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
       <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1">Get <strong>£50</strong> for switching to Octopus Energy</h1>
+        <h1 class="display-4 fw-bold lh-1"><i class="fa-solid fa-gift"></i> Get <strong>£50</strong> for switching to Octopus Energy</h1>
         <p class="lead">With energy prices going up so quickly, save some money by switching to Octopus Energy.</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-          <a href="https://share.octopus.energy/tan-loris-643" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Get £50</a>
-          <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="dismiss();">Dismiss</button>
+          <a href="https://share.octopus.energy/tan-loris-643" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold"><i class="fa-solid fa-gift"></i> Get £50</a>
+          <button type="button" class="btn btn-outline-secondary btn-sm px-4" onclick="dismiss();"><i class="fa-solid fa-heart-crack"></i> Dismiss</button>
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
@@ -544,7 +544,7 @@ for ($x=0; $x<=3; $x++) {
                     <div class="container">
                             <div class="row align-items-start">
                                 <div class="col">
-                                <ul><li>Don't put your food waste in plastic bags - only use the special recyclable food waste liners we provide, or put food directly into the bin.</li><li>Remove all packaging.</li><li>Don't put hot or cold liquids into your brown bin.</li><li>Use your brown bin to recycle as much food and garden waste as you can.</li><li>Make sure the lid is closed to minimise odour, deters vermin, prevents litter and protect the health and safety of our collection crews.</li></ul>
+                                    <ul><li>Don't put your food waste in plastic bags - only use the special recyclable food waste liners we provide, or put food directly into the bin.</li><li>Remove all packaging.</li><li>Don't put hot or cold liquids into your brown bin.</li><li>Use your brown bin to recycle as much food and garden waste as you can.</li><li>Make sure the lid is closed to minimise odour, deters vermin, prevents litter and protect the health and safety of our collection crews.</li></ul>
                                 </div>
                                 <div class="col">
                                     <h4>Contamination sticker</h4>
@@ -570,7 +570,7 @@ for ($x=0; $x<=3; $x++) {
 
 
         
-            <script>
+<script>
 
 // Capture the current theme from local storage and adjust the page to use the current theme.
 const htmlEl = document.getElementsByTagName('html')[0];
@@ -603,13 +603,10 @@ if(dismisser){
     $('#octopus').removeClass('d-none');
 }
                 
-                function dismiss(){
-                    localStorage.setItem('dismiss', 'yes');
-                    $('#octopus').addClass('d-none');
-                }
-
-
-
+function dismiss(){
+    localStorage.setItem('dismiss', 'yes');
+    $('#octopus').addClass('d-none');
+}
 
 
 //tabs
@@ -699,9 +696,9 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
 
     </script>
-        <?php
-         include_once "unversioned-b.php";
-    ?>
+<?php
+    include_once "unversioned-b.php";
+?>
 
 </body>
 
