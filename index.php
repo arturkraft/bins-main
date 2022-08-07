@@ -39,119 +39,49 @@ $brown_good = ['Grass cuttings', 'Flowers and plants', 'Weeds', 'Leaves', 'Small
 
 $brown_bad = ['Plastic bags', 'Packaging', 'Liquids', 'Fats and oils', 'Rubble and soil', 'Plant pots', 'Wood and fencing', 'Garden furniture', 'Plastics, cans and glass', 'Paper, card and cardboard'];
 
-$grey_modal = '
-                    <div class="container">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                These items can go in your grey bin:
-                                <ul class="fa-ul">
-                                <li>'.$good_li.'Non-recyclable waste</li>
-                                <li>'.$good_li.'Plastic bags and polythene</li>
-                                <li>'.$good_li.'Polystyrene</li>
-                                <li>'.$good_li.'Crisp and sweet wrappers</li>
-                                <li>'.$good_li.'Used tissues and paper towels</li>
-                                <li>'.$good_li.'Cling film</li>
-                                <li>'.$good_li.'Tinfoil</li>
-                                <li>'.$good_li.'Lightbulbs</li>
-                                <li>'.$good_li.'Pet litter</li>
-                                <li>'.$good_li.'Nappies</li>
-                                <li>'.$good_li.'Personal hygiene products</li>
-                                <li>'.$good_li.'Food and drinks pouches</li>
-                                <li>'.$good_li.'Hard plastics (toys, coat hangers, CD cases etc.)</li>
-                                <li>'.$good_li.'Padded envelopes</li>
-                                <li>'.$good_li.'Shredded paper</li>
-                             </div>
-                            <div class="col">
-                                Do not put these items in your grey bin:
-                                <ul class="fa-ul">
-                                <li>'.$bad_li.'Plastics, cans and glass</li>
-                                <li>'.$bad_li.'Paper, card and cardboard</li>
-                                <li>'.$bad_li.'Food waste</li>
-                                <li>'.$bad_li.'Garden waste</li>
-                                <li>'.$bad_li.'Electrical items</li>
-                                <li>'.$bad_li.'Textiles and shoes</li>
-                                </ul>
+
+
+for ($x = 0; $x <= 3; $x++) {
+
+    ${$current_bin[$x].'_modal'}='
+                            <div class="container">
+                                <div class="row align-items-start">
+                                    <div class="col">
+                                        <h5>These items can go in your '.$current_bin[$x].' bin:</h5>
+                                        <ul class="fa-ul">
+                                        ';
+        foreach (${$current_bin[$x].'_good'} as $good_item) {
+            ${$current_bin[$x].'_modal'}.='
+                                            <li>'.$good_li.' '.$good_item.'</li>
+                                            ';
+        }
+
+    ${$current_bin[$x].'_modal'}.='
+                                        </ul>
+                                    </div>
+                                    <div class="col">
+                                        <h5>Do not put these items in your '.$current_bin[$x].' bin:</h5>
+                                        <ul class="fa-ul">
+                                        ';
+        foreach (${$current_bin[$x].'_bad'} as $bad_item) {
+            ${$current_bin[$x].'_modal'}.='
+                                            <li>'.$bad_li.' '.$bad_item.'</li>
+            ';
+        }
+
+    ${$current_bin[$x].'_modal'}.='
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-';
+        ';
 
-$blue_modal = '
-                    <div class="container">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                One of two columns
-                             </div>
-                            <div class="col">
-                                One of two columns
-                            </div>
-                        </div>
-                    </div>
-';
-
-$green_modal = '
-                    <div class="container">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                These items can go in your green bin:
-                                <ul class="fa-ul">
-';
-
-foreach ($green_good as $good_item) {
-    $green_modal .= '
-                                    <li>'.$good_li.' '.$good_item.'</li>
-    ';
 }
 
-$green_modal .= '
-                                </ul>
-                             </div>
-                            <div class="col">
-                                Do not put these items in your green bin:
-                                <ul class="fa-ul">
-';
-
-foreach ($green_bad as $bad_item) {
-    $green_modal .= '
-                                    <li>'.$bad_li.' '.$bad_item.'</li>
-    ';
-}
-
-$green_modal .= '
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-';
-
-$brown_modal = '
-                    <div class="container">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                These items can go in your brown bin:
-                                <ul class="fa-ul">
-                                <li>'.$good_li.'Grass cuttings
-                                <li>'.$good_li.'Flowers and plants
-                                <li>'.$good_li.'Weeds
-                                <li>'.$good_li.'Leaves
-                                <li>'.$good_li.'Small branches and twigs
-                                <li>'.$good_li.'Cooked and uncooked food
-                                <li>'.$good_li.'Leftovers
-                                <li>'.$good_li.'Fruit and vegetable peelings
-                                <li>'.$good_li.'Tea bags and coffee grounds
-Egg shells
-Out of date food (remove packaging)
-Bread, pasta and cakes
-Meat, fish and small bones
 
 
-                             </div>
-                            <div class="col">
-                                One of two columns
-                            </div>
-                        </div>
-                    </div>
-';
+
+
 
 
 //class
@@ -351,10 +281,6 @@ require_once($up2.'/bins-main/experiment-2/html-head.php');
 ?>
 
 <body>
-             <div class="ios-peek">
-        <h1>hi there</h1>
-    </div>
-        
 <div id ="content" class="container-lg pb-5">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
@@ -459,11 +385,11 @@ for ($i = 0; $i <= 3; $i++) {
 echo '</div>';
 if ($bin2 == 0) {
     echo '<div class="alert alert-secondary" role="alert">
-    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><i class="fa-solid fa-trash"></i> '.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
     </div><hr />';
 } else {
     echo '<div class="alert alert-secondary" role="alert">
-    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'">'.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><i class="fa-solid fa-trash"></i> '.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'"><i class="fa-solid fa-trash"></i> '.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
     </div><hr />';
 }
 
@@ -564,6 +490,12 @@ if ($show_octopus == 1){
 <?php
 
 //preparing modal displays
+
+$brown_extra = '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal-extra">How to use the brown bin?</button>';
+
+
+
+
       
 for ($x=0; $x<=3; $x++) {
 
@@ -586,6 +518,9 @@ for ($x=0; $x<=3; $x++) {
 
 
                 <div class="modal-footer">
+                    '.${$current_bin[$x].'_extra'} = isset(${$current_bin[$x].'_extra'}) ? ${$current_bin[$x].'_extra'} : ' ';
+
+    echo '
                     <button type="button" class="btn btn-outline-secondary '.$current_bin[$x].'" data-bs-dismiss="modal">Close</button>
                 </div>
 
@@ -600,7 +535,40 @@ for ($x=0; $x<=3; $x++) {
 
 
 
+<div class="modal fade" id="brown-modal-extra" style="z-index: 99969">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title brown">How to use the brown bin?</h4>
+                    <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
+                </div>
 
+
+                <div class="modal-body">
+                    <div class="container">
+                            <div class="row align-items-start">
+                                <div class="col">
+                                <ul><li>Don't put your food waste in plastic bags - only use the special recyclable food waste liners we provide, or put food directly into the bin.</li><li>Remove all packaging.</li><li>Don't put hot or cold liquids into your brown bin.</li><li>Use your brown bin to recycle as much food and garden waste as you can.</li><li>Make sure the lid is closed to minimise odour, deters vermin, prevents litter and protect the health and safety of our collection crews.</li></ul>
+                                </div>
+                                <div class="col">
+                                    <h4>Contamination sticker</h4>
+                                    If the wrong material is in your brown bin, we cannot empty it as it will contaminate the whole vehicle load. 
+
+                                    If your bin is contaminated with items that can't be recycled, we will attach a contamination sticker and your bin won't be emptied. If you remove the contaminants, the bin will be emptied on your next scheduled collection day.
+                                </div>
+                            </div>
+                </div>
+            </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal">What goes in the brown bin?</button>
+                    <button type="button" class="btn btn-outline-secondary brown" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
         
 
 
@@ -666,7 +634,7 @@ $('#tabs').tabs({
                                     echo "{
                                             start: '".$datey."',
                                             end: '".$datey."',
-                                            title: '".strtoupper($current_bin[$x])."',
+                                            title: '".$current_bin[$x]."',
                                             display: 'block',
                                             color: '".${$current_bin[$x]}->getColour()."'
 

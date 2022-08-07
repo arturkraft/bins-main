@@ -90,20 +90,14 @@ echo $gtag;
 
 
     html {
-                background: var(--background-primary);
+        background: var(--background-primary);
         color: var(--color-primary);
         transition: color 300ms, background-color 300ms;
 
     }
 
-    .ios-peek {
-    position: fixed;
-    width: 505px;
-    height: 500px;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    background-color: red !important;
+    .modal-backdrop.show {
+      z-index: 9999;
     }
 
     * {
