@@ -1,17 +1,13 @@
 <?php
 
-if( empty( $bins_main ) ) die("Cannot access this page directly!");
 
+if( empty( $bins_main ) ) die("Cannot access this page directly!");
+//
 
 //define('__ROOT__', $up2);
 define('__ROOT__', dirname(dirname(__FILE__)));
 
 
-
-//checking code's efficiency
-
-//ini_set('display_errors','On');
-//error_reporting(E_ALL);
 
 $seconds_to_cache = 3600;
 $ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
@@ -24,7 +20,138 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
 $current_bin = ['grey', 'blue', 'green', 'brown'];
 
+$good_li = '<span class="fa-li green"><i class="fas fa-check-square"></i></span>';
+$bad_li = '<span class="fa-li text-danger"><i class="fa-solid fa-square-xmark"></i></span>';
 
+$grey_good = ['Non-recyclable waste', 'Plastic bags and polythene', 'Polystyrene', 'Crisp and sweet wrappers', 'Used tissues and paper towels', 'Cling film', 'Tinfoil', 'Lightbulbs', 'Pet litter', 'Nappies', 'Personal hygiene products', 'Food and drinks pouches', 'Hard plastics (toys, coat hangers, CD cases etc.)', 'Padded envelopes', 'Shredded paper'];
+
+$grey_bad = ['Plastics, cans and glass', 'Paper, card and cardboard', 'Food waste', 'Garden waste', 'Electrical items', 'Textiles and shoes'];
+
+$blue_good = ['Cardboard (flattened)', 'Cereal boxes', 'Large brown cardboard boxes', 'Corrugated cardboard', 'Toilet and kitchen roll tubes', 'Cardboard packaging', 'Paper (clean and dry)', 'Envelopes (with and without windows)', 'Magazines', 'Newspapers', 'Office paper', 'Telephone directories', 'Paperback books', 'Catalogues', 'Junk mail and takeaway menus'];
+
+$blue_bad = ['Glass', 'Plastics and cans', 'Hardback books', 'Plastic carrier bags', 'Padded envelopes', 'Plastic wrapping and bubble wrap', 'Polystyrene', 'Packaging with food residue', 'Used tissues and kitchen roll', 'Foil wrapping paper', 'Tinfoil', 'Shredded paper'];
+
+$green_good = ['Plastic bottles', 'Plastic pots, tubs and trays', 'Fruit and vegetable punnets', 'Clean takeaway containers', 'Cleaning product bottles', 'Drinks cans (empty and rinsed)', 'Food/pet food tins (empty and rinsed)', 'Biscuit/sweet tins', 'Aerosols', 'Glass bottles and jars', 'Cartons', 'Milk cartons'];
+
+$green_bad = ['Paper, card and cardboard', 'Food residue', 'Carrier bags', 'Sweet and crisp wrappers', 'Plastic wrapping and bubble wrap', 'Polystyrene Food and drink pouches', 'Hard plastics (toys, coat hangers, CD case etc)', 'Food and drink pouches', 'Light bulbs', 'Pyrex or crockery', 'Mirrors', 'Tinfoil'];
+
+$brown_good = ['Grass cuttings', 'Flowers and plants', 'Weeds', 'Leaves', 'Small branches and twigs', 'Cooked and uncooked food', 'Leftovers', 'Fruit and vegetable peelings', 'Tea bags and coffee grounds', 'Egg shells', 'Out of date food (remove packaging)', 'Bread, pasta and cakes', 'Meat, fish and small bones'];
+
+$brown_bad = ['Plastic bags', 'Packaging', 'Liquids', 'Fats and oils', 'Rubble and soil', 'Plant pots', 'Wood and fencing', 'Garden furniture', 'Plastics, cans and glass', 'Paper, card and cardboard'];
+
+$grey_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                These items can go in your grey bin:
+                                <ul class="fa-ul">
+                                <li>'.$good_li.'Non-recyclable waste</li>
+                                <li>'.$good_li.'Plastic bags and polythene</li>
+                                <li>'.$good_li.'Polystyrene</li>
+                                <li>'.$good_li.'Crisp and sweet wrappers</li>
+                                <li>'.$good_li.'Used tissues and paper towels</li>
+                                <li>'.$good_li.'Cling film</li>
+                                <li>'.$good_li.'Tinfoil</li>
+                                <li>'.$good_li.'Lightbulbs</li>
+                                <li>'.$good_li.'Pet litter</li>
+                                <li>'.$good_li.'Nappies</li>
+                                <li>'.$good_li.'Personal hygiene products</li>
+                                <li>'.$good_li.'Food and drinks pouches</li>
+                                <li>'.$good_li.'Hard plastics (toys, coat hangers, CD cases etc.)</li>
+                                <li>'.$good_li.'Padded envelopes</li>
+                                <li>'.$good_li.'Shredded paper</li>
+                             </div>
+                            <div class="col">
+                                Do not put these items in your grey bin:
+                                <ul class="fa-ul">
+                                <li>'.$bad_li.'Plastics, cans and glass</li>
+                                <li>'.$bad_li.'Paper, card and cardboard</li>
+                                <li>'.$bad_li.'Food waste</li>
+                                <li>'.$bad_li.'Garden waste</li>
+                                <li>'.$bad_li.'Electrical items</li>
+                                <li>'.$bad_li.'Textiles and shoes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+';
+
+$blue_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                One of two columns
+                             </div>
+                            <div class="col">
+                                One of two columns
+                            </div>
+                        </div>
+                    </div>
+';
+
+$green_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                These items can go in your green bin:
+                                <ul class="fa-ul">
+';
+
+foreach ($green_good as $good_item) {
+    $green_modal .= '
+                                    <li>'.$good_li.' '.$good_item.'</li>
+    ';
+}
+
+$green_modal .= '
+                                </ul>
+                             </div>
+                            <div class="col">
+                                Do not put these items in your green bin:
+                                <ul class="fa-ul">
+';
+
+foreach ($green_bad as $bad_item) {
+    $green_modal .= '
+                                    <li>'.$bad_li.' '.$bad_item.'</li>
+    ';
+}
+
+$green_modal .= '
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+';
+
+$brown_modal = '
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                These items can go in your brown bin:
+                                <ul class="fa-ul">
+                                <li>'.$good_li.'Grass cuttings
+                                <li>'.$good_li.'Flowers and plants
+                                <li>'.$good_li.'Weeds
+                                <li>'.$good_li.'Leaves
+                                <li>'.$good_li.'Small branches and twigs
+                                <li>'.$good_li.'Cooked and uncooked food
+                                <li>'.$good_li.'Leftovers
+                                <li>'.$good_li.'Fruit and vegetable peelings
+                                <li>'.$good_li.'Tea bags and coffee grounds
+Egg shells
+Out of date food (remove packaging)
+Bread, pasta and cakes
+Meat, fish and small bones
+
+
+                             </div>
+                            <div class="col">
+                                One of two columns
+                            </div>
+                        </div>
+                    </div>
+';
 
 
 //class
@@ -143,7 +270,7 @@ function generateDates($schedule_code, $weeks_added, $start_date, $end_date, $fe
 
 
                 
-$filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
+$filename = $up2.'/'.$folder_name.'/generated-bin-dates.csv';
 
 
                 
@@ -219,14 +346,16 @@ for($x = 0; $x <= 3; $x++)
 
 <?php 
 
-require_once(__ROOT__.'/bins-main/html-head.php');
+require_once($up2.'/bins-main/experiment-2/html-head.php');
 
 ?>
 
 <body>
-     
+             <div class="ios-peek">
+        <h1>hi there</h1>
+    </div>
         
-<div class="container-lg pb-5">
+<div id ="content" class="container-lg pb-5">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
@@ -254,7 +383,7 @@ require_once(__ROOT__.'/bins-main/html-head.php');
 
 
 
-    //$smallest_one = strtotime('2030-12-12');
+
     
 //sorting function
       
@@ -291,37 +420,53 @@ require_once(__ROOT__.'/bins-main/html-head.php');
 
 //preparing bin displays
       
-   for($x=0; $x<=3; $x++){
-        
-        ${$current_bin[$x].'_image'}='
-        <figure class="figure float-end">
-          <img src="../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
-          <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
-        </figure>';
-        
-    }
+for($x=0; $x<=3; $x++){
+    
+    ${$current_bin[$x].'_image'}='
+    <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
+    <figure class="figure float-end">
+        <img src="../../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+        <figcaption class="bin figure-caption text-center '.$current_bin[$x].'"><i class="fa-solid fa-trash"></i> &nbsp;'.strtoupper($current_bin[$x]).'</figcaption>
+    </figure>
+    </a>';
+    
+}
       
 
 
 //NEW WAY
-$jump_one = 0;
 echo '<div class="row"><h2>Your next collection:</h2></div>';
 echo '<div class="row pl0">'; 
 echo '<div class="col">
       <h4>' . date("l", strtotime($arr[0])) . ', <br/>
       <span id="thedate0">' . $arr[0] . '</span>
       </h4></div>';
+$bin1 = 0;
+$bin2 = 0;
 
-for($i = 0; $i <= 3; $i++) 
-{
+for ($i = 0; $i <= 3; $i++) {
     $current_bin_date=${$current_bin[$i]}->getNextDate();
-    if($arr[0] == $current_bin_date)
-    {
+    if ($arr[0] == $current_bin_date) {
         echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+        if ($bin1 == 0) {
+            $bin1 = $current_bin[$i];
+        } elseif ($bin2 == 0) {
+            $bin2 = $current_bin[$i];
+        }
     }
 }
 
-echo '</div><hr />';
+echo '</div>';
+if ($bin2 == 0) {
+    echo '<div class="alert alert-secondary" role="alert">
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
+    </div><hr />';
+} else {
+    echo '<div class="alert alert-secondary" role="alert">
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'">'.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'">'.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
+    </div><hr />';
+}
+
 echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
 
@@ -329,7 +474,7 @@ for ($g = 1; $g <= 3; $g++)
 {
     $next_week = $arr[$g];
 
-    if ($next_week == $arr[$g-1] && $jump_one == 0)
+    if ($next_week == $arr[$g-1])
     {
         $next_week = $arr[$g+1];
         array_splice($arr, $g, 1);
@@ -371,7 +516,7 @@ for ($g = 1; $g <= 3; $g++)
           <div id="tabs-2">
           <div id="calendar"></div>
   </div>
-        
+
 <div class="d-flex justify-content-between">
     <button id="dark" class="btn btn-dark btn-sm" onclick="toggleTheme('dark');"><i class="fas fa-moon"></i>
  Dark mode</button>
@@ -401,7 +546,7 @@ if ($show_octopus == 1){
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="../bins-main/img/octopus.png" alt="" width="720">
+          <img class="rounded-lg-3" src="../../bins-main/img/octopus.png" alt="" width="720">
       </div>
     </div>
   </div>
@@ -414,8 +559,43 @@ if ($show_octopus == 1){
 
     </div>
     
-    
 
+
+<?php
+
+//preparing modal displays
+      
+for ($x=0; $x<=3; $x++) {
+
+
+    echo 
+    '<div class="modal fade" id="'.$current_bin[$x].'-modal" style="z-index: 99969">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h4 class="modal-title '.$current_bin[$x].'">What goes in the '.$current_bin[$x].' bin?</h4>
+                    <button type="button" class="btn-close '.$current_bin[$x].'" data-bs-dismiss="modal"></button>
+                </div>
+
+
+                <div class="modal-body">
+                    '.${$current_bin[$x].'_modal'}.'
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary '.$current_bin[$x].'" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>';
+    
+}
+?>
+    
 
 
 
@@ -477,7 +657,7 @@ $('#tabs').tabs({
           initialView: 'dayGridMonth',
           firstDay: 1,
         aspectRatio: 0.9,
-//          themeSystem: 'bootstrap',
+         themeSystem: 'bootstrap5',
             events: [                
                 <?php
                 for($x=0; $x<=3; $x++){
@@ -486,7 +666,7 @@ $('#tabs').tabs({
                                     echo "{
                                             start: '".$datey."',
                                             end: '".$datey."',
-                                            title: '".$current_bin[$x]."',
+                                            title: '".strtoupper($current_bin[$x])."',
                                             display: 'block',
                                             color: '".${$current_bin[$x]}->getColour()."'
 
@@ -556,19 +736,12 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
         <?php
-            $mt = microtime();
-        file_put_contents("get-log.txt", "Time: " . date("Y-m-d h:i:sa") . "; memory: ". (memory_get_usage() - $mem) / (1024 * 1024). "; seconds: ". microtime(TRUE) - $time  ." by ".$_SERVER["REMOTE_ADDR"] . "; ".$_SERVER["REMOTE_HOST"].";\n", FILE_APPEND | LOCK_EX);
-        echo '<!--' . $mt . '<br />';
-        print_r(array(
-            'memory' => (memory_get_usage() - $mem) / (1024 * 1024),
-            'seconds' => microtime(TRUE) - $time
-        ));
-      echo "Time now: " . date("Y-m-d h:i:sa");
-        echo '-->';
+         include_once "unversioned-b.php";
     ?>
 
 </body>
 
 </html>
     
+
 

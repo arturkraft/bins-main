@@ -3,7 +3,8 @@
 
 <head>
     <title>Bins collection day - <?php echo $location_name; ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
 
@@ -45,16 +46,19 @@
     <link rel="shortcut icon" href="/favicon.ico?v=b">
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
-    <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css?v=2" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&family=Raleway:wght@200&family=Zen+Loop&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
 
     
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -85,12 +89,36 @@ echo $gtag;
     }
 
 
-
     html {
                 background: var(--background-primary);
         color: var(--color-primary);
         transition: color 300ms, background-color 300ms;
 
+    }
+
+    .ios-peek {
+    position: fixed;
+    width: 505px;
+    height: 500px;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background-color: red !important;
+    }
+
+    * {
+      margin: 0;
+    }
+
+    #content {
+        min-height: 100vh;
+        height: 100%;
+        background-color: #fff;
+    }
+
+    #bottom-text {
+        position: absolute;
+        bottom: 0;
     }
 
     h1,
