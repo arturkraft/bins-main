@@ -118,6 +118,10 @@ echo $gtag;
 
         }
 
+        h1{
+            padding-left: 0.1em;
+        }
+
         html {
             transition: color 300ms, background-color 300ms !important;
         }
