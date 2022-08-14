@@ -278,7 +278,7 @@ require_once(__ROOT__.'/bins-main/html-head.php');
 
 <body>
 <div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
-        <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
+        <h1 class="pt-5"><span class="bolder">Bin collections days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
   <ul class="sticky">
@@ -696,6 +696,50 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
 
     </script>
+
+
+<?php
+
+include_once "unversioned-a.php";
+
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://api.tomorrow.io/v4/timelines?location='.$api_location.'&fields=temperature,temperatureApparent,precipitationProbability,precipitationIntensity,precipitationType,weatherCode,windSpeed&timesteps=1d&units=metric&apikey='.$api_key,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+));
+
+// $response = curl_exec($curl);
+
+
+// echo $response;
+
+$parsed = array();
+parse_str(curl_exec($curl), $parsed);
+print_r($parsed);
+
+curl_close($curl);
+
+
+
+echo '<br /> test: <br />';
+echo $parsed['data']['timelines'][0];
+
+var_dump($parsed);
+
+echo $parsed['data']['timelines'][0];
+
+
+?>
+
+
+
 <?php
     include_once "unversioned-b.php";
 ?>
