@@ -438,7 +438,9 @@ function weatherDisplay($data, $date, $precipitation_type){
 
             echo '<p>Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
 
-            echo '           
+            echo '  
+            
+
                     </div></a>';    
         }
 

@@ -91,7 +91,7 @@ echo $gtag;
 
         html, body {
             max-width: 100%;
-            overflow-x: hidden;
+            
         }
 
         .modal-backdrop.show {
