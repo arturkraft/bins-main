@@ -42,7 +42,6 @@
     <link rel="shortcut icon" href="/favicon.ico?v=b">
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
-    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" type="text/css" href="/bins-main/css/styles.css?v=2" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
@@ -52,8 +51,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&family=Raleway:wght@200&family=Zen+Loop&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous" defer></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -80,6 +78,7 @@ echo $gtag;
             --background-primary: #6f6f6f;
             --color-primary: #333;
             transition: color 300ms, background-color 300ms;
+
         }
 
 
@@ -90,8 +89,50 @@ echo $gtag;
 
         }
 
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         .modal-backdrop.show {
           z-index: 9999;
+        }
+
+        .bg-secondary{
+            background-color: #f5f5f5 !important;
+            color: #000 !important;
+        }
+
+        .badge{
+            width: 7.5rem;
+            margin-top:0.3rem;
+            padding:0.8rem 0 0 0;
+            font-family: Arial,Helvetica,sans-serif !important;
+            font-weight: 400 !important;
+            border-radius: 1rem;
+        }
+
+        .alert{
+            font-size: 0.8rem;
+        }
+
+        @media (min-width:510px){
+            .badge{
+                width: 10rem;
+            }
+
+            .alert{
+                font-size: 1rem;
+            }
+        }
+
+        .badge p{
+            padding-top: 0;
+            margin-top: -0.6rem;
+        }
+
+        #weather-modal .modal-body, #weather-modal .container{
+            padding: 0 !important;
         }
 
         * {

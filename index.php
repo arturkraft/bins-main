@@ -292,14 +292,72 @@ require_once(__ROOT__.'/bins-main/html-head.php');
     
     
 
-
-
-    
-
-
-        
 <?php
+
+//API for the weather
+$weather_file = "../bins-main/brookfield-weather.json";
+include_once "unversioned-a.php";
+
+function weatherAPI($weather_file, $api_location, $api_key) {
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://api.tomorrow.io/v4/timelines?location='.$api_location.'&fields=temperature,temperatureApparent,precipitationProbability,precipitationIntensity,precipitationType,weatherCodeDay,windSpeed&timesteps=1d&units=metric&apikey='.$api_key,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    ));
+
+
+    //file_put_contents($weather_file, $curl);
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    $data = json_decode($response);
+
+    if(isset($data->data->timelines[0]->intervals)){
+        file_put_contents($weather_file, $response);
+        return 0;
+    }
     
+
+
+
+    return 1;
+
+}
+
+$log_mode = '-w.cached';
+
+if( !file_exists($weather_file) ) {
+    $API_result = weatherAPI($weather_file, $api_location, $api_key);
+    $log_mode = " | Running from API file creation, code: " . $API_result . ' | ';
+    echo '<!-- ' . $log_mode . ' -->';
+} else {
+    if(time() - filemtime($weather_file) >= 2 * 3600) { 
+        $API_result = weatherAPI($weather_file, $api_location, $api_key);
+        $log_mode = " | Running from API file update, code: " . $API_result . ' | ';
+        echo '<!-- ' . $log_mode . ' -->';
+    }
+}
+
+
+
+
+$text = file_get_contents($weather_file);
+echo '<!-- File loaded -->';
+
+$data = json_decode($text);
+
+
+
+
+    //close API
 
 
 
@@ -356,15 +414,65 @@ for($x=0; $x<=3; $x++){
       
 
 
+$precipitation_type = ['rain', 'rain', 'snow', 'freezing rain', 'sleet'];
+
+
+function weatherDisplay($data, $date, $precipitation_type){
+
+    
+
+    for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++){
+
+        if(substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10) == $date){
+            echo  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
+            <div class="badge bg-secondary text-wrap align-bottom">
+                        <img src="../bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
+                        <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
+            '           &#8451;</span><br /><br />';
+
+            if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
+                        echo '<p>Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
+            }else{
+                        echo '<p>0% chance of rain</p>';
+            }
+
+            echo '<p>Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
+
+            echo '           
+                    </div></a>';    
+        }
+
+    }  
+}
+
+$var_good = 0;
 //NEW WAY
-echo '<div class="row"><h2>Your next collection:</h2></div>';
+echo '<div class="row">
+        <h2>
+            Your next collection:
+        </h2>
+      </div>';
 echo '<div class="row pl0">'; 
-echo '<div class="col">
-      <h4>' . date("l", strtotime($arr[0])) . ', <br/>
-      <span id="thedate0">' . $arr[0] . '</span>
-      </h4></div>';
-$bin1 = 0;
-$bin2 = 0;
+echo '  <div class="col">
+        <h4>' . date("l", strtotime($arr[0])) . ', <br/>
+            <span id="thedate0">' . $arr[0] . '</span>
+        </h4>';
+
+        if(isset($data->data->timelines[0]->intervals)){
+            weatherDisplay($data, $arr[0], $precipitation_type);
+            $var_good = 1;
+        }    
+      
+      
+echo  '</div>';
+
+//setting up binN and binN_date variables
+for ($i=1; $i<=8; $i++){
+    ${'bin' . $i} = 0;
+    ${'bin' . $i . '_date'} = 0;
+}
+
+
 
 for ($i = 0; $i <= 3; $i++) {
     $current_bin_date=${$current_bin[$i]}->getNextDate();
@@ -372,11 +480,21 @@ for ($i = 0; $i <= 3; $i++) {
         echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
         if ( $bin1 === 0 ) {
             $bin1 = $current_bin[$i];
+            $bin1_date = $current_bin_date;
+
+            $bins_array = array($current_bin_date => $current_bin[$i]);
+
         } else {
             $bin2 = $current_bin[$i];
+            $bin2_date = $current_bin_date;
+
+            $bins_array += [ $current_bin_date => $current_bin[$i] ];
         }
     }
 }
+
+
+
 
 echo '</div>';
 if ($bin2 === 0) {
@@ -389,7 +507,7 @@ if ($bin2 === 0) {
     </div><hr />';
 }
 
-echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
+echo '<br /><div class="row"><h2>Your futures collections:</h2></div>';
 
 
 for ($g = 1; $g <= 3; $g++)
@@ -407,22 +525,44 @@ for ($g = 1; $g <= 3; $g++)
     echo '<div class="col">
         <h4>' . date("l", strtotime($next_week)) . ', <br/>
         <span id="thedate'.$g.'">' . $next_week . '</span>
-        </h4></div>';
+        </h4>';
+            if( $var_good == 1){
+                weatherDisplay($data, $arr[$g], $precipitation_type);
+            }    
+        
+    echo '</div>';
+
     for($i = 0; $i <= 3; $i++) 
     {
         $current_bin_date=${$current_bin[$i]}->getNextDate();
         $current_bin_date_plus=${$current_bin[$i]}->getNextDatePlus();
+        $add_one = 0;
         if($next_week == $current_bin_date)
         {
             echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+
+            if( !isset($bins_array[$current_bin_date]) ){
+                $bins_array += [ $current_bin_date => $current_bin[$i] ];
+            } else {
+                $bins_array[$current_bin_date] = $bins_array[$current_bin_date] . ', ' . $current_bin[$i];
+            }
+
+            
+
         }elseif($next_week == $current_bin_date_plus)
         {
             echo '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
+
+            if( !isset($bins_array[$current_bin_date_plus]) ){
+                $bins_array += [ $current_bin_date_plus => $current_bin[$i] ];
+            } else {
+                $bins_array[$current_bin_date_plus] = $bins_array[$current_bin_date_plus] . ', ' . $current_bin[$i];
+            }
+
         }
     }
     echo '</div><hr />';
 }
-
 
 //NEW WAY END
 
@@ -444,7 +584,7 @@ for ($g = 1; $g <= 3; $g++)
  Dark mode </button>
     <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><i class="fa-solid fa-toggle-on"></i> Dark mode </button>
 
-    <a href="<?php echo $folder_name ?>.ics" class="btn btn-warning" tabindex="-1" role="button" aria-disabled="true"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
+    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
 </div>
 
 </div>
@@ -532,39 +672,116 @@ for ($x=0; $x<=3; $x++) {
 
 
 <div class="modal fade" id="brown-modal-extra" style="z-index: 99969">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title brown">How to use the brown bin?</h4>
-                    <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
-                </div>
-
-
-                <div class="modal-body">
-                    <div class="container">
-                            <div class="row align-items-start">
-                                <div class="col">
-                                    <ul><li>Don't put your food waste in plastic bags - only use the special recyclable food waste liners we provide, or put food directly into the bin.</li><li>Remove all packaging.</li><li>Don't put hot or cold liquids into your brown bin.</li><li>Use your brown bin to recycle as much food and garden waste as you can.</li><li>Make sure the lid is closed to minimise odour, deters vermin, prevents litter and protect the health and safety of our collection crews.</li></ul>
-                                </div>
-                                <div class="col">
-                                    <h4>Contamination sticker</h4>
-                                    If the wrong material is in your brown bin, we cannot empty it as it will contaminate the whole vehicle load. 
-
-                                    If your bin is contaminated with items that can't be recycled, we will attach a contamination sticker and your bin won't be emptied. If you remove the contaminants, the bin will be emptied on your next scheduled collection day.
-                                </div>
-                            </div>
-                </div>
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title brown">How to use the brown bin?</h4>
+                <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
             </div>
 
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal">What goes in the brown bin?</button>
-                    <button type="button" class="btn btn-outline-secondary brown" data-bs-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-body">
+                <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <ul><li>Don't put your food waste in plastic bags - only use the special recyclable food waste liners we provide, or put food directly into the bin.</li><li>Remove all packaging.</li><li>Don't put hot or cold liquids into your brown bin.</li><li>Use your brown bin to recycle as much food and garden waste as you can.</li><li>Make sure the lid is closed to minimise odour, deters vermin, prevents litter and protect the health and safety of our collection crews.</li></ul>
+                            </div>
+                            <div class="col">
+                                <h4>Contamination sticker</h4>
+                                If the wrong material is in your brown bin, we cannot empty it as it will contaminate the whole vehicle load. 
 
+                                If your bin is contaminated with items that can't be recycled, we will attach a contamination sticker and your bin won't be emptied. If you remove the contaminants, the bin will be emptied on your next scheduled collection day.
+                            </div>
+                        </div>
             </div>
         </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal">What goes in the brown bin?</button>
+                <button type="button" class="btn btn-outline-secondary brown" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="weather-modal" style="z-index: 99969">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Weather forecast</h4>
+                <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
+            </div>
+
+
+        <div class="modal-body">
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table caption-top">
+                    <tbody>
+                        <tr>
+<?php
+$day_weather = [];
+for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++)
+{
+?>
+                        <td>
+<?php 
+echo '<div class="alert alert-light text-wrap" style="width: 8rem;">';
+
+$date_to_change = substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10);
+$formatted_date = date("l", strtotime($date_to_change));  
+echo $formatted_date.'<br />';
+$formatted_date = date("M, jS", strtotime($date_to_change));  
+echo $formatted_date;
+
+
+
+
+
+echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
+                        <br /><span class="fs-4">' . $data->data->timelines[0]->intervals[$i]->values->temperature . 
+            '           &#8451;</span>';
+
+            if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
+                        echo '<br />Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
+            }else{
+                        echo '<br />0% chance of rain';
+            }
+
+            echo '<br />Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
+
+            echo '</div>';
+            
+            if( isset($bins_array[$date_to_change]) ){
+                $exploded = explode(', ', $bins_array[$date_to_change]);
+
+                echo '<p class="text-center text-uppercase fw-bold ' . $exploded[0] . '"><i class="fa-solid fa-trash"></i> ' . $exploded[0] . '</p>';
+
+                if ( isset($exploded[1]) ){
+                    echo '<p class="text-center text-uppercase fw-bold ' . $exploded[1] . '"><i class="fa-solid fa-trash"></i> ' . $exploded[1] . '</p>';
+                }
+            }
+}
+?>
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
         
 
 
@@ -621,10 +838,26 @@ $('#tabs').tabs({
          themeSystem: 'bootstrap5',
             events: [                
                 <?php
+                /*
+                if( $var_good == 1){
+                        for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
+
+                                                                                                        echo "{
+                        start: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
+                        end: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
+                        title: '".floor($data->data->timelines[0]->intervals[$i]->values->temperature)." \'C, ".$precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ].": ".$data->data->timelines[0]->intervals[$i]->values->precipitationProbability."%',
+                        display: 'background',
+                        textColor: '#999',
+                        color: '#fff'},";  
+
+                        
+                        }
+                }
+                */
                 for($x=0; $x<=3; $x++){
                             foreach(${$current_bin[$x]}->getDates() as $datey){
                                 if(is_numeric(substr($datey,-1))){
-                                    echo "{
+                                            echo "{
                                             start: '".$datey."',
                                             end: '".$datey."',
                                             title: '".$current_bin[$x]."',
@@ -635,6 +868,7 @@ $('#tabs').tabs({
                                 }
                             }
                 }
+
                 ?>
 
             ]
@@ -643,8 +877,8 @@ $('#tabs').tabs({
   }
 });
                 
-                
-                //today or tomorrow or date format
+
+//today or tomorrow or date format
 
 
 function ordinal_suffix_of(i) {
@@ -697,46 +931,6 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
 
-
-<?php
-
-include_once "unversioned-a.php";
-
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.tomorrow.io/v4/timelines?location='.$api_location.'&fields=temperature,temperatureApparent,precipitationProbability,precipitationIntensity,precipitationType,weatherCode,windSpeed&timesteps=1d&units=metric&apikey='.$api_key,
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-));
-
-// $response = curl_exec($curl);
-
-
-// echo $response;
-
-$parsed = array();
-parse_str(curl_exec($curl), $parsed);
-print_r($parsed);
-
-curl_close($curl);
-
-
-
-echo '<br /> test: <br />';
-echo $parsed['data']['timelines'][0];
-
-var_dump($parsed);
-
-echo $parsed['data']['timelines'][0];
-
-
-?>
 
 
 
