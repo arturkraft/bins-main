@@ -488,7 +488,7 @@ for ($i = 0; $i <= 3; $i++) {
             $bin2 = $current_bin[$i];
             $bin2_date = $current_bin_date;
 
-            $bins_array += [ $current_bin_date => $current_bin[$i] ];
+            $bins_array[$current_bin_date] = $bins_array[$current_bin_date] . ', ' . $current_bin[$i];
         }
     }
 }
@@ -711,7 +711,7 @@ for ($x=0; $x<=3; $x++) {
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Weather forecast</h4>
+                <h4 class="modal-title">Weather forecast for <?php echo $location_name; ?></h4>
                 <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
             </div>
 
