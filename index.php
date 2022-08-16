@@ -509,7 +509,7 @@ if ($bin2 === 0) {
     </div><hr />';
 }
 
-echo '<br /><div class="row"><h2>Your futures collections:</h2></div>';
+echo '<br /><div class="row"><h2>Your future collections:</h2></div>';
 
 
 for ($g = 1; $g <= 3; $g++)
@@ -772,6 +772,11 @@ echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->
                         </tr>
                     </tbody>
                     </table>
+                    <p>
+                        <span style="padding-left: 8rem;">
+                            Swipe left/right <i class="fa-solid fa-left-right"></i>
+                        </span>
+                    </p>
                 </div>
             </div>
         </div>
