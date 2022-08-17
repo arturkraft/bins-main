@@ -582,12 +582,26 @@ for ($g = 1; $g <= 3; $g++)
   </div>
 
 <div class="d-flex justify-content-between">
-    <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><i class="fa-solid fa-toggle-off"></i>
+    <button id="dark" class="btn btn-outline-light btn-sm active d-none" onclick="toggleTheme('dark');"><i class="fa-solid fa-toggle-off"></i>
  Dark mode </button>
-    <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><i class="fa-solid fa-toggle-on"></i> Dark mode </button>
+    <button id="light" class="btn btn-outline-light btn-sm active d-none" onclick="toggleTheme('light');"><i class="fa-solid fa-toggle-on"></i> Dark mode </button>
 
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
 </div>
+
+<script>
+    if (currentTheme) {
+    htmlEl.dataset.theme = currentTheme;
+    $('#light').removeClass('d-none');
+    $('#'+currentTheme).addClass('d-none');
+
+}else{
+        $('#'+currentTheme).removeClass('d-none');
+    $('#light').addClass('d-none');
+
+}
+    </script>
+
 
 </div>
     
@@ -744,7 +758,7 @@ echo $formatted_date;
 
 
 echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
-                        <br /><span class="fs-4">' . $data->data->timelines[0]->intervals[$i]->values->temperature . 
+                        <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
             '           &#8451;</span>';
 
             if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
@@ -796,29 +810,7 @@ echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->
         
 <script>
 
-// Capture the current theme from local storage and adjust the page to use the current theme.
-const htmlEl = document.getElementsByTagName('html')[0];
-const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-const dismisser = localStorage.getItem('dismiss') ? localStorage.getItem('dismiss') : null;
 
-if (currentTheme) {
-    htmlEl.dataset.theme = currentTheme;
-    $('#'+currentTheme).addClass('d-none');
-}else{
-    $('#light').addClass('d-none');
-}
-
-// When the user changes the theme, we need to save the new value on local storage
-const toggleTheme = (theme) => {
-    htmlEl.dataset.theme = theme;
-    localStorage.setItem('theme', theme);
-    $('#'+theme).addClass('d-none');
-    if (theme=='dark'){
-        $('#light').removeClass('d-none');
-        }else{
-        $('#dark').removeClass('d-none');    
-        }
-}
 
 
 if(dismisser){

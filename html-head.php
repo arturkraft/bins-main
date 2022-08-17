@@ -56,6 +56,27 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
+
+        // Capture the current theme from local storage and adjust the page to use the current theme.
+const htmlEl = document.getElementsByTagName('html')[0];
+const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+const dismisser = localStorage.getItem('dismiss') ? localStorage.getItem('dismiss') : null;
+
+
+
+// When the user changes the theme, we need to save the new value on local storage
+const toggleTheme = (theme) => {
+    htmlEl.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+    $('#'+theme).addClass('d-none');
+    if (theme=='dark'){
+        $('#light').removeClass('d-none');
+        }else{
+        $('#dark').removeClass('d-none');    
+        }
+}
+
+
     $( function() {
       $( "#tabs" ).tabs();
     } );
