@@ -20,8 +20,8 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
 $current_bin = ['grey', 'blue', 'green', 'brown'];
 
-$good_li = '<span class="fa-li green"><i class="fas fa-check-square"></i></span>';
-$bad_li = '<span class="fa-li text-danger"><i class="fa-solid fa-square-xmark"></i></span>';
+$good_li = '<span class="fa-li green"><span class="icon-goodli"></span></span>';
+$bad_li = '<span class="icon-badli text-danger"></span>';
 
 $grey_good = ['Non-recyclable waste', 'Plastic bags and polythene', 'Polystyrene', 'Crisp and sweet wrappers', 'Used tissues and paper towels', 'Cling film', 'Tinfoil', 'Lightbulbs', 'Pet litter', 'Nappies', 'Personal hygiene products', 'Food and drinks pouches', 'Hard plastics (toys, coat hangers, CD cases etc.)', 'Padded envelopes', 'Shredded paper'];
 $grey_bad = ['Plastics, cans and glass', 'Paper, card and cardboard', 'Food waste', 'Garden waste', 'Electrical items', 'Textiles and shoes'];
@@ -44,7 +44,7 @@ for ($x = 0; $x <= 3; $x++) {
                                 <div class="row align-items-start">
                                     <div class="col">
                                         <h5>These items can go in your '.$current_bin[$x].' bin:</h5>
-                                        <ul class="fa-ul">
+                                        <ul style="list-style: none;">
                                         ';
         foreach (${$current_bin[$x].'_good'} as $good_item) {
             ${$current_bin[$x].'_modal'}.='
@@ -57,7 +57,7 @@ for ($x = 0; $x <= 3; $x++) {
                                     </div>
                                     <div class="col">
                                         <h5>Do not put these items in your '.$current_bin[$x].' bin:</h5>
-                                        <ul class="fa-ul">
+                                        <ul style="list-style: none;">
                                         ';
         foreach (${$current_bin[$x].'_bad'} as $bad_item) {
             ${$current_bin[$x].'_modal'}.='
@@ -282,8 +282,8 @@ require_once(__ROOT__.'/bins-main/html-head.php');
     
 <div id="tabs" class="pt-3">
   <ul class="sticky">
-    <li><a href="#tabs-1"><i class="fas fa-sort-amount-down"></i> Coming up</a></li>
-    <li><a href="#tabs-2"><i class="far fa-calendar-alt"></i> Calendar</a></li>
+    <li><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
+    <li><a href="#tabs-2"><span class="icon-calendar"></span> Calendar</a></li>
   </ul>
   <div id="tabs-1">
 
@@ -405,8 +405,8 @@ for($x=0; $x<=3; $x++){
     ${$current_bin[$x].'_image'}='
     <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
     <figure class="figure float-end">
-        <img src="../bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
-        <figcaption class="bin figure-caption text-center '.$current_bin[$x].'"><i class="fa-solid fa-trash"></i> &nbsp;'.strtoupper($current_bin[$x]).'</figcaption>
+        <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+        <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
     </figure>
     </a>';
     
@@ -426,17 +426,17 @@ function weatherDisplay($data, $date, $precipitation_type){
         if(substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10) == $date){
             echo  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
             <div class="badge bg-secondary text-wrap align-bottom">
-                        <img src="../bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
+                        <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
                         <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
             '           &#8451;</span><br /><br />';
 
             if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
-                        echo '<p>Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
+                        echo '<p><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
             }else{
-                        echo '<p>0% chance of rain</p>';
+                        echo '<p><span class="icon-rainy"></span> 0% chance of rain</p>';
             }
 
-            echo '<p>Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
+            echo '<p><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
 
             echo '  
             
@@ -501,11 +501,11 @@ for ($i = 0; $i <= 3; $i++) {
 echo '</div>';
 if ($bin2 === 0) {
     echo '<div class="alert alert-secondary" role="alert">
-    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><i class="fa-solid fa-trash"></i> '.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span> '.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
     </div><hr />';
 } else {
     echo '<div class="alert alert-secondary" role="alert">
-    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><i class="fa-solid fa-trash"></i> '.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'"><i class="fa-solid fa-trash"></i> '.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
+    Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span> '.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'"><span class="icon-delete"></span> '.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
     </div><hr />';
 }
 
@@ -582,25 +582,12 @@ for ($g = 1; $g <= 3; $g++)
   </div>
 
 <div class="d-flex justify-content-between">
-    <button id="dark" class="btn btn-outline-light btn-sm active d-none" onclick="toggleTheme('dark');"><i class="fa-solid fa-toggle-off"></i>
+    <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
  Dark mode </button>
-    <button id="light" class="btn btn-outline-light btn-sm active d-none" onclick="toggleTheme('light');"><i class="fa-solid fa-toggle-on"></i> Dark mode </button>
+    <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
 
-    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><i class="fas fa-calendar-alt"></i> Phone calendar</a>
+    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar</a>
 </div>
-
-<script>
-    if (currentTheme) {
-    htmlEl.dataset.theme = currentTheme;
-    $('#light').removeClass('d-none');
-    $('#'+currentTheme).addClass('d-none');
-
-}else{
-        $('#'+currentTheme).removeClass('d-none');
-    $('#light').addClass('d-none');
-
-}
-    </script>
 
 
 </div>
@@ -616,15 +603,15 @@ if ($show_octopus == 1) {
     <div class="container my-5">
     <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
       <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1"><i class="fa-solid fa-gift"></i> Get <strong>£50</strong> for switching to Octopus Energy</h1>
+        <h1 class="display-4 fw-bold lh-1"><span class="icon-gift"></span> Get <strong>£50</strong> for switching to Octopus Energy</h1>
         <p class="lead">With energy prices going up so quickly, save some money by switching to Octopus Energy.</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-          <a href="https://share.octopus.energy/tan-loris-643" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold"><i class="fa-solid fa-gift"></i> Get £50</a>
-          <button type="button" class="btn btn-outline-secondary btn-sm px-4" onclick="dismiss();"><i class="fa-solid fa-heart-crack"></i> Dismiss</button>
+          <a href="https://share.octopus.energy/tan-loris-643" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold"><span class="icon-gift"></span> Get £50</a>
+          <button type="button" class="btn btn-outline-secondary btn-sm px-4" onclick="dismiss();"><span class="icon-heart-broken"></span> Dismiss</button>
         </div>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="../bins-main/img/octopus.png" alt="" width="720">
+          <img class="rounded-lg-3" src="https://arturkraft.b-cdn.net/bins-main/img/octopus.png" alt="" width="720">
       </div>
     </div>
   </div>
@@ -727,7 +714,7 @@ for ($x=0; $x<=3; $x++) {
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Weather forecast for <?php echo $location_name; ?></h4>
+                <h4 class="modal-title"><span class="icon-sun"></span> Weather forecast for <?php echo $location_name; ?></h4>
                 <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
             </div>
 
@@ -757,27 +744,27 @@ echo $formatted_date;
 
 
 
-echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
+echo '<br /><div style="height: 4rem"><img src="https://arturkraft.b-cdn.net/bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
                         <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
             '           &#8451;</span>';
 
             if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
-                        echo '<br />Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
+                        echo '<br /><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
             }else{
-                        echo '<br />0% chance of rain';
+                        echo '<br /<span class="icon-rainy"></span> 0% chance of rain';
             }
 
-            echo '<br />Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
+            echo '<br /><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
 
             echo '</div>';
             
             if( isset($bins_array[$date_to_change]) ){
                 $exploded = explode(', ', $bins_array[$date_to_change]);
 
-                echo '<p class="text-center text-uppercase fw-bold ' . $exploded[0] . '"><i class="fa-solid fa-trash"></i> ' . $exploded[0] . '</p>';
+                echo '<p class="text-center text-uppercase fw-bold ' . $exploded[0] . '"><span class="icon-delete"></span>' . $exploded[0] . '</p>';
 
                 if ( isset($exploded[1]) ){
-                    echo '<p class="text-center text-uppercase fw-bold ' . $exploded[1] . '"><i class="fa-solid fa-trash"></i> ' . $exploded[1] . '</p>';
+                    echo '<p class="text-center text-uppercase fw-bold ' . $exploded[1] . '"><span class="icon-delete"></span>' . $exploded[1] . '</p>';
                 }
             }
 }
@@ -788,7 +775,7 @@ echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->
                     </table>
                     <p>
                         <span style="padding-left: 8rem;">
-                            Swipe left/right <i class="fa-solid fa-left-right"></i>
+                            Swipe left/right <span class="icon-one-finger-swipe-horizontally" style="font-size: 2em"></span>
                         </span>
                     </p>
                 </div>
@@ -806,10 +793,22 @@ echo '<br /><div style="height: 4rem"><img src="../bins-main/img/large/'.$data->
         
 
 
-
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
         
 <script>
 
+
+
+    if (currentTheme) {
+    htmlEl.dataset.theme = currentTheme;
+    $('#light').removeClass('d-none');
+    $('#'+currentTheme).addClass('d-none');
+
+}else{
+        $('#'+currentTheme).removeClass('d-none');
+    $('#light').addClass('d-none');
+
+}
 
 
 
@@ -834,7 +833,7 @@ $('#tabs').tabs({
           initialView: 'dayGridMonth',
           firstDay: 1,
         aspectRatio: 0.9,
-         themeSystem: 'bootstrap5',
+         //themeSystem: 'bootstrap5',
             events: [                
                 <?php
                 /*
