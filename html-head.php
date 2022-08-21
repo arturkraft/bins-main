@@ -46,6 +46,7 @@
 
     body {
         background-size: cover;
+        touch-action: manipulation;
     }
 
     .fc-daygrid-day-number {
