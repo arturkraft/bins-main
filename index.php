@@ -83,7 +83,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
   <div id="tabs-1">
 
     <div class="row">
-            <h2>
+            <h2 id="next-collection">
                 Your next collection:
             </h2>
     </div>
@@ -108,7 +108,7 @@ echo $post_bins_row1;
     </div><br />
     <div class="row">
         <h2>
-            Your future collections:
+            Future collections:
         </h2>
     </div>
 
@@ -285,7 +285,7 @@ $('#tabs').tabs({
           initialView: 'dayGridMonth',
           validRange: {
             start: '2022-05-01',
-            end: '2025-01-01'
+            end: '2023-12-31'
           },
           firstDay: 1,
         aspectRatio: 0.9,
@@ -357,13 +357,17 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 //let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMonth()] + " " + date.getFullYear();
 
   if(today === date2){
-      document.getElementById("thedate"+i).textContent='today';
+    document.getElementById("thedate"+i).textContent='today';
+    document.getElementById("next-collection").textContent = "Today's collection: ";
   }else if(tomorrow === date2){
-      document.getElementById("thedate"+i).textContent='tomorrow';
+    document.getElementById("thedate"+i).textContent='tomorrow';
+    document.getElementById("next-collection").textContent = "Tomorrow's collection: ";
   }else if(yesterday === date2){
-      document.getElementById("thedate"+i).textContent='yesterday';
+    document.getElementById("thedate"+i).textContent='yesterday';
+    document.getElementById("next-collection").textContent = "Yesterday's collection: ";
   }else{
-      document.getElementById("thedate"+i).textContent=formatted_date;
+    document.getElementById("thedate"+i).textContent=formatted_date;
+    document.getElementById("next-collection").textContent = "Collection this week: ";
   }
     
 }
