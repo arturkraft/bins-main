@@ -329,6 +329,19 @@ color: brown;
 
         .icon-badli:before { content: '\ea0d'; margin-left: -20px; margin-right: 10px; } 
 
+
+        img.bin{
+            height: 259px;
+            width: 138px;
+        }
+
+        @media screen and (max-width: 640px) {
+            img.bin{
+                height: 150.14px;
+                width: 80px;
+            }
+        }
+
     </style>
 
 

@@ -151,7 +151,7 @@ $brown->setColour($brownColour);
             ${$current_bin[$x].'_image'}='
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
             <figure class="figure float-end">
-                <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin figure-img img-fluid" alt="'.$current_bin[$x].'">
+                <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin bin'.$current_bin[$x].' figure-img img-fluid" data-hover="../bins-main/img/'.$current_bin[$x].'-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" alt="'.$current_bin[$x].'">
                 <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
             </figure>
             </a>';

@@ -84,7 +84,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
     <div class="row">
             <h2 id="next-collection">
-                Your next collection:
+                Next collection:
             </h2>
     </div>
     <div class="row pl0"> 
@@ -376,7 +376,19 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
 
+<script defer>
 
+$('img.bin').bind('touchstart touchend', function(e) {
+    $(this).attr('src', $(this).data("hover"));
+});
+
+$("img.bin").mouseover(function() {
+  $(this).attr('src', $(this).data("hover"));
+}).mouseout(function() {
+  $(this).attr('src', $(this).data("src"));
+});
+
+</script>
 
 
 <?php
