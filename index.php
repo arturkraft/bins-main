@@ -127,7 +127,7 @@ echo $post_bins_rows;
  Dark mode </button>
     <button id="light" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('light');" onclick="toggleTheme('light');" class="default" onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };"><span class="icon-toggle-on"></span> Dark mode </button>
 
-    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar</a>
+    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar test</a>
 </div>
 
 
@@ -276,6 +276,8 @@ function dismiss(){
 }
 
 
+
+
 //tabs
 
 $('#tabs').tabs({
@@ -392,6 +394,20 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
             </style>
 
 <script src="../bins-main/js/ripplet.min.js"></script>
+
+
+<script defer>
+
+$('img.bin').bind('touchstart touchend', function(e) {
+    $(this).attr('src', $(this).data("hover"));
+});
+
+$("img.bin").mouseover(function() {
+  $(this).attr('src', $(this).data("hover"));
+}).mouseout(function() {
+  $(this).attr('src', $(this).data("src"));
+});
+    </script>
 
 
 <?php
