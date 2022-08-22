@@ -349,7 +349,7 @@ $brown->setColour($brownColour);
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++){
 
             if(substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10) == $date){
-                $result .=  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
+                $result .=  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal" onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: \'rainbow\' })">
                 <div class="badge bg-secondary text-wrap align-bottom">
                             <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
                             <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 

@@ -71,19 +71,19 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
 ?>
 
-<body onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };">
+<body>
 <div id="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
   <ul class="sticky">
-    <li id="example"><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
-    <li><a href="#tabs-2"><span class="icon-calendar"></span> Calendar</a></li>
+    <li onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };"><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
+    <li><a href="#tabs-2" onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };"><span class="icon-calendar"></span> Calendar</a></li>
   </ul>
   <div id="tabs-1">
 
     <div class="row">
-            <h2>
+            <h2 id="next-collection">
                 Your next collection:
             </h2>
     </div>
@@ -285,7 +285,7 @@ $('#tabs').tabs({
           initialView: 'dayGridMonth',
           validRange: {
             start: '2022-05-01',
-            end: '2025-01-01'
+            end: '2023-12-31'
           },
           firstDay: 1,
         aspectRatio: 0.9,
@@ -364,6 +364,7 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
       document.getElementById("thedate"+i).textContent='yesterday';
   }else{
       document.getElementById("thedate"+i).textContent=formatted_date;
+      document.getElementById("next-collection").textContent = "Collection this week: "
   }
     
 }
