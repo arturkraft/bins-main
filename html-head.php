@@ -69,7 +69,10 @@
     }
 
 
-
+    .ripples-purple .ripple  { 
+        background-color : #B721FF ; 
+        opacity : .32 ; 
+    }
 
     h1 { font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } 
     h2 { font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 2em; font-style: normal; font-variant: normal; font-weight: 200;} 
@@ -328,6 +331,30 @@ color: brown;
         .icon-goodli:before { content: '\ea10'; margin-left: -20px; margin-right: 10px; } 
 
         .icon-badli:before { content: '\ea0d'; margin-left: -20px; margin-right: 10px; } 
+
+
+
+.ripple {
+  position: absolute;
+  background: #aaa;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  animation: rippleEffect .88s 1;
+  opacity: 0;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(100);
+    opacity: 0;
+  }
+}
+
 
     </style>
 

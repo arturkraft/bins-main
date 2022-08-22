@@ -71,13 +71,13 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
 ?>
 
-<body>
-<div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
+<body onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };">
+<div id="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
   <ul class="sticky">
-    <li><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
+    <li id="example"><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
     <li><a href="#tabs-2"><span class="icon-calendar"></span> Calendar</a></li>
   </ul>
   <div id="tabs-1">
@@ -125,7 +125,7 @@ echo $post_bins_rows;
 <div class="d-flex justify-content-between">
     <button id="dark" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('dark');" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
  Dark mode </button>
-    <button id="light" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('light');" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
+    <button id="light" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('light');" onclick="toggleTheme('light');" class="default" onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' };"><span class="icon-toggle-on"></span> Dark mode </button>
 
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar</a>
 </div>
@@ -214,7 +214,7 @@ echo $post_weather_modal;
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title brown">How to use the brown bin?</h4>
+                <h4 class="myRipple modal-title brown">How to use the brown bin?</h4>
                 <button type="button" class="btn-close brown" data-bs-dismiss="modal"></button>
             </div>
 
@@ -237,8 +237,8 @@ echo $post_weather_modal;
 
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal">What goes in the brown bin?</button>
-                <button type="button" class="btn btn-outline-secondary brown" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary myRipple" data-bs-toggle="modal" data-bs-target="#brown-modal">What goes in the brown bin?</button>
+                <button type="button" class="myRipple btn btn-outline-secondary brown" data-bs-dismiss="modal">Close</button>
             </div>
 
         </div>
@@ -372,7 +372,25 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
 
+<button data-ripplet>Default</button>
+<button data-ripplet="color: rgba( 64, 192, 255, .2); spreading-duration: 2s; clearing-delay: 1.8s;">Sky Blue Slow</button>
+            <button type="button" class="default" onpointerdown="ripplet(arguments[0], { color: 'red' })">Red!</button>
+            <button type="button" class="default" onpointerdown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' })">Rainbow!</button>
+            <style>
+              .rainbow {
+                background-image: linear-gradient(
+                  -45deg,
+                  rgba(255,   0,   0, .3),
+                  rgba(255, 255,   0, .3),
+                  rgba(  0, 255, 255, .2),
+                  rgba(  0,   0, 255, .15),
+                  rgba(255,   0, 255, .2),
+                  rgba(255,   0,   0, .3)
+                );
+              }
+            </style>
 
+<script src="../bins-main/js/ripplet.min.js"></script>
 
 
 <?php
