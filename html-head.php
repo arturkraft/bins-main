@@ -3,14 +3,14 @@
 
 <head>
     <title>Bins collection day - <?php echo $location_name; ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
 <style>
-            :root {
+        :root {
             --background-primary: #fff;
             --color-primary: #333;
             transition: color 300ms, background-color 300ms;
@@ -41,13 +41,32 @@
         html, body {
             max-width: 100%;
             min-height: 100%;
-            
+            touch-action: pan-x, pan-y;
         }
 
-    body {
-        background-size: cover;
-        touch-action: manipulation;
-    }
+        body {
+            background-size: cover;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: pan-x, pan-y;
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+        }
+    
+
+    
+    
+        div {
+            touch-action: pan-x, pan-y;
+        }
+    
+    
+    
 
     .fc-daygrid-day-number {
         text-decoration: none !important;
@@ -112,9 +131,7 @@
             margin: 0;
         }
 
-        .bin {
-            width: 80px;
-        }
+       
     }
 
     #tabs {
@@ -207,7 +224,7 @@ color: brown;
         #content {
             min-height: 100vh;
             height: 100%;
-            background-color: #fff;
+            background-color: #fff;.
         }
 
         #bottom-text {
@@ -410,6 +427,27 @@ const toggleTheme = (theme) => {
     $( function() {
       $( "#tabs" ).tabs();
     } );
+    
+    
+    
+document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+    // special hack to prevent zoom-to-tabs gesture in safari
+    document.body.style.zoom = 0.99;
+});
+
+document.addEventListener('gesturechange', function(e) {
+    e.preventDefault();
+    // special hack to prevent zoom-to-tabs gesture in safari
+    document.body.style.zoom = 0.99;
+});
+
+document.addEventListener('gestureend', function(e) {
+    e.preventDefault();
+    // special hack to prevent zoom-to-tabs gesture in safari
+    document.body.style.zoom = 0.99;
+});
+   
     </script>
     
 <?php

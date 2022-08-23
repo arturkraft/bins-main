@@ -123,9 +123,9 @@ echo $post_bins_rows;
   </div>
 
 <div class="d-flex justify-content-between">
-    <button id="dark" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('dark');" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
+    <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
  Dark mode </button>
-    <button id="light" class="btn btn-outline-light btn-sm active" ontouchstart="toggleTheme('light');" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
+    <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
 
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar</a>
 </div>
