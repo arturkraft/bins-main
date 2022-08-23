@@ -102,10 +102,6 @@
         font-weight: 300;
     }
 
-    .whitet {
-        color: #fff;
-    }
-
     ul.sticky {
         position: -webkit-sticky;
         position: sticky;
@@ -137,43 +133,25 @@
     #tabs {
         padding: 0 !important;
     }
-
-
-
-.c-event-main{
-    height: 50px;
-}
-.grayb{
-background-color:#737373;
-color: #fff;
-}
-.blueb{
-background-color:#007DBB;
-color: #fff;
-}
-.greenb{
-background-color:#038831;
-color: #fff;
-}
-.brownb{
-background-color:#966757;
-color: #fff;
-}
-.whitet{
-color: #fff;
-}
-.gray{
-color: #444;
-}
-.blue{
-color: blue;
-}
-.green{
-color: green;
-}
-.brown{
-color: brown;
-}
+    .c-event-main{
+        height: 50px;
+    }
+    .grayb{
+        background-color: #737373;
+        color: #fff;
+    }
+    .blueb{
+        background-color: #007DBB;
+        color: #fff;
+    }
+    .greenb{
+        background-color: #038831;
+        color: #fff;
+    }
+    .brownb{
+        background-color: #966757;
+        color: #fff;
+    }
 
 
         .modal-backdrop.show {
@@ -424,12 +402,6 @@ const toggleTheme = (theme) => {
         }
 }
 
-    $( function() {
-      $( "#tabs" ).tabs();
-    } );
-    
-    
-    
 document.addEventListener('gesturestart', function(e) {
     e.preventDefault();
     // special hack to prevent zoom-to-tabs gesture in safari
@@ -447,6 +419,14 @@ document.addEventListener('gestureend', function(e) {
     // special hack to prevent zoom-to-tabs gesture in safari
     document.body.style.zoom = 0.99;
 });
+
+    $( function() {
+      $( "#tabs" ).tabs();
+    } );
+    
+    
+    
+
    
     </script>
     

@@ -311,7 +311,22 @@ $('#tabs').tabs({
                 echo $post_js_events;
 
                 ?>
+                    {
+                            start: '2022-10-31',
+                            end: '2022-10-31',
+                            title: 'Halloween',
+                            display: 'block',
+                            color: '#E66C2C'
 
+                    },
+                    {
+                            start: '2022-12-25',
+                            end: '2022-12-25',
+                            title: 'Christmas',
+                            display: 'block',
+                            color: '#C30F16'
+
+                    }
             ]
         });
         calendar.render();
