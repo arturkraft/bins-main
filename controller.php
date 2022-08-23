@@ -250,8 +250,8 @@ $brown->setColour($brownColour);
             $formatted_date = date("M, jS", strtotime($date_to_change));  
             $post_weather_modal .= $formatted_date;
             $post_weather_modal .= '<br /><div style="height: 4rem"><img src="https://arturkraft.b-cdn.net/bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
-                                    <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
-                        '           &#8451;</span>';
+                                    <br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
+                        '&#8451;</span>';
 
                         if($data->data->timelines[0]->intervals[$i]->values->precipitationType != 0) {
                                     $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
@@ -352,8 +352,8 @@ $brown->setColour($brownColour);
                 $result .=  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
                 <div class="badge bg-secondary text-wrap align-bottom">
                             <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
-                            <br /><span class="fs-4">' . floor($data->data->timelines[0]->intervals[$i]->values->temperature) . 
-                '           &#8451;</span><br /><br />';
+                            <br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
+                '&#8451;</span><br /><br />';
 
                 if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
                             $result .= '<p><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
