@@ -245,12 +245,9 @@ echo $post_weather_modal;
     </div>
 </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
+
         
 <script>
-
-
-
     if (currentTheme) {
     htmlEl.dataset.theme = currentTheme;
     $('#light').removeClass('d-none');
@@ -276,62 +273,7 @@ function dismiss(){
 }
 
 
-//tabs
 
-$('#tabs').tabs({
-  activate: function(event, ui) {
-            var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          validRange: {
-            start: '2022-05-01',
-            end: '2023-12-31'
-          },
-          firstDay: 1,
-        aspectRatio: 0.9,
-         //themeSystem: 'bootstrap5',
-            events: [                
-                <?php
-                /*
-                if( $var_good == 1){
-                        for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
-
-                                                                                                        echo "{
-                        start: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
-                        end: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
-                        title: '".floor($data->data->timelines[0]->intervals[$i]->values->temperature)." \'C, ".$precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ].": ".$data->data->timelines[0]->intervals[$i]->values->precipitationProbability."%',
-                        display: 'background',
-                        textColor: '#999',
-                        color: '#fff'},";  
-
-                        
-                        }
-                }
-                */
-                echo $post_js_events;
-
-                ?>
-                    {
-                            start: '2022-10-31',
-                            end: '2022-10-31',
-                            title: 'Halloween',
-                            display: 'block',
-                            color: '#E66C2C'
-
-                    },
-                    {
-                            start: '2022-12-25',
-                            end: '2022-12-25',
-                            title: 'Christmas',
-                            display: 'block',
-                            color: '#C30F16'
-
-                    }
-            ]
-        });
-        calendar.render();
-  }
-});
                 
 
 //today or tomorrow or date format
@@ -387,9 +329,11 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
     
 }
 
-
-
     </script>
+
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js" defer></script>
 
 <script defer>
 
@@ -401,6 +345,64 @@ $("img.bin").mouseover(function() {
   $(this).attr('src', $(this).data("hover"));
 }).mouseout(function() {
   $(this).attr('src', $(this).data("src"));
+});
+
+
+//tabs and calendar
+
+$('#tabs').tabs({
+  activate: function(event, ui) {
+            var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          validRange: {
+            start: '2022-05-01',
+            end: '2023-12-31'
+          },
+          firstDay: 1,
+        aspectRatio: 0.9,
+         //themeSystem: 'bootstrap5',
+            events: [                
+                <?php
+                /*
+                if( $var_good == 1){
+                        for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
+
+                                                                                                        echo "{
+                        start: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
+                        end: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
+                        title: '".floor($data->data->timelines[0]->intervals[$i]->values->temperature)." \'C, ".$precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ].": ".$data->data->timelines[0]->intervals[$i]->values->precipitationProbability."%',
+                        display: 'background',
+                        textColor: '#999',
+                        color: '#fff'},";  
+
+                        
+                        }
+                }
+                */
+                echo $post_js_events;
+
+                ?>
+                    {
+                            start: '2022-10-31',
+                            end: '2022-10-31',
+                            title: 'Halloween',
+                            display: 'block',
+                            color: '#E66C2C'
+
+                    },
+                    {
+                            start: '2022-12-25',
+                            end: '2022-12-25',
+                            title: 'Christmas',
+                            display: 'block',
+                            color: '#C30F16'
+
+                    }
+            ]
+        });
+        calendar.render();
+  }
 });
 
 </script>

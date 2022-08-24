@@ -69,7 +69,7 @@ echo $gtag;
 
     <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/jquery-ui.min.css">
     <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/styles.pure.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
+
 
     <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
