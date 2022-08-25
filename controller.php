@@ -256,7 +256,7 @@ $brown->setColour($brownColour);
                         if($data->data->timelines[0]->intervals[$i]->values->precipitationType != 0) {
                                     $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
                         }else{
-                                    $post_weather_modal .= '<br /<span class="icon-rainy"></span> 0% chance of rain';
+                                    $post_weather_modal .= '<br /><span class="icon-rainy"></span> 0% chance of rain';
                         }
 
                         $post_weather_modal .= '<br /><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
