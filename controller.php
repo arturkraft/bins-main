@@ -145,41 +145,31 @@ $brown->setColour($brownColour);
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
 
-        echo '99';
+        echo '9999876544433322111';
         for($i = 0; $i <= 7; $i++) {
-            if($i <= 3) {
+            if ($i == 0){
+                $comp = 0;
+            }else{
+                $j = $i-1;
+                if(isset($post_bins_rows[$j][0])){
+                    $comp = array_key_first($post_bins_rows[$j][0]);
+                }
+                
+            }
+            if($comp != $arr[$i] && count($post_bins_rows) < 4) {
                 for($x=0; $x<=3; $x++) {
                     if($arr[$i] == ${$current_bin[$x]}->next_date || $arr[$i] == ${$current_bin[$x]}->next_date_plus) {
-                        if(!isset($post_bins_rows[$i]) && !isset(${$current_bin[$x] . '_posted'}) ) {
+                        if(!isset($post_bins_rows[$i])  ) {
                             $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
                             $post_bins_rows[$i][1] = array($arr[$i] => "none");
-                            ${$current_bin[$x] . '_posted'} = 1;
                         } elseif(isset($post_bins_rows[$i])) {
                             if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
                                 $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
-                                ${$current_bin[$x] . '_posted'} = 1;
                             }  
                         }   
                     }
                 }
-            } elseif(count($post_bins_rows) <= 3) {
-                for($x=0; $x<=3; $x++) {
-                    if($arr[$i] == ${$current_bin[$x]}->next_date_plus) {
-                        echo $current_bin[$x].$arr[$i].'  huha '.count($post_bins_rows).' hu ';
-                        if(!isset($post_bins_rows[$i]) && !isset(${$current_bin[$x] . '_posted2'}) ) {
-                            $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
-                            $post_bins_rows[$i][1] = array($arr[$i] => "none");
-                            ${$current_bin[$x] . '_posted2'} = 1;
-                        } elseif(isset($post_bins_rows[$i])) {
-                            if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
-                                $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
-                                echo 'zzzz';
-                                ${$current_bin[$x] . '_posted2'} = 1;
-                            } 
-                        }
-                    }
-                }
-            }
+            } 
         }
 
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
