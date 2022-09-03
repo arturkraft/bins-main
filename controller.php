@@ -131,10 +131,11 @@ $brown->setColour($brownColour);
 
     function renderView($render_cache_file, $current_bin, Bin $grey, Bin $blue, Bin $green, Bin $brown, $precipitation_type, $data){
         $bin1 = $bin1_date = $bin2 = $bin2_date = $var_good = 0;
-        $post_bins_row1 = $post_bins_rows = $post_weather_modal = $post_js_events = "";
+        $post_bins_row1 = $post_weather_modal = $post_js_events = "";
+        $post_bins_rows = [];
 
         //assigning two future dates from each bin to a numbered date
-        for($x=0; $x<=3; $x++){
+        for($x=0; $x<=3; $x++) {
             $y=$x+1;
             ${'date'.$y} = ${$current_bin[$x]}->next_date;
             $z=$x+5;
@@ -144,101 +145,42 @@ $brown->setColour($brownColour);
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
 
-        //bin displays
-      
-        for($x=0; $x<=3; $x++){
-            
-            ${$current_bin[$x].'_image'}='
-            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
-            <figure class="figure float-end">
-                <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin bin'.$current_bin[$x].' figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" alt="'.$current_bin[$x].'">
-                <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
-            </figure>
-            </a>';
-            
-        }
-
-        //row1
-        for ($i = 0; $i <= 3; $i++) {
-            $current_bin_date=${$current_bin[$i]}->next_date;
-            if ($arr[0] == $current_bin_date) {
-                $post_bins_row1 .= '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
-                if ($bin1 === 0) {
-                    $bin1 = $current_bin[$i];
-                    $bin1_date = $current_bin_date;
-
-                    $bins_array = array($current_bin_date => $current_bin[$i]);
-
-                } else {
-                    $bin2 = $current_bin[$i];
-                    $bin2_date = $current_bin_date;
-
-                    $bins_array[$current_bin_date] = $bins_array[$current_bin_date] . ', ' . $current_bin[$i];
+        echo '99';
+        for($i = 0; $i <= 7; $i++) {
+            if($i <= 3) {
+                for($x=0; $x<=3; $x++) {
+                    if($arr[$i] == ${$current_bin[$x]}->next_date || $arr[$i] == ${$current_bin[$x]}->next_date_plus) {
+                        if(!isset($post_bins_rows[$i]) && !isset(${$current_bin[$x] . '_posted'}) ) {
+                            $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
+                            $post_bins_rows[$i][1] = array($arr[$i] => "none");
+                            ${$current_bin[$x] . '_posted'} = 1;
+                        } elseif(isset($post_bins_rows[$i])) {
+                            if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
+                                $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
+                                ${$current_bin[$x] . '_posted'} = 1;
+                            }  
+                        }   
+                    }
+                }
+            } elseif(count($post_bins_rows) <= 3) {
+                for($x=0; $x<=3; $x++) {
+                    if($arr[$i] == ${$current_bin[$x]}->next_date_plus) {
+                        echo $current_bin[$x].$arr[$i].'  huha '.count($post_bins_rows).' hu ';
+                        if(!isset($post_bins_rows[$i]) && !isset(${$current_bin[$x] . '_posted2'}) ) {
+                            $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
+                            $post_bins_rows[$i][1] = array($arr[$i] => "none");
+                            ${$current_bin[$x] . '_posted2'} = 1;
+                        } elseif(isset($post_bins_rows[$i])) {
+                            if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
+                                $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
+                                echo 'zzzz';
+                                ${$current_bin[$x] . '_posted2'} = 1;
+                            } 
+                        }
+                    }
                 }
             }
         }
-
-        if ($bin2 === 0) {
-            $post_bins_row1 .= '<div class="alert alert-secondary" role="alert">
-            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span>'.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
-            </div><hr />';
-        } else {
-            $post_bins_row1 .= '<div class="alert alert-secondary" role="alert">
-            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span>'.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'"><span class="icon-delete"></span>'.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
-            </div><hr />';
-        }
-
-
-        for ($g = 1; $g <= 3; $g++) {
-            $next_week = $arr[$g];
-
-            if ($next_week == $arr[$g-1]) {
-                $next_week = $arr[$g+1];
-                array_splice($arr, $g, 1);
-            }
-
-
-            $post_bins_rows .= '<div class="row pl'.$g.'">'; 
-            $post_bins_rows .= '<div class="col">
-                <h4>' . date("l", strtotime($next_week)) . ', <br/>
-                <span id="thedate'.$g.'">' . $next_week . '</span>
-                </h4>';
-            $post_bins_rows .= weatherDisplay($data, $arr[$g], $precipitation_type); 
-                
-            $post_bins_rows .= '</div>';
-
-            for($i = 0; $i <= 3; $i++) 
-            {
-                $current_bin_date=${$current_bin[$i]}->next_date;
-                $current_bin_date_plus=${$current_bin[$i]}->next_date_plus;
-                $add_one = 0;
-                if($next_week == $current_bin_date)
-                {
-                    $post_bins_rows .= '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
-
-                    if( !isset($bins_array[$current_bin_date]) ){
-                        $bins_array += [ $current_bin_date => $current_bin[$i] ];
-                    } else {
-                        $bins_array[$current_bin_date] = $bins_array[$current_bin_date] . ', ' . $current_bin[$i];
-                    }
-
-                    
-
-                }elseif($next_week == $current_bin_date_plus)
-                {
-                    $post_bins_rows .= '<div class="col col-md-auto">'.${$current_bin[$i].'_image'}.'</div>';
-
-                    if( !isset($bins_array[$current_bin_date_plus]) ){
-                        $bins_array += [ $current_bin_date_plus => $current_bin[$i] ];
-                    } else {
-                        $bins_array[$current_bin_date_plus] = $bins_array[$current_bin_date_plus] . ', ' . $current_bin[$i];
-                    }
-
-                }
-            }
-            $post_bins_rows .= '</div><hr />';
-        }
-
 
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 

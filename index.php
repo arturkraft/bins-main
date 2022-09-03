@@ -25,7 +25,7 @@ $tomorrow = date("Y-m-d",strtotime("+1 days"));
 $var_good = $post_bins_row1 = 0;
 
 //CONTROLLER
-require_once('controller.php');
+require_once(__ROOT__.'/bins-main/controller.php');
 
 //HTML HEAD
 require_once(__ROOT__.'/bins-main/html-head.php');
@@ -55,7 +55,7 @@ if( !file_exists($render_cache_file) ) {
     $view_log_mode = " | Running from render file creation, code: " . $render_result . ' | ';
     echo '<!-- ' . $view_log_mode . ' -->';
 } else {
-    if(time() - filemtime($render_cache_file) >= 5 * 3600 || date("l", strtotime('today')) == 'Monday' && date("H") <= 8) { 
+    if(time() - filemtime($render_cache_file) >= 0.0005 * 3600 || date("l", strtotime('today')) == 'Monday' && date("H") <= 12) { 
         $render_result = renderView($render_cache_file, $current_bin, $grey, $blue, $green, $brown, $precipitation_type, $data);
         $view_log_mode = " | Running from render file update, code: " . $render_result . ' | ';
         echo '<!-- ' . $view_log_mode . ' -->';
@@ -95,25 +95,60 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             </h4>
             <?php
             if(isset($data->data->timelines[0]->intervals)) {
-                echo $weather = weatherDisplay($data, $arr[0], $precipitation_type);
+                echo weatherDisplay($data, $arr[0], $precipitation_type);
             }  
             ?>
-    </div>
-
-
-<?php
-echo $post_bins_row1;
-?>
-
+        </div>
+        <div class="col col-md-auto">
+            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
+                <figure class="figure float-end">
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin bin'.$current_bin[$x].' figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" alt="'.$current_bin[$x].'">
+                    <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="col col-md-auto">
+            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
+                <figure class="figure float-end">
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin bin'.$current_bin[$x].' figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" alt="'.$current_bin[$x].'">
+                    <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="alert alert-secondary" role="alert">
+            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span>'.$bin1.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collection can take place until 6.30<sup>pm</sup>.
+        </div>
+        <div class="alert alert-secondary" role="alert">
+            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin1.'-modal"><strong class="'.$bin1.'"><span class="icon-delete"></span>'.$bin1.'</strong></a> and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$bin2.'-modal"><strong class="'.$bin2.'"><span class="icon-delete"></span>'.$bin2.'</strong></a> bin out for collection before 7.00<sup>am</sup>. Collections can take place until 6.30<sup>pm</sup>.
+        </div>
+        <hr />
     </div><br />
     <div class="row">
         <h2>
             Future collections:
         </h2>
     </div>
+    <div class="row pl'.$g.'">
+        <div class="col">
+            <h4>' . date("l", strtotime($next_week)) . ', <br/>
+                <span id="thedate'.$g.'">' . $next_week . '</span>
+            </h4>
+            <?php
+            if(isset($data->data->timelines[0]->intervals)) {
+                echo weatherDisplay($data, $arr[0], $precipitation_type);
+            }  
+            ?>
+        </div>
+
+    
 
 <?php
-echo $post_bins_rows;
+var_dump($post_bins_rows);
+
+
+
+
+
 ?>
         
 
@@ -324,7 +359,7 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
     document.getElementById("next-collection").textContent = "Yesterday's collection: ";
   }else{
     document.getElementById("thedate"+i).textContent=formatted_date;
-    document.getElementById("next-collection").textContent = "Collection this week: ";
+    //document.getElementById("next-collection").textContent = "Collection this week: ";
   }
     
 }
@@ -409,7 +444,7 @@ $('#tabs').tabs({
 
 
 <?php
-    include "unversioned-b.php";
+    require_once(__ROOT__.'/bins-main/unversioned-b.php');
 ?>
 
 </body>
