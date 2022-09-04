@@ -145,7 +145,7 @@ $brown->setColour($brownColour);
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
 
-        echo '9999876544433322111';
+        echo '6969';
         for($i = 0; $i <= 7; $i++) {
             if ($i == 0){
                 $comp = 0;
@@ -171,6 +171,8 @@ $brown->setColour($brownColour);
                 }
             } 
         }
+
+        $post_bins_rows = array_values($post_bins_rows);
 
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 
