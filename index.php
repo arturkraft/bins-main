@@ -22,7 +22,6 @@ $view_log_mode = '-v.cached';
 $today = time();
 $today = date('Y-m-d', $today);
 $tomorrow = date('Y-m-d',strtotime('+1 days'));
-$var_good = $post_bins_row1 = 0;
 
 //CONTROLLER
 require_once(__ROOT__.'/bins-main/controller.php');

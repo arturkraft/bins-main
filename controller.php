@@ -143,6 +143,9 @@ $brown->setColour($brownColour);
 
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
+
+        $bins_array = $bins_array_2add = [];
+
         for($i = 0; $i <= 7; $i++) {
             if ($i == 0){
                 $comp = 0;
@@ -159,9 +162,15 @@ $brown->setColour($brownColour);
                         if(!isset($post_bins_rows[$i])  ) {
                             $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
                             $post_bins_rows[$i][1] = array($arr[$i] => "none");
+
+                            $bins_array[$arr[$i]] = $current_bin[$x];
+
+                            //$bins_array = array_push($bins_array, $bins_array_2add);
                         } elseif(isset($post_bins_rows[$i])) {
                             if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
                                 $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
+
+                                $bins_array[$arr[$i]] = $bins_array[$arr[$i]] . ', ' . $current_bin[$x];
                             }  
                         }   
                     }
