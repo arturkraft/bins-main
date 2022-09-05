@@ -55,7 +55,7 @@ if( !file_exists($render_cache_file) ) {
     $view_log_mode = " | Running from render file creation, code: " . $render_result . ' | ';
     echo '<!-- ' . $view_log_mode . ' -->';
 } else {
-    if(time() - filemtime($render_cache_file) >= 0.0005 * 3600 || date("l", strtotime('today')) == 'Monday' && date("H") <= 12) { 
+    if(time() - filemtime($render_cache_file) >= 7 * 3600 || date("l", strtotime('today')) == 'Monday' && date("H") < 11) { 
         $render_result = renderView($render_cache_file, $current_bin, $grey, $blue, $green, $brown, $precipitation_type, $data);
         $view_log_mode = " | Running from render file update, code: " . $render_result . ' | ';
         echo '<!-- ' . $view_log_mode . ' -->';
@@ -80,17 +80,14 @@ echo '<!-- Render view file loaded and bins are sorted -->';
     <li><a href="#tabs-1"><span class="icon-sort-amount-desc"></span> Coming up</a></li>
     <li><a href="#tabs-2"><span class="icon-calendar"></span> Calendar</a></li>
   </ul>
-  <?php
-var_dump($post_bins_rows);
-
-echo 'test: '.$post_bins_rows[0][0]["2022-09-04"].' dupkasz';
-
-
-for ($i=0; $i<4; $i++) {
-?>
-
-
   <div id="tabs-1">
+
+    <?php
+        for ($i=0; $i<4; $i++) {
+    ?>
+
+
+
     <?php if ($i == 0){ ?>
     <div class="row">
         <h2 id="next-collection">
@@ -112,7 +109,7 @@ for ($i=0; $i<4; $i++) {
             </h4>
             <?php
             if(isset($data->data->timelines[0]->intervals)) {
-                echo weatherDisplay($data, $arr[0], $precipitation_type);
+                echo weatherDisplay($data, $row_date, $precipitation_type);
             }  
             ?>
         </div>
@@ -120,18 +117,20 @@ for ($i=0; $i<4; $i++) {
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $post_bins_rows[$i][0][$row_date]; ?>-modal">
                 <figure class="figure float-end">
                     <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
-                    <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo $row_bin1; ?></figcaption>
+                    <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>
         </div>
+        <?php if ($post_bins_rows[$i][1][$row_date] != "none"){ ?>
         <div class="col col-md-auto">
-            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#'.$current_bin[$x].'-modal">
+            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $post_bins_rows[$i][1][$row_date]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" class="bin bin'.$current_bin[$x].' figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/'.$current_bin[$x].'.png" alt="'.$current_bin[$x].'">
-                    <figcaption class="bin figure-caption text-center '.$current_bin[$x].'">'.strtoupper($current_bin[$x]).'</figcaption>
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" alt="<?php echo $row_bin2; ?>">
+                    <figcaption class="bin figure-caption text-center <?php echo $row_bin2; ?>"><?php echo strtoupper($row_bin2); ?></figcaption>
                 </figure>
             </a>
         </div>
+        <?php } ?>
         <?php if ($i == 0){ ?>
         <div class="alert alert-secondary" role="alert">
             Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $post_bins_rows[0][0][$row_date]; ?>-modal"><strong class="<?php echo $post_bins_rows[0][0][$arr[0]]; ?>"><span class="icon-delete"></span><?php echo $post_bins_rows[0][0][$row_date]; ?></strong></a>
@@ -140,18 +139,23 @@ for ($i=0; $i<4; $i++) {
             <?php } ?>
             bin out for collection before 7.00am. Collections can take place until 6.30pm.
         </div>
+
+
         <hr />
+
         <?php } ?>
-    </div><br />
+
+                </div>
 
 
-<?php
-}
-?>
-    
-  <div id="tabs-2">
-    <div id="calendar"></div>
-  </div>
+
+    <?php
+    }
+    ?>
+    </div><br />  
+        <div id="tabs-2">
+        <div id="calendar"></div>
+    </div>
 
 <div class="d-flex justify-content-between">
     <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>

@@ -130,8 +130,7 @@ $brown->setColour($brownColour);
     //VIEW RENDER function
 
     function renderView($render_cache_file, $current_bin, Bin $grey, Bin $blue, Bin $green, Bin $brown, $precipitation_type, $data){
-        $bin1 = $bin1_date = $bin2 = $bin2_date = $var_good = 0;
-        $post_bins_row1 = $post_weather_modal = $post_js_events = "";
+        $post_weather_modal = $post_js_events = "";
         $post_bins_rows = [];
 
         //assigning two future dates from each bin to a numbered date
@@ -144,8 +143,6 @@ $brown->setColour($brownColour);
 
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
-
-        echo '6969';
         for($i = 0; $i <= 7; $i++) {
             if ($i == 0){
                 $comp = 0;
@@ -172,7 +169,7 @@ $brown->setColour($brownColour);
             } 
         }
 
-        $post_bins_rows = array_values($post_bins_rows);
+        $post_bins_rows = array_values($post_bins_rows); //renumbering array
 
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 
@@ -190,7 +187,7 @@ $brown->setColour($brownColour);
                         if($data->data->timelines[0]->intervals[$i]->values->precipitationType != 0) {
                                     $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
                         }else{
-                                    $post_weather_modal .= '<br /><span class="icon-rainy"></span> 0% chance of rain';
+                                    $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of rain: 0%';
                         }
 
                         $post_weather_modal .= '<br /><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
@@ -225,13 +222,11 @@ $brown->setColour($brownColour);
         }
 
 
-        $bins_array_str = var_export($bins_array, true);
-        $post_bins_row1_str = var_export($post_bins_row1, true);
         $post_bins_rows_str = var_export($post_bins_rows, true);
         $post_weather_modal_str = var_export($post_weather_modal, true);
         $post_js_events_str = var_export($post_js_events, true);
         $arr_str = var_export($arr, true);
-        $var = "<?php\n\n\$bins_array = $bins_array_str;\n\$post_bins_row1 = $post_bins_row1_str;\n\$post_bins_rows = $post_bins_rows_str;\n\$arr = $arr_str;\n\$post_weather_modal = $post_weather_modal_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
+        $var = "<?php\n\$post_bins_rows = $post_bins_rows_str;\n\$arr = $arr_str;\n\$post_weather_modal = $post_weather_modal_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
         file_put_contents($render_cache_file, $var);
 
         return 0;
@@ -456,14 +451,4 @@ for($x = 0; $x <= 3; $x++)
         }
     }
 }
-
-
-
-
-
-
-
-/// MODALS
-
-
 
