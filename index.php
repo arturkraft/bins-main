@@ -1,5 +1,5 @@
 <?php
-if( empty( $bins_main ) ) die("Cannot access this page directly!");
+if( empty( $bins_main ) ) die('Cannot access this page directly!');
 
 //log and cache
 $seconds_to_cache = 3600;
@@ -15,13 +15,13 @@ define('__ROOT__', dirname(dirname(__FILE__)));
 $current_bin = ['grey', 'blue', 'green', 'brown'];
 $precipitation_type = ['rain', 'rain', 'snow', 'freezing rain', 'sleet'];
 $filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
-$weather_file = "../bins-main/brookfield-weather.json";
+$weather_file = __ROOT__.'/bins-main/brookfield-weather.json';
 $render_cache_file = __ROOT__.'/'.$folder_name.'/view-render-cache.php';
 $log_mode = '-w.cached';
 $view_log_mode = '-v.cached';
 $today = time();
-$today = date("Y-m-d", $today);
-$tomorrow = date("Y-m-d",strtotime("+1 days"));
+$today = date('Y-m-d', $today);
+$tomorrow = date('Y-m-d',strtotime('+1 days'));
 $var_good = $post_bins_row1 = 0;
 
 //CONTROLLER
@@ -34,12 +34,12 @@ require_once(__ROOT__.'/bins-main/html-head.php');
 //weather cache
 if( !file_exists($weather_file) ) {
     $API_result = weatherAPI($weather_file, $api_location, $api_key);
-    $log_mode = " | Running from API file creation, code: " . $API_result . ' | ';
+    $log_mode = ' | Running from API file creation, code: ' . $API_result . ' | ';
     echo '<!-- ' . $log_mode . ' -->';
 } else {
     if(time() - filemtime($weather_file) >= 2 * 3600) { 
         $API_result = weatherAPI($weather_file, $api_location, $api_key);
-        $log_mode = " | Running from API file update, code: " . $API_result . ' | ';
+        $log_mode = ' | Running from API file update, code: ' . $API_result . ' | ';
         echo '<!-- ' . $log_mode . ' -->';
     }
 }
@@ -52,12 +52,12 @@ $data = json_decode($text);
 //!!! VIEW RENDER cache !!!
 if( !file_exists($render_cache_file) ) {
     $render_result = renderView($render_cache_file, $current_bin, $grey, $blue, $green, $brown, $precipitation_type, $data);
-    $view_log_mode = " | Running from render file creation, code: " . $render_result . ' | ';
+    $view_log_mode = ' | Running from render file creation, code: ' . $render_result . ' | ';
     echo '<!-- ' . $view_log_mode . ' -->';
 } else {
-    if(time() - filemtime($render_cache_file) >= 7 * 3600 || date("l", strtotime('today')) == 'Monday' && date("H") < 11) { 
+    if(time() - filemtime($render_cache_file) >= 7 * 3600 || date('l', strtotime('today')) == 'Monday' && date('H') < 11) { 
         $render_result = renderView($render_cache_file, $current_bin, $grey, $blue, $green, $brown, $precipitation_type, $data);
-        $view_log_mode = " | Running from render file update, code: " . $render_result . ' | ';
+        $view_log_mode = ' | Running from render file update, code: ' . $render_result . ' | ';
         echo '<!-- ' . $view_log_mode . ' -->';
     }
 }
