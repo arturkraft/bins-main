@@ -81,13 +81,9 @@ echo '<!-- Render view file loaded and bins are sorted -->';
     <li><a href="#tabs-2"><span class="icon-calendar"></span> Calendar</a></li>
   </ul>
   <div id="tabs-1">
-
     <?php
         for ($i=0; $i<4; $i++) {
     ?>
-
-
-
     <?php if ($i == 0){ ?>
     <div class="row">
         <h2 id="next-collection">
@@ -139,16 +135,9 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             <?php } ?>
             bin out for collection before 7.00am. Collections can take place until 6.30pm.
         </div>
-
-
         <hr />
-
         <?php } ?>
-
-                </div>
-
-
-
+    </div>
     <?php
     }
     ?>
