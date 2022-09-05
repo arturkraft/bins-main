@@ -127,6 +127,9 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             </a>
         </div>
         <?php } ?>
+        <?php if ($i != 0 && $i != 3){ ?>
+        <hr />
+        <?php } ?>
         <?php if ($i == 0){ ?>
         <div class="alert alert-secondary" role="alert">
             Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $post_bins_rows[0][0][$row_date]; ?>-modal"><strong class="<?php echo $post_bins_rows[0][0][$arr[0]]; ?>"><span class="icon-delete"></span><?php echo $post_bins_rows[0][0][$row_date]; ?></strong></a>
