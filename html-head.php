@@ -17,7 +17,13 @@
                 // Capture the current theme from local storage and adjust the page to use the current theme.
 const htmlEl = document.getElementsByTagName('html')[0];
 const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+<?php 
+if ($show_octopus == 1) {
+?>
 const dismisser = localStorage.getItem('dismiss') ? localStorage.getItem('dismiss') : null;
+<?php 
+}
+?>
 
 
 

@@ -345,7 +345,9 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 }
 
 
-
+<?php 
+if ($show_octopus == 1) {
+?>
 if(dismisser){
     $('#octopus').addClass('d-none');
 }else{
@@ -356,6 +358,9 @@ function dismiss(){
     localStorage.setItem('dismiss', 'yes');
     $('#octopus').addClass('d-none');
 }
+<?php 
+}
+?>
 
 
 
