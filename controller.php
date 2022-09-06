@@ -131,7 +131,7 @@ $brown->setColour($brownColour);
 
     function renderView($render_cache_file, $current_bin, Bin $grey, Bin $blue, Bin $green, Bin $brown, $precipitation_type, $data){
         $post_weather_modal = $post_js_events = "";
-        $post_bins_rows = [];
+
 
         //assigning two future dates from each bin to a numbered date
         for($x=0; $x<=3; $x++) {
@@ -144,41 +144,23 @@ $brown->setColour($brownColour);
         $arr = array($date1, $date2, $date3, $date4, $date5, $date6, $date7, $date8);
         usort($arr, "compareByTimeStamp"); 
 
-        $bins_array = $bins_array_2add = [];
+        $bins_array =  [];
 
         for($i = 0; $i <= 7; $i++) {
-            if ($i == 0){
-                $comp = 0;
-            }else{
-                $j = $i-1;
-                if(isset($post_bins_rows[$j][0])){
-                    $comp = array_key_first($post_bins_rows[$j][0]);
-                }
-                
-            }
-            if($comp != $arr[$i] && count($post_bins_rows) < 4) {
+
+            if(count($bins_array) < 4) {
                 for($x=0; $x<=3; $x++) {
                     if($arr[$i] == ${$current_bin[$x]}->next_date || $arr[$i] == ${$current_bin[$x]}->next_date_plus) {
-                        if(!isset($post_bins_rows[$i])  ) {
-                            $post_bins_rows[$i][] = array($arr[$i] => $current_bin[$x]);
-                            $post_bins_rows[$i][1] = array($arr[$i] => "none");
-
+                        if(!isset($bins_array[$arr[$i]])  ) {
                             $bins_array[$arr[$i]] = $current_bin[$x];
-
-                            //$bins_array = array_push($bins_array, $bins_array_2add);
-                        } elseif(isset($post_bins_rows[$i])) {
-                            if (array_key_first($post_bins_rows[$i][0]) == $arr[$i]){
-                                $post_bins_rows[$i][1] = array($arr[$i] => $current_bin[$x]);
-
-                                $bins_array[$arr[$i]] = $bins_array[$arr[$i]] . ', ' . $current_bin[$x];
-                            }  
+                        } elseif(strpos($bins_array[$arr[$i]], $current_bin[$x])===false) {
+                            $bins_array[$arr[$i]] = $bins_array[$arr[$i]] . ', ' . $current_bin[$x];
                         }   
                     }
                 }
             } 
         }
 
-        $post_bins_rows = array_values($post_bins_rows); //renumbering array
 
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 
@@ -230,12 +212,11 @@ $brown->setColour($brownColour);
             }
         }
 
-
-        $post_bins_rows_str = var_export($post_bins_rows, true);
+        $bins_array_str = var_export($bins_array, true);
         $post_weather_modal_str = var_export($post_weather_modal, true);
         $post_js_events_str = var_export($post_js_events, true);
         $arr_str = var_export($arr, true);
-        $var = "<?php\n\$post_bins_rows = $post_bins_rows_str;\n\$arr = $arr_str;\n\$post_weather_modal = $post_weather_modal_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
+        $var = "<?php\n\n\$bins_array = $bins_array_str;\n\$arr = $arr_str;\n\$post_weather_modal = $post_weather_modal_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
         file_put_contents($render_cache_file, $var);
 
         return 0;

@@ -54,7 +54,7 @@ if( !file_exists($render_cache_file) ) {
     $view_log_mode = ' | Running from render file creation, code: ' . $render_result . ' | ';
     echo '<!-- ' . $view_log_mode . ' -->';
 } else {
-    if(time() - filemtime($render_cache_file) >= 7 * 3600 || date('l', strtotime('today')) == 'Monday' && date('H') < 11) { 
+    if(time() - filemtime($render_cache_file) >= 8 * 3600 || date('l', strtotime('today')) == 'Monday' && date('H') < 11) { 
         $render_result = renderView($render_cache_file, $current_bin, $grey, $blue, $green, $brown, $precipitation_type, $data);
         $view_log_mode = ' | Running from render file update, code: ' . $render_result . ' | ';
         echo '<!-- ' . $view_log_mode . ' -->';
@@ -96,11 +96,15 @@ echo '<!-- Render view file loaded and bins are sorted -->';
         </h2>
     </div>
     <?php } ?>
+    <?php 
+    $row_date = array_keys($bins_array)[$i];
+    $exploded = explode(', ', $bins_array[$row_date]);
+    ?>
     <div class="row pl<?php echo $i; ?>"> 
         <div class="col">
             <h4>
-                <?php echo date("l", strtotime($arr[0])) ?>, <br/>
-                <span id="thedate<?php echo $i; ?>"><?php echo $row_date = array_key_first($post_bins_rows[$i][0]); ?></span>
+                <?php echo date("l", strtotime($row_date)) ?>, <br/>
+                <span id="thedate<?php echo $i; ?>"><?php echo $row_date; ?></span>
             </h4>
             <?php
             if(isset($data->data->timelines[0]->intervals)) {
@@ -109,16 +113,17 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             ?>
         </div>
         <div class="col col-md-auto">
-            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $post_bins_rows[$i][0][$row_date]; ?>-modal">
+            
+            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $exploded[0]; ?>-modal">
                 <figure class="figure float-end">
                     <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>
         </div>
-        <?php if ($post_bins_rows[$i][1][$row_date] != "none"){ ?>
+        <?php if (isset($exploded[1])) { ?>
         <div class="col col-md-auto">
-            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $post_bins_rows[$i][1][$row_date]; ?>-modal">
+            <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $exploded[1]; ?>-modal">
                 <figure class="figure float-end">
                     <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" alt="<?php echo $row_bin2; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin2; ?>"><?php echo strtoupper($row_bin2); ?></figcaption>
@@ -131,9 +136,9 @@ echo '<!-- Render view file loaded and bins are sorted -->';
         <?php } ?>
         <?php if ($i == 0){ ?>
         <div class="alert alert-secondary" role="alert">
-            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $post_bins_rows[0][0][$row_date]; ?>-modal"><strong class="<?php echo $post_bins_rows[0][0][$arr[0]]; ?>"><span class="icon-delete"></span><?php echo $post_bins_rows[0][0][$row_date]; ?></strong></a>
-            <?php if ($post_bins_rows[0][1][$arr[0]] != "none"){ ?>
-            and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $post_bins_rows[0][1][$arr[0]]; ?>-modal"><strong class="<?php echo $post_bins_rows[0][1][$arr[0]]; ?>"><span class="icon-delete"></span><?php echo $post_bins_rows[0][1][$arr[0]]; ?></strong></a> 
+            Please put your <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1; ?>-modal"><strong class="<?php echo $row_bin1; ?>"><span class="icon-delete"></span><?php echo $row_bin1; ?></strong></a>
+            <?php if(isset($exploded[1])) { ?>
+            and <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2; ?>-modal"><strong class="<?php echo $row_bin2; ?>"><span class="icon-delete"></span><?php echo $row_bin2; ?></strong></a> 
             <?php } ?>
             bin out for collection before 7.00am. Collections can take place until 6.30pm.
         </div>
