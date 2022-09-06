@@ -9,11 +9,9 @@ class Bin{
     public $end_date;
     public $next_date;
     public $next_date_plus;
-    public $already_posted;
     //Default end_date and already_posted
     public function __construct()
     {
-        $this->already_posted="false";
         $this->next_date;
         $this->next_date_plus;
         $this->dates;
@@ -22,9 +20,6 @@ class Bin{
     //Methods
     function setEndDate($end_date){
         $this->end_date = $end_date;
-    }
-    function getEndDate(){
-        return $this->end_date;
     }
     function setStartDate($start_date){
         $this->start_date = $start_date;
@@ -41,20 +36,11 @@ class Bin{
     function setColour($colour){
         $this->colour = $colour;
     }
-    function getColour(){
-        return $this->colour;
-    }
     function setNextDate($next_date){
         $this->next_date = $next_date;
     }
     function setNextDatePlus($next_date_plus){
         $this->next_date_plus = $next_date_plus;
-    }
-    function setAlreadyPosted($already_posted){
-        $this->already_posted = $already_posted;
-    }
-    function getAlreadyPosted(){
-        return $this->already_posted;
     }
 }
 
