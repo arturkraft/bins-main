@@ -107,7 +107,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
                 <span id="thedate<?php echo $i; ?>"><?php echo $row_date; ?></span>
             </h4>
             <?php
-            if(isset($data->data->timelines[0]->intervals)) {
+            if(isset($data->data->timelines[0]->intervals) && $i != 3) {
                 echo weatherDisplay($data, $row_date, $precipitation_type);
             }  
             ?>
@@ -218,7 +218,61 @@ displayBinModals($current_bin);
                     <tbody>
                         <tr>
 <?php
-echo $post_weather_modal;
+for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
+    $date_to_change = substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10);
+    $formatted_date = date("l", strtotime($date_to_change));  
+?>
+                            <td>
+                                <div class="alert alert-light text-wrap" style="width: 8rem;"><?php echo $formatted_date; ?>
+                                    <br />
+                                    <?php echo date("M, jS", strtotime($date_to_change)); ?>
+                                    <br />
+                                    <div style="height: 4rem">
+                                        <img src="https://arturkraft.b-cdn.net/bins-main/img/large/<?php echo $data->data->timelines[0]->intervals[$i]->values->weatherCodeDay ?>.png" />
+                                    </div>
+                                    <br />
+                                    <span class="fs-4">
+                                        <?php echo trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)).'&#8451;'; ?>
+                                    </span>
+                                    <?php
+                                    if($data->data->timelines[0]->intervals[$i]->values->precipitationType != 0) { ?>
+                                        <br />
+                                        <span class="icon-rainy"></span> 
+                                        Chance of 
+                                        <?php echo $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
+                                    } else { ?>
+                                        <br />
+                                        <span class="icon-rainy"></span> 
+                                        Chance of rain: 0%
+                                    <?php } ?>
+                                        <br />
+                                        <span class="icon-wind"></span> 
+                                        Wind speed: 
+                                        <?php echo $data->data->timelines[0]->intervals[$i]->values->windSpeed; ?> 
+                                        mph 
+                                </div>
+                                <?php
+                                if( isset($bins_array[$date_to_change]) ){
+                                    $exploded = explode(', ', $bins_array[$date_to_change]);
+                                ?>
+                                <p class="text-center text-uppercase fw-bold <?php echo $exploded[0]; ?>">
+                                    <span class="icon-delete"></span>
+                                    <?php echo $exploded[0]; ?>
+                                </p>
+
+                                <?php
+                                if ( isset($exploded[1]) ){
+                                ?>
+                                <p class="text-center text-uppercase fw-bold <?php echo $exploded[1] ?>">
+                                    <span class="icon-delete"></span><?php echo $exploded[1] ?>
+                                </p>
+                                <?php
+                                    }
+                                } ?>
+                            </td>
+
+<?php
+}
 ?>
                         </tr>
                     </tbody>

@@ -148,40 +148,6 @@ $brown->setColour($brownColour);
         }
 
 
-        for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
-
-            $post_weather_modal .= '<td><div class="alert alert-light text-wrap" style="width: 8rem;">';
-
-            $date_to_change = substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10);
-            $formatted_date = date("l", strtotime($date_to_change));  
-            $post_weather_modal .= $formatted_date.'<br />';
-            $formatted_date = date("M, jS", strtotime($date_to_change));  
-            $post_weather_modal .= $formatted_date;
-            $post_weather_modal .= '<br /><div style="height: 4rem"><img src="https://arturkraft.b-cdn.net/bins-main/img/large/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" /></div>
-                                    <br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
-                        '&#8451;</span>';
-
-                        if($data->data->timelines[0]->intervals[$i]->values->precipitationType != 0) {
-                                    $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%';
-                        }else{
-                                    $post_weather_modal .= '<br /><span class="icon-rainy"></span> Chance of rain: 0%';
-                        }
-
-                        $post_weather_modal .= '<br /><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph';
-
-                        $post_weather_modal .= '</div>';
-                        
-                        if( isset($bins_array[$date_to_change]) ){
-                            $exploded = explode(', ', $bins_array[$date_to_change]);
-
-                            $post_weather_modal .= '<p class="text-center text-uppercase fw-bold ' . $exploded[0] . '"><span class="icon-delete"></span>' . $exploded[0] . '</p>';
-
-                            if ( isset($exploded[1]) ){
-                                $post_weather_modal .= '<p class="text-center text-uppercase fw-bold ' . $exploded[1] . '"><span class="icon-delete"></span>' . $exploded[1] . '</p>';
-                            }
-                        }
-                        $post_weather_modal .= '</td>';
-        }
 
         for($x=0; $x<=3; $x++) {
             foreach(${$current_bin[$x]}->dates as $datey) {
@@ -199,10 +165,9 @@ $brown->setColour($brownColour);
         }
 
         $bins_array_str = var_export($bins_array, true);
-        $post_weather_modal_str = var_export($post_weather_modal, true);
         $post_js_events_str = var_export($post_js_events, true);
         $arr_str = var_export($arr, true);
-        $var = "<?php\n\n\$bins_array = $bins_array_str;\n\$arr = $arr_str;\n\$post_weather_modal = $post_weather_modal_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
+        $var = "<?php\n\n\$bins_array = $bins_array_str;\n\$arr = $arr_str;\n\$post_js_events = $post_js_events_str;\n\n?>";
         file_put_contents($render_cache_file, $var);
 
         return 0;
@@ -271,7 +236,8 @@ $brown->setColour($brownColour);
                 $result .= '  
                 
 
-                        </div></a>';    
+                        </div></a>'; 
+                        break;   
             }
 
         }
