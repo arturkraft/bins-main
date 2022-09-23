@@ -22,6 +22,8 @@ $view_log_mode = '-v.cached';
 $today = time();
 $today = date('Y-m-d', $today);
 $tomorrow = date('Y-m-d',strtotime('+1 days'));
+$festivity = ['none', 'halloween', 'christmas'];
+$current_festivity = $festivity[1];
 
 //CONTROLLER
 require_once(__ROOT__.'/bins-main/controller.php');
@@ -116,7 +118,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $exploded[0]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="../bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin1 : $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>
@@ -125,7 +127,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
         <div class="col col-md-auto">
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $exploded[1]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" alt="<?php echo $row_bin2; ?>">
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="../bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin2 : $row_bin2; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" alt="<?php echo $row_bin2; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin2; ?>"><?php echo strtoupper($row_bin2); ?></figcaption>
                 </figure>
             </a>
@@ -197,7 +199,78 @@ if ($show_octopus == 1) {
 
 <?php
 //bin modals
-displayBinModals($current_bin);
+        $grey_good = ['Non-recyclable waste', 'Plastic bags and polythene', 'Polystyrene', 'Crisp and sweet wrappers', 'Used tissues and paper towels', 'Cling film', 'Tinfoil', 'Lightbulbs', 'Pet litter', 'Nappies', 'Personal hygiene products', 'Food and drinks pouches', 'Hard plastics (toys, coat hangers, CD cases etc.)', 'Padded envelopes', 'Shredded paper'];
+        $grey_bad = ['Plastics, cans and glass', 'Paper, card and cardboard', 'Food waste', 'Garden waste', 'Electrical items', 'Textiles and shoes'];
+
+        $blue_good = ['Cardboard (flattened)', 'Cereal boxes', 'Large brown cardboard boxes', 'Corrugated cardboard', 'Toilet and kitchen roll tubes', 'Cardboard packaging', 'Paper (clean and dry)', 'Envelopes (with and without windows)', 'Magazines', 'Newspapers', 'Office paper', 'Telephone directories', 'Paperback books', 'Catalogues', 'Junk mail and takeaway menus'];
+        $blue_bad = ['Glass', 'Plastics and cans', 'Hardback books', 'Plastic carrier bags', 'Padded envelopes', 'Plastic wrapping and bubble wrap', 'Polystyrene', 'Packaging with food residue', 'Used tissues and kitchen roll', 'Foil wrapping paper', 'Tinfoil', 'Shredded paper'];
+
+        $green_good = ['Plastic bottles', 'Plastic pots, tubs and trays', 'Fruit and vegetable punnets', 'Clean takeaway containers', 'Cleaning product bottles', 'Drinks cans (empty and rinsed)', 'Food/pet food tins (empty and rinsed)', 'Biscuit/sweet tins', 'Aerosols', 'Glass bottles and jars', 'Cartons', 'Milk cartons'];
+        $green_bad = ['Paper, card and cardboard', 'Food residue', 'Carrier bags', 'Sweet and crisp wrappers', 'Plastic wrapping and bubble wrap', 'Polystyrene Food and drink pouches', 'Hard plastics (toys, coat hangers, CD case etc)', 'Food and drink pouches', 'Light bulbs', 'Pyrex or crockery', 'Mirrors', 'Tinfoil'];
+
+        $brown_good = ['Grass cuttings', 'Flowers and plants', 'Weeds', 'Leaves', 'Small branches and twigs', 'Cooked and uncooked food', 'Leftovers', 'Fruit and vegetable peelings', 'Tea bags and coffee grounds', 'Egg shells', 'Out of date food (remove packaging)', 'Bread, pasta and cakes', 'Meat, fish and small bones'];
+        $brown_bad = ['Plastic bags', 'Packaging', 'Liquids', 'Fats and oils', 'Rubble and soil', 'Plant pots', 'Wood and fencing', 'Garden furniture', 'Plastics, cans and glass', 'Paper, card and cardboard'];
+
+        $brown_extra = '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal-extra">How to use the brown bin?</button>';
+
+
+        for ($x=0; $x<=3; $x++) {
+?>
+
+<div class="modal fade" id="<?php echo $current_bin[$x]; ?>-modal" style="z-index: 99969">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+
+
+                        <div class="modal-header">
+                            <h4 class="modal-title <?php echo $current_bin[$x]; ?>">What goes in the <?php echo $current_bin[$x]; ?> bin?</h4>
+                            <button type="button" class="btn-close <?php echo $current_bin[$x]; ?>" data-bs-dismiss="modal"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row align-items-start">
+                                    <div class="col">
+                                        <h5>These items can go in your <?php echo $current_bin[$x]; ?> bin:</h5>
+                                        <ul style="list-style: none;">
+                                        <?php foreach (${$current_bin[$x].'_good'} as $good_item) { ?>
+                                            <li><span class="icon-goodli green"></span><?php echo $good_item; ?></li>                                
+                                        <?php } ?>
+                                        </ul>
+                                    </div>
+                                    <div class="col">
+                                        <h5>Do not put these items in your <?php echo $current_bin[$x]; ?> bin:</h5>
+                                        <ul style="list-style: none;">
+                                        <?php foreach (${$current_bin[$x].'_bad'} as $bad_item) { ?>
+                                            <li><span class="icon-badli text-danger"></span><?php echo $bad_item; ?></li>                                
+                                        <?php } ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <?php echo ${$current_bin[$x].'_extra'} = isset(${$current_bin[$x].'_extra'}) ? ${$current_bin[$x].'_extra'} : ' '; ?>
+
+                            <button type="button" class="btn btn-outline-secondary <?php echo $current_bin[$x]; ?>" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+<?php
+        
+        }
+
+
+
+    
+
+
 ?>
 
 
@@ -495,7 +568,98 @@ $('#tabs').tabs({
   }
 });
 
+
+    <?php
+    if ($current_festivity == $festivity[1]){
+    ?>
+        ;(function () {
+        var r=Math.random,n=0,d=document,w=window,
+            i=d.createElement('img'),
+            z=d.createElement('div'),
+            zs=z.style,
+            a=w.innerWidth*r(),b=w.innerHeight*r();
+        zs.position="fixed";
+        zs.left=0;
+        zs.top=0;
+        zs.opacity=0;
+        zs.zIndex=999999999;
+        z.appendChild(i);
+        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
+        d.body.appendChild(z);
+        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
+        function A(){
+            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
+                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
+            zs.opacity=n;n=1;
+            zs.transition=zs.webkitTransition=d/1e3+'s linear';
+            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
+            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
+            a=x;b=y;
+            setTimeout(A,d);
+        };setTimeout(A,r()*3e3);
+        })();
+
+        ;(function () {
+        var r=Math.random,n=0,d=document,w=window,
+            i=d.createElement('img'),
+            z=d.createElement('div'),
+            zs=z.style,
+            a=w.innerWidth*r(),b=w.innerHeight*r();
+        zs.position="fixed";
+        zs.left=0;
+        zs.top=0;
+        zs.opacity=0;
+        zs.zIndex=999999999;
+        z.appendChild(i);
+        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
+        d.body.appendChild(z);
+        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
+        function A(){
+            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
+                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
+            zs.opacity=n;n=1;
+            zs.transition=zs.webkitTransition=d/1e3+'s linear';
+            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
+            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
+            a=x;b=y;
+            setTimeout(A,d);
+        };setTimeout(A,r()*3e3);
+        })();
+
+                ;(function () {
+        var r=Math.random,n=0,d=document,w=window,
+            i=d.createElement('img'),
+            z=d.createElement('div'),
+            zs=z.style,
+            a=w.innerWidth*r(),b=w.innerHeight*r();
+        zs.position="fixed";
+        zs.left=0;
+        zs.top=0;
+        zs.opacity=0;
+        zs.zIndex=999999999;
+        z.appendChild(i);
+        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
+        d.body.appendChild(z);
+        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
+        function A(){
+            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
+                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
+            zs.opacity=n;n=1;
+            zs.transition=zs.webkitTransition=d/1e3+'s linear';
+            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
+            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
+            a=x;b=y;
+            setTimeout(A,d);
+        };setTimeout(A,r()*3e3);
+        })();
+    <?php
+    }
+    ?>
+
 </script>
+
+
+
 
 
 <?php
