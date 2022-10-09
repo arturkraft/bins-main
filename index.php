@@ -118,7 +118,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $exploded[0]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="../bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin1 : $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
+                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin1 : $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>

@@ -5,8 +5,8 @@
     <title>Bins collection day - <?php echo $location_name; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#eb6123" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#eb6123" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="<?php echo $current_festivity != $festivity[0] ? '#eb6123' : '#fff';  ?>" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="<?php echo $current_festivity != $festivity[0] ? '#eb6123' : '#000';  ?>" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous" defer></script>
