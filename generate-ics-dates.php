@@ -7,7 +7,7 @@ $blue->setEndDate($ics_end_date);
 $green->setEndDate($ics_end_date);
 $brown->setEndDate($ics_end_date);
 
-$bin_dates=generateDates($schedule_code,$weeks_added,[$grey->getStartDate(),$blue->getStartDate(),$green->getStartDate(),$brown->getStartDate()],$grey->getEndDate(),2); 
+$bin_dates=generateDates($schedule_code,$weeks_added,[$grey->getStartDate(),$blue->getStartDate(),$green->getStartDate(),$brown->getStartDate()],$grey->getEndDate(),$festive_deduction); 
 
 $fileICS = fopen($filenameICS,"w");
 
@@ -19,15 +19,15 @@ CALSCALE:GREGORIAN";
 
 $end_ics='
 BEGIN:VEVENT
-DTEND;VALUE=DATE:20221217
-DTSTART;VALUE=DATE:20221212
+DTEND;VALUE=DATE:20231217
+DTSTART;VALUE=DATE:20231212
 LOCATION:Weirs Wynd
 DESCRIPTION:DOWNLOAD A NEW BIN CALENDAR FROM www.artur.kr/'.$folder_name.'
 URL;VALUE=URI:https://artur.kr/'.$folder_name.'/
 SUMMARY:UPDATE BIN CALENDAR
 UID:'.md5('new').'
 SEQUENCE:0
-DTSTAMP:20220127T162901Z
+DTSTAMP:20230127T162901Z
 END:VEVENT
 END:VCALENDAR';
 

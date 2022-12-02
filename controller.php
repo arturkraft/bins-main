@@ -21,6 +21,9 @@ class Bin{
     function setEndDate($end_date){
         $this->end_date = $end_date;
     }
+    function getEndDate(){	
+        return $this->end_date;	
+    }
     function setStartDate($start_date){
         $this->start_date = $start_date;
     }
@@ -214,7 +217,7 @@ $brown->setColour($brownColour);
 
 
     //weather function
-    function weatherDisplay($data, $date, $precipitation_type) {
+    function weatherDisplay($data, $date, $precipitation_type, $weatherCodeDay) {
         $result = "";
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++){
 
@@ -222,6 +225,7 @@ $brown->setColour($brownColour);
                 $result .=  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
                 <div class="badge bg-secondary text-wrap align-bottom">
                             <img src="https://arturkraft.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" />
+                            <p>'.$weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay].'</p>
                             <br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
                 '&#8451;</span><br /><br />';
 
@@ -244,7 +248,98 @@ $brown->setColour($brownColour);
         return $result;  
     }
 
+    function displayBinModals($current_bin){
 
+        $good_li = '<span class="fa-li green"><span class="icon-goodli"></span></span>';
+        $bad_li = '<span class="icon-badli text-danger"></span>';
+
+        $grey_good = ['Non-recyclable waste', 'Plastic bags and polythene', 'Polystyrene', 'Crisp and sweet wrappers', 'Used tissues and paper towels', 'Cling film', 'Tinfoil', 'Lightbulbs', 'Pet litter', 'Nappies', 'Personal hygiene products', 'Food and drinks pouches', 'Hard plastics (toys, coat hangers, CD cases etc.)', 'Padded envelopes', 'Shredded paper'];
+        $grey_bad = ['Plastics, cans and glass', 'Paper, card and cardboard', 'Food waste', 'Garden waste', 'Electrical items', 'Textiles and shoes'];
+
+        $blue_good = ['Cardboard (flattened)', 'Cereal boxes', 'Large brown cardboard boxes', 'Corrugated cardboard', 'Toilet and kitchen roll tubes', 'Cardboard packaging', 'Paper (clean and dry)', 'Envelopes (with and without windows)', 'Magazines', 'Newspapers', 'Office paper', 'Telephone directories', 'Paperback books', 'Catalogues', 'Junk mail and takeaway menus'];
+        $blue_bad = ['Glass', 'Plastics and cans', 'Hardback books', 'Plastic carrier bags', 'Padded envelopes', 'Plastic wrapping and bubble wrap', 'Polystyrene', 'Packaging with food residue', 'Used tissues and kitchen roll', 'Foil wrapping paper', 'Tinfoil', 'Shredded paper'];
+
+        $green_good = ['Plastic bottles', 'Plastic pots, tubs and trays', 'Fruit and vegetable punnets', 'Clean takeaway containers', 'Cleaning product bottles', 'Drinks cans (empty and rinsed)', 'Food/pet food tins (empty and rinsed)', 'Biscuit/sweet tins', 'Aerosols', 'Glass bottles and jars', 'Cartons', 'Milk cartons'];
+        $green_bad = ['Paper, card and cardboard', 'Food residue', 'Carrier bags', 'Sweet and crisp wrappers', 'Plastic wrapping and bubble wrap', 'Polystyrene Food and drink pouches', 'Hard plastics (toys, coat hangers, CD case etc)', 'Food and drink pouches', 'Light bulbs', 'Pyrex or crockery', 'Mirrors', 'Tinfoil'];
+
+        $brown_good = ['Grass cuttings', 'Flowers and plants', 'Weeds', 'Leaves', 'Small branches and twigs', 'Cooked and uncooked food', 'Leftovers', 'Fruit and vegetable peelings', 'Tea bags and coffee grounds', 'Egg shells', 'Out of date food (remove packaging)', 'Bread, pasta and cakes', 'Meat, fish and small bones'];
+        $brown_bad = ['Plastic bags', 'Packaging', 'Liquids', 'Fats and oils', 'Rubble and soil', 'Plant pots', 'Wood and fencing', 'Garden furniture', 'Plastics, cans and glass', 'Paper, card and cardboard'];
+
+        $brown_extra = '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal-extra">How to use the brown bin?</button>';
+
+
+        //generating modals
+        for ($x = 0; $x <= 3; $x++) {
+
+            ${$current_bin[$x].'_modal'}='
+                                    <div class="container">
+                                        <div class="row align-items-start">
+                                            <div class="col">
+                                                <h5>These items can go in your '.$current_bin[$x].' bin:</h5>
+                                                <ul style="list-style: none;">
+                                                ';
+                foreach (${$current_bin[$x].'_good'} as $good_item) {
+                    ${$current_bin[$x].'_modal'}.='
+                                                    <li>'.$good_li.' '.$good_item.'</li>
+                                                    ';
+                }
+
+            ${$current_bin[$x].'_modal'}.='
+                                                </ul>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Do not put these items in your '.$current_bin[$x].' bin:</h5>
+                                                <ul style="list-style: none;">
+                                                ';
+                foreach (${$current_bin[$x].'_bad'} as $bad_item) {
+                    ${$current_bin[$x].'_modal'}.='
+                                                    <li>'.$bad_li.' '.$bad_item.'</li>
+                    ';
+                }
+
+            ${$current_bin[$x].'_modal'}.='
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                ';
+
+        }
+
+        for ($x=0; $x<=3; $x++) {
+            echo 
+            '<div class="modal fade" id="'.$current_bin[$x].'-modal" style="z-index: 99969">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+
+
+                        <div class="modal-header">
+                            <h4 class="modal-title '.$current_bin[$x].'">What goes in the '.$current_bin[$x].' bin?</h4>
+                            <button type="button" class="btn-close '.$current_bin[$x].'" data-bs-dismiss="modal"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            '.${$current_bin[$x].'_modal'}.'
+                        </div>
+
+
+                        <div class="modal-footer">
+                            '.${$current_bin[$x].'_extra'} = isset(${$current_bin[$x].'_extra'}) ? ${$current_bin[$x].'_extra'} : ' ';
+
+            echo '
+                            <button type="button" class="btn btn-outline-secondary '.$current_bin[$x].'" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>';
+        
+        }
+
+    return 1;
+
+    }
 
 //END FUNCTIONS
 
@@ -302,4 +397,3 @@ for($x = 0; $x <= 3; $x++)
         }
     }
 }
-

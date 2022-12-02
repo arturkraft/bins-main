@@ -1,6 +1,5 @@
 <?php
 if( empty( $bins_main ) ) die('Cannot access this page directly!');
-
 //log and cache
 $seconds_to_cache = 3600;
 $ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
@@ -16,17 +15,23 @@ $current_bin = ['grey', 'blue', 'green', 'brown'];
 $precipitation_type = ['rain', 'rain', 'snow', 'freezing rain', 'sleet'];
 $filename = __ROOT__.'/'.$folder_name.'/generated-bin-dates.csv';
 $weather_file = __ROOT__.'/bins-main/brookfield-weather.json';
-$render_cache_file = __ROOT__.'/'.$folder_name.'/view-render-cache.php';
+$render_cache_file = __ROOT__.'/'.$folder_name.($offline == 1 ? '/view-render-cache-offline.php' : '/view-render-cache.php');
 $log_mode = '-w.cached';
 $view_log_mode = '-v.cached';
 $today = time();
 $today = date('Y-m-d', $today);
 $tomorrow = date('Y-m-d',strtotime('+1 days'));
 $festivity = ['none', 'halloween', 'christmas'];
-$current_festivity = $festivity[1];
+$current_festivity = $festivity[0];
+$bins_for_json = [];
+
 
 //CONTROLLER
 require_once(__ROOT__.'/bins-main/controller.php');
+
+
+header('Access-Control-Allow-Origin: https://arturkraft.b-cdn.net');
+
 
 //HTML HEAD
 require_once(__ROOT__.'/bins-main/html-head.php');
@@ -47,6 +52,103 @@ if( !file_exists($weather_file) ) {
 $text = file_get_contents($weather_file);
 echo '<!-- File loaded -->';
 $data = json_decode($text);
+
+$weatherCodeDay = array(
+      "0"=>"Weather Unknown",
+      "10000"=>"Clear, Sunny",
+      "11000"=>"Mostly Clear",
+      "11010"=>"Partly Cloudy",
+      "11020"=>"Mostly Cloudy",
+      "10010"=>"Cloudy",
+      "11030"=>"Partly Cloudy and Mostly Clear",
+      "21000"=>"Light Fog",
+      "21010"=>"Mostly Clear and Light Fog",
+      "21020"=>"Partly Cloudy and Light Fog",
+      "21030"=>"Mostly Cloudy and Light Fog",
+      "21060"=>"Mostly Clear and Fog",
+      "21070"=>"Partly Cloudy and Fog",
+      "21080"=>"Mostly Cloudy and Fog",
+      "20000"=>"Fog",
+      "42040"=>"Partly Cloudy and Drizzle",
+      "42030"=>"Mostly Clear and Drizzle",
+      "42050"=>"Mostly Cloudy and Drizzle",
+      "40000"=>"Drizzle",
+      "42000"=>"Light Rain",
+      "42130"=>"Mostly Clear and Light Rain",
+      "42140"=>"Partly Cloudy and Light Rain",
+      "42150"=>"Mostly Cloudy and Light Rain",
+      "42090"=>"Mostly Clear and Rain",
+      "42080"=>"Partly Cloudy and Rain",
+      "42100"=>"Mostly Cloudy and Rain",
+      "40010"=>"Rain",
+      "42110"=>"Mostly Clear and Heavy Rain",
+      "42020"=>"Partly Cloudy and Heavy Rain",
+      "42120"=>"Mostly Cloudy and Heavy Rain",
+      "42010"=>"Heavy Rain",
+      "51150"=>"Mostly Clear and Flurries",
+      "51160"=>"Partly Cloudy and Flurries",
+      "51170"=>"Mostly Cloudy and Flurries",
+      "50010"=>"Flurries",
+      "51000"=>"Light Snow",
+      "51020"=>"Mostly Clear and Light Snow",
+      "51030"=>"Partly Cloudy and Light Snow",
+      "51040"=>"Mostly Cloudy and Light Snow",
+      "51220"=>"Drizzle and Light Snow",
+      "51050"=>"Mostly Clear and Snow",
+      "51060"=>"Partly Cloudy and Snow",
+      "51070"=>"Mostly Cloudy and Snow",
+      "50000"=>"Snow",
+      "51010"=>"Heavy Snow",
+      "51190"=>"Mostly Clear and Heavy Snow",
+      "51200"=>"Partly Cloudy and Heavy Snow",
+      "51210"=>"Mostly Cloudy and Heavy Snow",
+      "51100"=>"Drizzle and Snow",
+      "51080"=>"Rain and Snow",
+      "51140"=>"Snow and Freezing Rain",
+      "51120"=>"Snow and Ice Pellets",
+      "60000"=>"Freezing Drizzle",
+      "60030"=>"Mostly Clear and Freezing drizzle",
+      "60020"=>"Partly Cloudy and Freezing drizzle",
+      "60040"=>"Mostly Cloudy and Freezing drizzle",
+      "62040"=>"Drizzle and Freezing Drizzle",
+      "62060"=>"Light Rain and Freezing Drizzle",
+      "62050"=>"Mostly Clear and Light Freezing Rain",
+      "62030"=>"Partly Cloudy and Light Freezing Rain",
+      "62090"=>"Mostly Cloudy and Light Freezing Rain",
+      "62000"=>"Light Freezing Rain",
+      "62130"=>"Mostly Clear and Freezing Rain",
+      "62140"=>"Partly Cloudy and Freezing Rain",
+      "62150"=>"Mostly Cloudy and Freezing Rain",
+      "60010"=>"Freezing Rain",
+      "62120"=>"Drizzle and Freezing Rain",
+      "62200"=>"Light Rain and Freezing Rain",
+      "62220"=>"Rain and Freezing Rain",
+      "62070"=>"Mostly Clear and Heavy Freezing Rain",
+      "62020"=>"Partly Cloudy and Heavy Freezing Rain",
+      "62080"=>"Mostly Cloudy and Heavy Freezing Rain",
+      "62010"=>"Heavy Freezing Rain",
+      "71100"=>"Mostly Clear and Light Ice Pellets",
+      "71110"=>"Partly Cloudy and Light Ice Pellets",
+      "71120"=>"Mostly Cloudy and Light Ice Pellets",
+      "71020"=>"Light Ice Pellets",
+      "71080"=>"Mostly Clear and Ice Pellets",
+      "71070"=>"Partly Cloudy and Ice Pellets",
+      "71090"=>"Mostly Cloudy and Ice Pellets",
+      "70000"=>"Ice Pellets",
+      "71050"=>"Drizzle and Ice Pellets",
+      "71060"=>"Freezing Rain and Ice Pellets",
+      "71150"=>"Light Rain and Ice Pellets",
+      "71170"=>"Rain and Ice Pellets",
+      "71030"=>"Freezing Rain and Heavy Ice Pellets",
+      "71130"=>"Mostly Clear and Heavy Ice Pellets",
+      "71140"=>"Partly Cloudy and Heavy Ice Pellets",
+      "71160"=>"Mostly Cloudy and Heavy Ice Pellets",
+      "71010"=>"Heavy Ice Pellets",
+      "80010"=>"Mostly Clear and Thunderstorm",
+      "80030"=>"Partly Cloudy and Thunderstorm",
+      "80020"=>"Mostly Cloudy and Thunderstorm",
+      "80000"=>"Thunderstorm"
+);
 
 
 
@@ -74,6 +176,31 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
 <body>
 <div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
+<div id="uwaga" class="jumbotron alert-danger uwaga d-none">
+  <h1 class="display-4">App out of date</h1>
+  <p class="lead">Please go to <a href="https://bins.ren/<?php echo $folder_name; ?>/">www.bins.ren/<?php echo $folder_name; ?></a> and add it to the Home Screen again</p>
+  <hr class="my-4">
+  <p>This version will stop working soon.</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="https://bins.ren/<?php echo $folder_name; ?>/" role="button">Open new web app</a>
+  </p>
+</div>
+
+<?php
+if($offline == 1){
+    echo '
+    <div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
+    <div id="uwaga" class="jumbotron offline">
+      <h1 class="display-4">Your device lost internet connection</h1>
+      <p class="lead">You can still view the calendar and the latest cached version of the app.</p>
+      <hr class="my-4">
+      <p>Press the button below once your connection is restored.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Reload</a>
+      </p>
+    </div>';
+}
+?>
         <h1 class="pt-5"><span class="bolder">Bin collection days</span> <span class="thinner">- <?php echo $location_name; ?></span></h1>
     
 <div id="tabs" class="pt-3">
@@ -85,23 +212,50 @@ echo '<!-- Render view file loaded and bins are sorted -->';
     <?php
         for ($i=0; $i<4; $i++) {
     ?>
-    <?php if ($i == 0){ ?>
+    <?php
+    $row_date = array_keys($bins_array)[$i];
+    $exploded = explode(', ', $bins_array[$row_date]);
+    
+    
+
+    if($i == 0){
+
+
+
+        $bins_for_json[$row_date] = $exploded[0];
+        if (isset($exploded[1])) {
+            $bins_for_json[$row_date]=array($exploded[0],$exploded[1]);
+        } else {
+            $bins_for_json[$row_date]=array($exploded[0]);
+        }    
+
+        $json_data = json_encode($bins_for_json);
+        //!!! VIEW RENDER cache !!!
+        if(!file_exists('bins-closest.json')) {
+            file_put_contents('bins-closest.json', $json_data);
+            echo '<!-- closest json created -->';
+        } else {
+            if(time() - filemtime('bins-closest.json') >= 8 * 3600 || date('l', strtotime('today')) == 'Monday' && date('H') < 11) { 
+                file_put_contents('bins-closest.json', $json_data);
+                echo '<!-- closest json updated -->';
+            }
+        }
+
+        
+    ?>
     <div class="row">
         <h2 id="next-collection">
             Next collection:
         </h2>
+        <p><?php echo "Time: " . date("Y-m-d h:i:sa"); ?></p>
     </div>
-    <?php } elseif($i==1){ ?>
+<?php } elseif($i == 1) { ?>
     <div class="row">
         <h2>
             Future collections:
         </h2>
     </div>
     <?php } ?>
-    <?php 
-    $row_date = array_keys($bins_array)[$i];
-    $exploded = explode(', ', $bins_array[$row_date]);
-    ?>
     <div class="row pl<?php echo $i; ?>"> 
         <div class="col">
             <h4>
@@ -110,7 +264,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
             </h4>
             <?php
             if(isset($data->data->timelines[0]->intervals) && $i != 3) {
-                echo weatherDisplay($data, $row_date, $precipitation_type);
+                echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay);
             }  
             ?>
         </div>
@@ -160,7 +314,7 @@ echo '<!-- Render view file loaded and bins are sorted -->';
  Dark mode </button>
     <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
 
-    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> Phone calendar</a>
+    <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> <strong>2023</strong> Phone calendar</a>
 </div>
 
 
@@ -302,6 +456,7 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
                                     <br />
                                     <div style="height: 4rem">
                                         <img src="https://arturkraft.b-cdn.net/bins-main/img/large/<?php echo $data->data->timelines[0]->intervals[$i]->values->weatherCodeDay ?>.png" />
+                                        <p><?php echo $weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay]; ?></p>
                                     </div>
                                     <br />
                                     <span class="fs-4">
@@ -500,161 +655,9 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
 <script defer>
 
-$('img.bin').bind('touchstart touchend', function(e) {
-    $(this).attr('src', $(this).data("hover"));
-});
-
-$("img.bin").mouseover(function() {
-  $(this).attr('src', $(this).data("hover"));
-}).mouseout(function() {
-  $(this).attr('src', $(this).data("src"));
-});
-
-
-//tabs and calendar
-
-$('#tabs').tabs({
-  activate: function(event, ui) {
-            var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          validRange: {
-            start: '2022-05-01',
-            end: '2023-12-31'
-          },
-          firstDay: 1,
-        aspectRatio: 0.9,
-         //themeSystem: 'bootstrap5',
-            events: [                
-                <?php
-                /*
-                if( $var_good == 1){
-                        for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
-
-                                                                                                        echo "{
-                        start: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
-                        end: '".substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10)."',
-                        title: '".floor($data->data->timelines[0]->intervals[$i]->values->temperature)." \'C, ".$precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ].": ".$data->data->timelines[0]->intervals[$i]->values->precipitationProbability."%',
-                        display: 'background',
-                        textColor: '#999',
-                        color: '#fff'},";  
-
-                        
-                        }
-                }
-                */
-                echo $post_js_events;
-
-                ?>
-                    {
-                            start: '2022-10-31',
-                            end: '2022-10-31',
-                            title: 'Halloween',
-                            display: 'block',
-                            color: '#E66C2C'
-
-                    },
-                    {
-                            start: '2022-12-25',
-                            end: '2022-12-25',
-                            title: 'Christmas',
-                            display: 'block',
-                            color: '#C30F16'
-
-                    }
-            ]
-        });
-        calendar.render();
-  }
-});
-
-
-    <?php
-    if ($current_festivity == $festivity[1]){
-    ?>
-        ;(function () {
-        var r=Math.random,n=0,d=document,w=window,
-            i=d.createElement('img'),
-            z=d.createElement('div'),
-            zs=z.style,
-            a=w.innerWidth*r(),b=w.innerHeight*r();
-        zs.position="fixed";
-        zs.left=0;
-        zs.top=0;
-        zs.opacity=0;
-        zs.zIndex=999999999;
-        z.appendChild(i);
-        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
-        d.body.appendChild(z);
-        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
-        function A(){
-            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
-                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
-            zs.opacity=n;n=1;
-            zs.transition=zs.webkitTransition=d/1e3+'s linear';
-            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
-            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
-            a=x;b=y;
-            setTimeout(A,d);
-        };setTimeout(A,r()*3e3);
-        })();
-
-        ;(function () {
-        var r=Math.random,n=0,d=document,w=window,
-            i=d.createElement('img'),
-            z=d.createElement('div'),
-            zs=z.style,
-            a=w.innerWidth*r(),b=w.innerHeight*r();
-        zs.position="fixed";
-        zs.left=0;
-        zs.top=0;
-        zs.opacity=0;
-        zs.zIndex=999999999;
-        z.appendChild(i);
-        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
-        d.body.appendChild(z);
-        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
-        function A(){
-            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
-                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
-            zs.opacity=n;n=1;
-            zs.transition=zs.webkitTransition=d/1e3+'s linear';
-            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
-            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
-            a=x;b=y;
-            setTimeout(A,d);
-        };setTimeout(A,r()*3e3);
-        })();
-
-                ;(function () {
-        var r=Math.random,n=0,d=document,w=window,
-            i=d.createElement('img'),
-            z=d.createElement('div'),
-            zs=z.style,
-            a=w.innerWidth*r(),b=w.innerHeight*r();
-        zs.position="fixed";
-        zs.left=0;
-        zs.top=0;
-        zs.opacity=0;
-        zs.zIndex=999999999;
-        z.appendChild(i);
-        i.src='data:image/gif;base64,R0lGODlhMAAwAJECAAAAAEJCQv///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAQACACwAAAAAMAAwAAACdpSPqcvtD6NcYNpbr4Z5ewV0UvhRohOe5UE+6cq0carCgpzQuM3ut16zvRBAH+/XKQ6PvaQyCFs+mbnWlEq0FrGi15XZJSmxP8OTRj4DyWY1lKdmV8fyLL3eXOPn6D3f6BcoOEhYaHiImKi4yNjo+AgZKTl5WAAAIfkECQEAAgAsAAAAADAAMAAAAnyUj6nL7Q+jdCDWicF9G1vdeWICao05ciUVpkrZIqjLwCdI16s+5wfck+F8JOBiR/zZZAJk0mAsDp/KIHRKvVqb2KxTu/Vdvt/nGFs2V5Bpta3tBcKp8m5WWL/z5PpbtH/0B/iyNGh4iJiouMjY6PgIGSk5SVlpeYmZqVkAACH5BAkBAAIALAAAAAAwADAAAAJhlI+py+0Po5y02ouz3rz7D4biSJbmiabq6gCs4B5AvM7GTKv4buby7vsAbT9gZ4h0JYmZpXO4YEKeVCk0QkVUlw+uYovE8ibgaVBSLm1Pa3W194rL5/S6/Y7P6/f8vp9SAAAh+QQJAQACACwAAAAAMAAwAAACZZSPqcvtD6OctNqLs968+w+G4kiW5omm6ooALeCusAHHclyzQs3rOz9jAXuqIRFlPJ6SQWRSaIQOpUBqtfjEZpfMJqmrHIFtpbGze2ZywWu0aUwWEbfiZvQdD4sXuWUj7gPos1EAACH5BAkBAAIALAAAAAAwADAAAAJrlI+py+0Po5y02ouz3rz7D4ZiCIxUaU4Amjrr+rDg+7ojXTdyh+e7kPP0egjabGg0EIVImHLJa6KaUam1aqVynNNsUvPTQjO/J84cFA3RzlaJO2495TF63Y7P6/f8vv8PGCg4SFhoeIg4UQAAIfkEBQEAAgAsAAAAADAAMAAAAnaUj6nL7Q+jXGDaW6+GeXsFdFL4UaITnuVBPunKtHGqwoKc0LjN7rdes70QQB/v1ykOj72kMghbPpm51pRKtBaxoteV2SUpsT/Dk0Y+A8lmNZSnZlfH8iy93lzj5+g93+gXKDhIWGh4iJiouMjY6PgIGSk5eVgAADs=';
-        d.body.appendChild(z);
-        function R(o,m){return Math.max(Math.min(o+(r()-.5)*400,m-50),50)}
-        function A(){
-            var x=R(a,w.innerWidth),y=R(b,w.innerHeight),
-                d=5*Math.sqrt((a-x)*(a-x)+(b-y)*(b-y));
-            zs.opacity=n;n=1;
-            zs.transition=zs.webkitTransition=d/1e3+'s linear';
-            zs.transform=zs.webkitTransform='translate('+x+'px,'+y+'px)';
-            i.style.transform=i.style.webkitTransform=(a>x)?'':'scaleX(-1)';
-            a=x;b=y;
-            setTimeout(A,d);
-        };setTimeout(A,r()*3e3);
-        })();
-    <?php
-    }
-    ?>
+<?php 
+    require_once(__ROOT__.'/bins-main/bottom-js.php'); 
+?>
 
 </script>
 
@@ -669,6 +672,3 @@ $('#tabs').tabs({
 </body>
 
 </html>
-    
-
-

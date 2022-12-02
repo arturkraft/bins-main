@@ -9,10 +9,17 @@
     <meta name="theme-color" content="<?php echo $current_festivity != $festivity[0] ? '#eb6123' : '#000';  ?>" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
+<?php
+
+if ($offline != 1){
+    echo '
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-    <script src="https://arturkraft.b-cdn.net/bins-main/js/jquery-ui.min.js"></script>
-
+    <script src="https://arturkraft.b-cdn.net/bins-main/js/jquery-ui.min.js"></script>';
+} else {
+    include_once 'js-top.ini';
+}
+?>
     <script>
                 // Capture the current theme from local storage and adjust the page to use the current theme.
 const htmlEl = document.getElementsByTagName('html')[0];
@@ -63,20 +70,59 @@ document.addEventListener('gestureend', function(e) {
     
     
     
+    
+    // if ('serviceWorker' in navigator) {
+    //     caches.keys().then(function(cacheNames) {
+    //         cacheNames.forEach(function(cacheName) {
+    //         caches.delete(cacheName);
+    //         });
+    //     });
+    // }
+
 
    
     </script>
-    
 <?php
-
-echo $gtag;
-
-?>
-
+if ($offline != 1){
+    echo '
     <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/jquery-ui.min.css">
-    <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/styles.pure.min.css">
-
-
+    <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/styling.min.css">';
+} else {
+    include_once 'css-top.ini';
+}
+?>
+    
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <!-- <script async src="https://cdn.jsdelivr.net/npm/pwacompat" crossorigin="anonymous"></script> -->
+    <script>
+    // Check compatibility for the browser we're running this in
+            if ("serviceWorker" in navigator) {
+            if (navigator.serviceWorker.controller) {
+                console.log("[PWA Builder] active service worker found, no need to register");
+            } else {
+                // Register the service worker
+                navigator.serviceWorker
+                .register("sw.js", {
+                    scope: "./"
+                })
+                .then(function (reg) {
+                    console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+            }
+            
+            
+            let displayMode = 'browser';
+            const mqStandAlone = '(display-mode: standalone)';
+            if (navigator.standalone || window.matchMedia(mqStandAlone).matches) {
+                displayMode = 'standalone';
+                $('#uwaga').removeClass('d-none');
+                console.log('yes, PWA');
+            }
+            else{
+            console.log("not PWA");
+            }
+    </script>
     <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.9__iPad_Air_landscape.png">
@@ -107,7 +153,6 @@ echo $gtag;
     <link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/4__iPhone_SE__iPod_touch_5th_generation_and_later_portrait.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=b">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=b">
-    <link rel="manifest" href="/site.webmanifest?v=b">
     <link rel="mask-icon" href="/safari-pinned-tab.svg?v=b" color="#5bbad5">
     <link rel="shortcut icon" href="/favicon.ico?v=b">
     <?php
