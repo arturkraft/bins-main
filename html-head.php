@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
 <?php
-
 if ($offline != 1){
     echo '
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous" defer></script>
@@ -93,6 +92,9 @@ if ($offline != 1){
 ?>
     
     <link rel="manifest" href="./manifest.webmanifest" />
+    <?php if($offline != 1) {
+        ?>
+    
     <!-- <script async src="https://cdn.jsdelivr.net/npm/pwacompat" crossorigin="anonymous"></script> -->
     <script>
     // Check compatibility for the browser we're running this in
@@ -123,6 +125,9 @@ if ($offline != 1){
             console.log("not PWA");
             }
     </script>
+    <?php
+    }
+    ?>
     <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/12.9__iPad_Pro_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/11__iPad_Pro__10.5__iPad_Pro_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/10.9__iPad_Air_landscape.png">

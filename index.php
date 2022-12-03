@@ -24,6 +24,7 @@ $tomorrow = date('Y-m-d',strtotime('+1 days'));
 $festivity = ['none', 'halloween', 'christmas'];
 $current_festivity = $festivity[0];
 $bins_for_json = [];
+$cdn_img_url = "https://arturkraft.b-cdn.net/bins-main/img/";
 
 
 //CONTROLLER
@@ -150,6 +151,9 @@ $weatherCodeDay = array(
       "80000"=>"Thunderstorm"
 );
 
+if($offline == 1){
+include_once("bins-base64.php");
+}
 
 
 //!!! VIEW RENDER cache !!!
@@ -188,16 +192,10 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
 <?php
 if($offline == 1){
-    echo '
-    <div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
-    <div id="uwaga" class="jumbotron offline">
-      <h1 class="display-4">Your device lost internet connection</h1>
-      <p class="lead">You can still view the calendar and the latest cached version of the app.</p>
-      <hr class="my-4">
-      <p>Press the button below once your connection is restored.</p>
-      <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#" role="button">Reload</a>
-      </p>
+    echo '<div class="alert alert-secondary" role="alert">
+  <p><strong>Your device has lost internet connection</strong>, but you still can use this app. Press the button below once your connection is restored.</p>
+
+        <a class="btn btn-primary btn-sm" href="#" role="button">Reload</a>
     </div>';
 }
 ?>
@@ -263,7 +261,7 @@ if($offline == 1){
                 <span id="thedate<?php echo $i; ?>"><?php echo $row_date; ?></span>
             </h4>
             <?php
-            if(isset($data->data->timelines[0]->intervals) && $i != 3) {
+            if(isset($data->data->timelines[0]->intervals) && $i != 3 && $offline != 1) {
                 echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay);
             }  
             ?>
@@ -272,7 +270,7 @@ if($offline == 1){
             
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $exploded[0]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin1 : $row_bin1; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin1; ?>.png" alt="<?php echo $row_bin1; ?>">
+                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $cdn_img_url.$row_bin1 : $cdn_img_url.$row_bin1; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" alt="<?php echo $row_bin1; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>
@@ -281,7 +279,7 @@ if($offline == 1){
         <div class="col col-md-auto">
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $exploded[1]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="../bins-main/img/<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $row_bin2 : $row_bin2; ?>-2.png" data-src="https://arturkraft.b-cdn.net/bins-main/img/<?php echo $row_bin2; ?>.png" alt="<?php echo $row_bin2; ?>">
+                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $cdn_img_url.$row_bin2 : $cdn_img_url.$row_bin2; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" alt="<?php echo $row_bin2; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin2; ?>"><?php echo strtoupper($row_bin2); ?></figcaption>
                 </figure>
             </a>
@@ -313,8 +311,13 @@ if($offline == 1){
     <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
  Dark mode </button>
     <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
-
+    <?php
+if($offline != 1){
+    ?>
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> <strong>2023</strong> Phone calendar</a>
+    <?php
+}
+    ?>
 </div>
 
 
@@ -561,6 +564,17 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 
         
 <script>
+
+    <?php
+    if($offline==1){
+    ?>
+    htmlEl.dataset.theme = 'dark';
+    $('#light').addClass('d-none');
+    $('#dark').addClass('d-none');
+    <?php
+    }else{
+    ?>
+
     if (currentTheme) {
     htmlEl.dataset.theme = currentTheme;
     $('#light').removeClass('d-none');
@@ -571,7 +585,9 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
     $('#light').addClass('d-none');
 
 }
-
+    <?php
+    }
+    ?>
 
 <?php 
 if ($show_octopus == 1) {
@@ -649,17 +665,13 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 
     </script>
 
-        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
 
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js" defer></script>
-
-<script defer>
 
 <?php 
     require_once(__ROOT__.'/bins-main/bottom-js.php'); 
 ?>
 
-</script>
+
 
 
 
