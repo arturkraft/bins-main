@@ -261,8 +261,8 @@ if($offline == 1){
                 <span id="thedate<?php echo $i; ?>"><?php echo $row_date; ?></span>
             </h4>
             <?php
-            if(isset($data->data->timelines[0]->intervals) && $i != 3 && $offline != 1) {
-                echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay);
+            if(isset($data->data->timelines[0]->intervals) && $i != 3) {
+                echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay, $offline);
             }  
             ?>
         </div>
@@ -457,9 +457,15 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
                                     <br />
                                     <?php echo date("M, jS", strtotime($date_to_change)); ?>
                                     <br />
-                                    <div style="height: 4rem">
+                                    <div style="margin-bottom: -20px">
+                                    <?php
+                                    if ($offline != 1){
+                                    ?>
                                         <img src="https://arturkraft.b-cdn.net/bins-main/img/large/<?php echo $data->data->timelines[0]->intervals[$i]->values->weatherCodeDay ?>.png" />
-                                        <p><?php echo $weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay]; ?></p>
+                                    <?php
+                                    }
+                                    ?>
+                                        <p class="weatherinfo"><?php echo $weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay]; ?></p>
                                     </div>
                                     <br />
                                     <span class="fs-4">
