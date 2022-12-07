@@ -222,13 +222,13 @@ $brown->setColour($brownColour);
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++){
 
             if(substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10) == $date){
-                $result .=  '<a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#weather-modal">
+                $result .=  '<a href="#" onclick="weatherModalOpened();" data-bs-toggle="modal" data-bs-target="#weather-modal">
                 <div class="badge bg-secondary text-wrap align-bottom">';
                 if ($offline != 1){
-                    $result .= '<img src="https://arturkraft.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" style="margin-bottom: 20px" />';
+                    $result .= '<img src="https://bins.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" style="margin-bottom: 5px; margin-top: -10px" />';
                 }
-                $result .= '<p class="weatherinfo">'.$weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay].'</p>
-                            <br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
+                $result .= '<br /><span class="weatherinfo">'.$weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay].'</span>
+                            <br /><br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
                 '&#8451;</span><br /><br />';
 
                 if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){

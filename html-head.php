@@ -9,12 +9,150 @@
     <meta name="theme-color" content="<?php echo $current_festivity != $festivity[0] ? '#eb6123' : '#000';  ?>" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-title" content="<?php echo $location_name; ?> Bins">
     <meta name="application-name" content="<?php echo $location_name; ?> Bins">
+    <style>
+    
+        #loading {
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 1;
+        background-color: #0C4622;
+        color: #fff;
+        z-index: 999999;
+        }
+        #loading h1{
+        color: #fff;
+        }
+        html[data-theme=dark] #loading {
+        filter: invert(1) hue-rotate(180deg);
+        background-color: #0C4622 !important;
+        color: #fff;
+        z-index: 999999;
+        }
+        .bins-ren a{
+            color: #7bdcb5; 
+            font-size: 18px; 
+            font-weight: 400; 
+            letter-spacing: .09rem; 
+            line-height: 1.4; 
+            text-decoration: none; 
+            /* text-decoration-color: #ff746d; */
+            border-bottom: 2px solid #ff746d;
+            padding-bottom: 4px.
+        }
+
+        .bins-ren{
+            padding: 20px;
+        }
+
+        .bins-ren a:hover{
+            color: #ff746d;
+        }
+        html[data-theme=dark] .bins-ren a {
+        filter: invert(1) hue-rotate(180deg);
+        }
+        
+        .chcontainer {
+          display: flex;
+          justify-content: left;
+          align-items: left;
+          width: 20px;
+          height: 20px;
+          padding-left: 40px;
+        }
+        
+        .chevron {
+          position: absolute;
+            width: 0.7rem;
+            height: 0.16rem;
+          opacity: 0;
+          transform: scale(0.3);
+          -webkit-animation: move-chevron 3s ease-out infinite;
+                  animation: move-chevron 3s ease-out infinite;
+        }
+        
+        .chevron:first-child {
+          -webkit-animation: move-chevron 3s ease-out 1s infinite;
+                  animation: move-chevron 3s ease-out 1s infinite;
+        }
+        
+        .chevron:nth-child(2) {
+          -webkit-animation: move-chevron 3s ease-out 2s infinite;
+                  animation: move-chevron 3s ease-out 2s infinite;
+        }
+        
+        .chevron:before,
+        .chevron:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 50%;
+          background: #2c3e50;
+        }
+        
+        .chevron:before {
+          left: 0;
+          transform: skewY(-30deg);
+        }
+        
+        .chevron:after {
+          right: 0;
+          width: 50%;
+          transform: skewY(30deg);
+        }
+        
+        @-webkit-keyframes move-chevron {
+          25% {
+            opacity: 0;
+            transform: translateY(3.2rem) scale(0.5);
+          }
+          33.3% {
+            opacity: 1;
+            transform: translateY(2.08rem);
+          }
+          66.6% {
+            opacity: 1;
+            transform: translateY(1.52rem);
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+        
+        @keyframes move-chevron {
+          25% {
+            opacity: 0;
+            transform: translateY(3.2rem) scale(0.5);
+          }
+          33.3% {
+            opacity: 1;
+            transform: translateY(2.08rem);
+          }
+          66.6% {
+            opacity: 1;
+            transform: translateY(1.52rem);
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+        .text-muted{
+            padding: 0 0 30px 65px; margin-top: -5px; font-size: 14px;
+        }
+    </style>
+
 <?php
 if ($offline != 1){
     echo '
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-    <script src="https://arturkraft.b-cdn.net/bins-main/js/jquery-ui.min.js"></script>';
+    <script src="https://bins.b-cdn.net/bins-main/js/jquery-ui.min.js"></script>';
 } else {
     include_once 'js-top.ini';
 }
@@ -68,7 +206,25 @@ document.addEventListener('gestureend', function(e) {
     } );
     
     
-    
+
+
+  function removeTip(){
+      const tipState = localStorage.getItem('weather-tip') ? localStorage.getItem('weather-tip') : null;
+    if (tipState != null){
+          $('#weather-tip').addClass('d-none');
+      }
+  }
+
+window.onload = function() {
+  removeTip();
+};
+
+  
+
+function weatherModalOpened() {
+        localStorage.setItem('weather-tip', 'off');
+        $('#weather-tip').addClass('d-none');
+}
     
     // if ('serviceWorker' in navigator) {
     //     caches.keys().then(function(cacheNames) {
@@ -84,8 +240,8 @@ document.addEventListener('gestureend', function(e) {
 <?php
 if ($offline != 1){
     echo '
-    <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/jquery-ui.min.css">
-    <link rel="stylesheet" href="https://arturkraft.b-cdn.net/bins-main/css/styling.min.css">';
+    <link rel="stylesheet" href="https://bins.b-cdn.net/bins-main/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://bins.b-cdn.net/bins-main/css/styling-min.css">';
 } else {
     include_once 'css-top.ini';
 }
@@ -104,7 +260,7 @@ if ($offline != 1){
             } else {
                 // Register the service worker
                 navigator.serviceWorker
-                .register("sw.js", {
+                .register("sw.js?v=<?php echo rand(100,999); ?>", {
                     scope: "./"
                 })
                 .then(function (reg) {
@@ -182,6 +338,8 @@ if ($offline != 1){
             background-size: 386px 640px;
             background-position: right 10px top 10px;
         }
+
+        
         .ui-widget-header {
             border-top: 1px solid #eb6123;
         }
@@ -231,4 +389,5 @@ if ($offline != 1){
     <?php
     }
     ?>
+    
 </head>

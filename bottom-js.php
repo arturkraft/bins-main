@@ -1,5 +1,4 @@
-<?php
-?>
+
     <?php
     if($offline == 1){
     ?>
@@ -21,13 +20,45 @@ var FullCalendar=function(e){"use strict";var t=function(e,n){return(t=Object.se
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js" defer></script>
+        
+        <style>
+            h1,
+              .wrapper {
+                font-weight: lighter;
+              }
+              .wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: -apple-system, sans-serif;
+                width: 100%;
+                height: 100%;
+              }
+              .wrapper .item {
+                max-width: 80%;
+              }
+              .a2hs__container {
+                animation: slideUp 0.7s ease;
+              }
+              @keyframes slideUp {
+                0% {
+                  opacity: 0;
+                  transform: translateY(240px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+        </style>
+        
     <?php
     }
     ?>
 
         <script defer>
 <?php
-if($offline!=1){
+if($offline != 1){
 ?>
 $('img.bin').bind('touchstart touchend', function(e) {
     $(this).attr('src', $(this).data("hover"));
@@ -38,6 +69,93 @@ $("img.bin").mouseover(function() {
 }).mouseout(function() {
   $(this).attr('src', $(this).data("src"));
 });
+
+
+ 
+var AddToHomeScreen = function (settings = {}) {
+  // Container styles
+  var backgroundColor = settings.backgroundColor || "#f9f9f9";
+  var padding = settings.padding || "10px";
+  var shadowColor = settings.shadowColor || "#e9e9e9";
+  var shadowSize = settings.shadowSize || "10px";
+  // Content styles
+  var fontFamily = settings.fontFamily || "-apple-system, sans-serif";
+  var color = settings.color || "#5d5d5d";
+  var fontSize = settings.fontSize || "0.9rem";
+  // Content
+  var brandName = settings.brandName || "Bins.ren";
+  var logoImage =
+    settings.logoImage ||
+    `<img src="https://bins.b-cdn.net/bins-main/img/green.png" alt="Bin Collection Days" style="width: 50px; height: 94px" />`;
+  var htmlContent =
+    settings.htmlContent ||
+    `Install <strong>${brandName} web app</strong> on your iOS device: tap Share <img src="../bins-main/img/share-sm.png" alt="share" style="width: 18px; height: 18px"> and <strong>Add to Home Screen</strong> <img src="https://bins.b-cdn.net/bins-main/img/add-sm.png" alt="add" style="width: 18px; height: 18px"><br />
+        <img src="https://bins.b-cdn.net/bins-main/img/arrow-down.gif" style="width: 50px; margin-left: auto; margin-right: auto; display: block; position: relative; right: 38px;">`;
+  // Define iOS User-Agent variable
+  var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  // Define standalone mode variable - && !window.localStorage.a2hs_message - in the if below
+  var standalone =
+    "standalone" in window.navigator && window.navigator.standalone;
+  // Check localStorage before render a2hs container
+  if (iOS && !standalone ) {
+    // Define container variable
+    var div = document.createElement("div");
+    // Define style variable
+    var style = document.createElement("style");
+    // Create styles
+    style.innerHTML = `
+      .a2hs__container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        box-sizing: border-box;
+        box-shadow: ${shadowColor} 0 0 ${shadowSize};
+        background-color: ${backgroundColor};
+        padding: ${padding};
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+      .a2hs__container .a2hs__logo {
+        padding: ${padding};
+      }
+      .a2hs__container .a2hs__text {
+        font-family: ${fontFamily};
+        font-size: ${fontSize};
+        color: ${color};
+      }`;
+    // Create message
+    div.innerHTML = `<div class="a2hs__logo">${logoImage}</div>
+      <div class="a2hs__text">${htmlContent}</div>`;
+    // Add class to container
+    div.setAttribute("class", "a2hs__container animated-box in");
+    // Add onClick function
+    div.onclick = function (event) {
+      // Prevent default click
+      event.preventDefault();
+      // Hide a2hs_message
+      window.localStorage.setItem("a2hs_message", "hide");
+      // Remove a2hs container from DOM
+      document.querySelector(".a2hs__container").remove();
+    };
+    // Render elements
+    document.head.appendChild(style);
+    document.body.appendChild(div);
+  }
+};
+
+
+
+AddToHomeScreen({
+  brandName: "Bins.ren/<?php echo $folder_name; ?>",
+  fontFamily: "Helvetica, Arial, sans-serif",
+});
+
+
+
+
 <?php
 }
 ?>
@@ -51,7 +169,7 @@ $('#tabs').tabs({
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
           validRange: {
-            start: '2022-05-01',
+            start: '2022-12-01',
             end: '2023-12-31'
           },
           firstDay: 1,
@@ -79,8 +197,8 @@ $('#tabs').tabs({
 
                 ?>
                     {
-                            start: '2022-10-31',
-                            end: '2022-10-31',
+                            start: '2023-10-31',
+                            end: '2023-10-31',
                             title: 'Halloween',
                             display: 'block',
                             color: '#E66C2C'
@@ -89,6 +207,14 @@ $('#tabs').tabs({
                     {
                             start: '2022-12-25',
                             end: '2022-12-25',
+                            title: 'Christmas',
+                            display: 'block',
+                            color: '#C30F16'
+
+                    },
+                    {
+                            start: '2023-12-25',
+                            end: '2023-12-25',
                             title: 'Christmas',
                             display: 'block',
                             color: '#C30F16'
@@ -189,10 +315,11 @@ $('#tabs').tabs({
     ?>
     
     <?php
-    if($offline == 1){
+    if($offline == 1) {
     ?>
       // Manual reload feature.
-      document.querySelector("button").addEventListener("click", () => {
+
+      $( "#reload" ).click(function() {
         window.location.reload();
       });
 
@@ -223,4 +350,10 @@ $('#tabs').tabs({
     <?php
     }
     ?>
+    
+
+
+
+
+ 
     </script>

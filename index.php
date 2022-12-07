@@ -24,14 +24,14 @@ $tomorrow = date('Y-m-d',strtotime('+1 days'));
 $festivity = ['none', 'halloween', 'christmas'];
 $current_festivity = $festivity[0];
 $bins_for_json = [];
-$cdn_img_url = "https://arturkraft.b-cdn.net/bins-main/img/";
+$cdn_img_url = "https://bins.b-cdn.net/bins-main/img/";
 
 
 //CONTROLLER
 require_once(__ROOT__.'/bins-main/controller.php');
 
 
-header('Access-Control-Allow-Origin: https://arturkraft.b-cdn.net');
+header('Access-Control-Allow-Origin: https://bins.b-cdn.net');
 
 
 //HTML HEAD
@@ -179,23 +179,21 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 ?>
 
 <body>
-<div id ="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
-<div id="uwaga" class="jumbotron alert-danger uwaga d-none">
-  <h1 class="display-4">App out of date</h1>
-  <p class="lead">Please go to <a href="https://bins.ren/<?php echo $folder_name; ?>/">www.bins.ren/<?php echo $folder_name; ?></a> and add it to the Home Screen again</p>
-  <hr class="my-4">
-  <p>This version will stop working soon.</p>
-  <p class="lead">
-    <a class="btn btn-primary btn-lg" href="https://bins.ren/<?php echo $folder_name; ?>/" role="button">Open new web app</a>
-  </p>
+
+
+<div id="loading" class="loading">
+  <!-- <img id="loading-image" src="path/to/ajax-loader.gif" alt="Loading..." /> -->
+  <h1>Bins.ren/<?php echo $folder_name; ?></h1>
 </div>
+
+<div id="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
 
 <?php
 if($offline == 1){
-    echo '<div class="alert alert-secondary" role="alert">
+    echo '<div class="alert alert-secondary animated-box in" role="alert">
   <p><strong>Your device has lost internet connection</strong>, but you still can use this app. Press the button below once your connection is restored.</p>
 
-        <a class="btn btn-primary btn-sm" href="#" role="button">Reload</a>
+        <a id="reload" class="btn btn-primary btn-sm" href="javascript:void();" role="button">Reload</a>
     </div>';
 }
 ?>
@@ -245,7 +243,6 @@ if($offline == 1){
         <h2 id="next-collection">
             Next collection:
         </h2>
-        <p><?php echo "Time: " . date("Y-m-d h:i:sa"); ?></p>
     </div>
 <?php } elseif($i == 1) { ?>
     <div class="row">
@@ -260,9 +257,20 @@ if($offline == 1){
                 <?php echo date("l", strtotime($row_date)) ?>, <br/>
                 <span id="thedate<?php echo $i; ?>"><?php echo $row_date; ?></span>
             </h4>
+
             <?php
             if(isset($data->data->timelines[0]->intervals) && $i != 3) {
                 echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay, $offline);
+                if($i==0) {
+                    echo '<br />
+                    <div id="weather-tip" class="">
+                        <div class="chcontainer">
+                          <div class="chevron"></div>
+                          <div class="chevron"></div>
+                          <div class="chevron"></div>
+                        </div><p class="text-muted">Tap to see weather</p>
+                    </div>';
+                }
             }  
             ?>
         </div>
@@ -311,16 +319,30 @@ if($offline == 1){
     <button id="dark" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('dark');"><span class="icon-toggle-off"></span>
  Dark mode </button>
     <button id="light" class="btn btn-outline-light btn-sm active" onclick="toggleTheme('light');"><span class="icon-toggle-on"></span> Dark mode </button>
+    
+
     <?php
-if($offline != 1){
+    if($offline != 1 && $ics_calendar == 1){
     ?>
     <a href="<?php echo $folder_name ?>.ics" class="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style="color: #fff"><span class="icon-system_update"></span> <strong>2023</strong> Phone calendar</a>
     <?php
-}
+    }
     ?>
 </div>
 
 
+</div>
+
+<?php
+    if($offline == 1){
+        echo "<p style=\"padding: 20px;\">Offline content saved on: " . date("Y-m-d h:i:sa") . "</p>";
+    }
+    ?>
+<br /><br /><br />
+<div class="d-flex justify-content-between">
+<p class="bins-ren"><a href="<?php echo ($offline == 1) ? '#' : 'https://bins.ren'; ?>" target="_blank" aria-current="page" >BINS.REN</a></p>
+
+<p class="bins-ren">&copy;<?php echo date("Y"); ?> Artur Kraft <a href="<?php echo ($offline == 1) ? '#' : 'https://artur.kr/'; ?>" data-type="URL" data-id="<?php echo ($offline == 1) ? '#' : 'https://artur.kr/'; ?>" style="text-decoration-color: #7bdcb5;" target="_blank" >artur.kr</a></p>
 </div>
     
     
@@ -340,7 +362,7 @@ if ($show_octopus == 1) {
             </div>
         </div>
         <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-            <img class="rounded-lg-3" src="https://arturkraft.b-cdn.net/bins-main/img/octopus.png" alt="" width="720">
+            <img class="rounded-lg-3" src="https://bins.b-cdn.net/bins-main/img/octopus.png" alt="" width="720">
         </div>
         </div>
     </div>
@@ -420,14 +442,7 @@ if ($show_octopus == 1) {
             </div>
 
 <?php
-        
         }
-
-
-
-    
-
-
 ?>
 
 
@@ -457,11 +472,11 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
                                     <br />
                                     <?php echo date("M, jS", strtotime($date_to_change)); ?>
                                     <br />
-                                    <div style="margin-bottom: -20px">
+                                    <div style="margin-bottom: -30px">
                                     <?php
                                     if ($offline != 1){
                                     ?>
-                                        <img src="https://arturkraft.b-cdn.net/bins-main/img/large/<?php echo $data->data->timelines[0]->intervals[$i]->values->weatherCodeDay ?>.png" />
+                                        <img src="https://bins.b-cdn.net/bins-main/img/large/<?php echo $data->data->timelines[0]->intervals[$i]->values->weatherCodeDay ?>.png" />
                                     <?php
                                     }
                                     ?>
@@ -571,6 +586,13 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
         
 <script>
 
+    setTimeout(() => {
+        const box = document.getElementById('loading');
+        box.style.display = 'none';
+        // box.style.visibility = 'hidden';
+    }, 300); 
+
+
     <?php
     if($offline==1){
     ?>
@@ -586,11 +608,11 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
     $('#light').removeClass('d-none');
     $('#'+currentTheme).addClass('d-none');
 
-}else{
-        $('#'+currentTheme).removeClass('d-none');
-    $('#light').addClass('d-none');
+    }else{
+            $('#'+currentTheme).removeClass('d-none');
+        $('#light').addClass('d-none');
 
-}
+    }
     <?php
     }
     ?>
@@ -676,11 +698,6 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 <?php 
     require_once(__ROOT__.'/bins-main/bottom-js.php'); 
 ?>
-
-
-
-
-
 
 
 <?php

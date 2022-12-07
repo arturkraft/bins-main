@@ -1,14 +1,13 @@
 <?php
 
-$url='https://bins.ren/';
-$bin_locations = ['brookfield', 'brooklands', 'linwood', 'weirswynd'];
+require_once 'bin-locations.php';
 echo 'done!';
 
 foreach($bin_locations as $bin_location) {
 
     $manifest = Array (
-        "theme_color" => "#1e7a43",
-        "background_color" => "#1e7a43",
+        "theme_color" => "#0C4622",
+        "background_color" => "#0C4622",
         "display" => "standalone",
         "start_url" => $url.$bin_location."/",
         "scope" => $url.$bin_location."/",
@@ -35,5 +34,3 @@ foreach($bin_locations as $bin_location) {
     echo "Here is the data";
     print_r($json);
 }
-
-
