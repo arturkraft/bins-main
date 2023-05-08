@@ -218,31 +218,32 @@ $brown->setColour($brownColour);
 
     //weather function
     function weatherDisplay($data, $date, $precipitation_type, $weatherCodeDay, $offline) {
-        $result = "";
+        $result = "no data";
         for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++){
 
             if(substr($data->data->timelines[0]->intervals[$i]->startTime, 0, 10) == $date){
-                $result .=  '<a href="#" onclick="weatherModalOpened();" data-bs-toggle="modal" data-bs-target="#weather-modal">
+                echo '<a href="#" onclick="weatherModalOpened();" data-bs-toggle="modal" data-bs-target="#weather-modal">
                 <div class="badge bg-secondary text-wrap align-bottom">';
                 if ($offline != 1){
-                    $result .= '<img src="https://bins.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" style="margin-bottom: 5px; margin-top: -10px" />';
+                    echo '<img src="https://bins.b-cdn.net/bins-main/img/'.$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay.'.png" style="margin-bottom: 5px; margin-top: -10px" />';
                 }
-                $result .= '<br /><span class="weatherinfo">'.$weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay].'</span>
+                echo '<br /><span class="weatherinfo">'.$weatherCodeDay[$data->data->timelines[0]->intervals[$i]->values->weatherCodeDay].'</span>
                             <br /><br /><span class="fs-4">' . trim(floor($data->data->timelines[0]->intervals[$i]->values->temperature)) . 
                 '&#8451;</span><br /><br />';
 
                 if( $data->data->timelines[0]->intervals[$i]->values->precipitationType != 0 ){
-                            $result .= '<p><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
+                            echo '<p><span class="icon-rainy"></span> Chance of ' . $precipitation_type[ $data->data->timelines[0]->intervals[$i]->values->precipitationType ] . ': ' . $data->data->timelines[0]->intervals[$i]->values->precipitationProbability . '%</p>';
                 }else{
-                            $result .= '<p><span class="icon-rainy"></span> 0% chance of rain</p>';
+                            echo '<p><span class="icon-rainy"></span> 0% chance of rain</p>';
                 }
 
-                $result .= '<p><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
+                echo '<p><span class="icon-wind"></span> Wind speed: ' . $data->data->timelines[0]->intervals[$i]->values->windSpeed . 'mph</p>';
 
-                $result .= '  
+                echo '  
                 
 
                         </div></a>'; 
+                $result = 1;
                         break;   
             }
 
