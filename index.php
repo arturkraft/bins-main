@@ -260,8 +260,9 @@ if($offline == 1){
 
             <?php
             if(isset($data->data->timelines[0]->intervals) && $i != 3) {
-                echo weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay, $offline);
-                if($i==0) {
+                $displayed = weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay, $offline);
+                //weatherDisplay($data, $row_date, $precipitation_type, $weatherCodeDay, $offline);
+                if($i==0 && $displayed != "no data") {
                     echo '<br />
                     <div id="weather-tip" class="">
                         <div class="chcontainer">
@@ -528,12 +529,12 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 ?>
                         </tr>
                     </tbody>
-                    </table>
+                    </table><!--
                     <p>
                         <span style="padding-left: 8rem;">
                             Swipe left/right <span class="icon-one-finger-swipe-horizontally" style="font-size: 2em"></span>
                         </span>
-                    </p>
+                    </p>-->
                 </div>
             </div>
         </div>
@@ -698,6 +699,22 @@ let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMo
 <?php 
     require_once(__ROOT__.'/bins-main/bottom-js.php'); 
 ?>
+
+
+<script defer>
+
+document.addEventListener("DOMContentLoaded", function(){
+  AddToHomeScreen({
+  brandName: "Bins.ren/<?php echo $folder_name; ?>",
+  fontFamily: "Helvetica, Arial, sans-serif"
+  });
+});
+
+
+
+
+
+</script>
 
 
 <?php
