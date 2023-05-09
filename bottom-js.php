@@ -1,4 +1,117 @@
 
+        
+<script>
+
+    setTimeout(() => {
+        const box = document.getElementById('loading');
+        box.style.display = 'none';
+        // box.style.visibility = 'hidden';
+    }, 300); 
+
+
+    <?php
+    if($offline==1){
+    ?>
+    htmlEl.dataset.theme = 'dark';
+    $('#light').addClass('d-none');
+    $('#dark').addClass('d-none');
+    <?php
+    }else{
+    ?>
+
+    if (currentTheme) {
+    htmlEl.dataset.theme = currentTheme;
+    $('#light').removeClass('d-none');
+    $('#'+currentTheme).addClass('d-none');
+
+    }else{
+            $('#'+currentTheme).removeClass('d-none');
+        $('#light').addClass('d-none');
+
+    }
+    <?php
+    }
+    ?>
+
+<?php 
+if ($show_octopus == 1) {
+?>
+if(dismisser){
+    $('#octopus').addClass('d-none');
+}else{
+    $('#octopus').removeClass('d-none');
+}
+                
+function dismiss(){
+    localStorage.setItem('dismiss', 'yes');
+    $('#octopus').addClass('d-none');
+}
+<?php 
+}
+?>
+
+
+
+                
+
+//today or tomorrow or date format
+
+
+function ordinal_suffix_of(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
+
+var today = new Date().toDateString();
+var tomorrow = new Date();
+var yesterday = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1)
+tomorrow = tomorrow.toDateString();
+yesterday.setDate(yesterday.getDate() - 1)
+yesterday = yesterday.toDateString();
+                
+
+for(var i=0; i<=3; i++){
+    
+var theDate = document.getElementById("thedate"+i).textContent;
+var utcDate = new Date(theDate);
+var date = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000) //local Date
+var date2 = date.toDateString();
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMonth()];
+//let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMonth()] + " " + date.getFullYear();
+
+  if(today === date2){
+    document.getElementById("thedate"+i).textContent='today';
+    document.getElementById("next-collection").textContent = "Today's collection: ";
+  }else if(tomorrow === date2){
+    document.getElementById("thedate"+i).textContent='tomorrow';
+    document.getElementById("next-collection").textContent = "Tomorrow's collection: ";
+  }else if(yesterday === date2){
+    document.getElementById("thedate"+i).textContent='yesterday';
+    document.getElementById("next-collection").textContent = "Yesterday's collection: ";
+  }else{
+    document.getElementById("thedate"+i).textContent=formatted_date;
+    //document.getElementById("next-collection").textContent = "Collection this week: ";
+  }
+    
+}
+
+    </script>
+    
+    
+    
+    
     <?php
     if($offline == 1){
     ?>
@@ -70,9 +183,10 @@ $("img.bin").mouseover(function() {
   $(this).attr('src', $(this).data("src"));
 });
 
-
+// var AddToHomeScreen = function (settings = {}) {
  
-var AddToHomeScreen = function (settings = {}) {
+function AddToHomeScreen(settings = {}) {
+
   // Container styles
   var backgroundColor = settings.backgroundColor || "#f9f9f9";
   var padding = settings.padding || "10px";
@@ -87,15 +201,19 @@ var AddToHomeScreen = function (settings = {}) {
   var logoImage =
     settings.logoImage ||
     `<img src="https://bins.b-cdn.net/bins-main/img/green.png" alt="Bin Collection Days" style="width: 50px; height: 94px" />`;
+   
   var htmlContent =
     settings.htmlContent ||
-    `Install <strong>${brandName} web app</strong> on your iOS device: tap Share <img src="../bins-main/img/share-sm.png" alt="share" style="width: 18px; height: 18px"> and <strong>Add to Home Screen</strong> <img src="https://bins.b-cdn.net/bins-main/img/add-sm.png" alt="add" style="width: 18px; height: 18px"><br />
+    `Install <strong>${brandName} web app</strong> on your iOS device: tap Share <img src="https://bins.b-cdn.net/bins-main/img/share-sm.png" alt="share" style="width: 18px; height: 18px"> and <strong>Add to Home Screen</strong> <img src="https://bins.b-cdn.net/bins-main/img/add-sm.png" alt="add" style="width: 18px; height: 18px"><br />
         <img src="https://bins.b-cdn.net/bins-main/img/arrow-down.gif" style="width: 50px; margin-left: auto; margin-right: auto; display: block; position: relative; right: 38px;">`;
   // Define iOS User-Agent variable
   var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  
+ 
   // Define standalone mode variable - && !window.localStorage.a2hs_message - in the if below
   var standalone =
     "standalone" in window.navigator && window.navigator.standalone;
+   
   // Check localStorage before render a2hs container
   if (iOS && !standalone ) {
     // Define container variable
@@ -131,6 +249,7 @@ var AddToHomeScreen = function (settings = {}) {
       <div class="a2hs__text">${htmlContent}</div>`;
     // Add class to container
     div.setAttribute("class", "a2hs__container animated-box in");
+    
     // Add onClick function
     div.onclick = function (event) {
       // Prevent default click
@@ -143,15 +262,13 @@ var AddToHomeScreen = function (settings = {}) {
     // Render elements
     document.head.appendChild(style);
     document.body.appendChild(div);
+    
   }
+ 
 };
 
 
 
-AddToHomeScreen({
-  brandName: "Bins.ren/<?php echo $folder_name; ?>",
-  fontFamily: "Helvetica, Arial, sans-serif",
-});
 
 
 
@@ -350,10 +467,15 @@ $('#tabs').tabs({
     <?php
     }
     ?>
-    
-
-
-
-
- 
     </script>
+    
+ <script defer>
+
+document.addEventListener("DOMContentLoaded", function(){
+  AddToHomeScreen({
+  brandName: "Bins.ren/<?php echo $folder_name; ?>",
+  fontFamily: "Helvetica, Arial, sans-serif"
+  });
+});
+
+</script>
