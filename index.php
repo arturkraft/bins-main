@@ -54,102 +54,7 @@ $text = file_get_contents($weather_file);
 echo '<!-- File loaded -->';
 $data = json_decode($text);
 
-$weatherCodeDay = array(
-      "0"=>"Weather Unknown",
-      "10000"=>"Clear, Sunny",
-      "11000"=>"Mostly Clear",
-      "11010"=>"Partly Cloudy",
-      "11020"=>"Mostly Cloudy",
-      "10010"=>"Cloudy",
-      "11030"=>"Partly Cloudy and Mostly Clear",
-      "21000"=>"Light Fog",
-      "21010"=>"Mostly Clear and Light Fog",
-      "21020"=>"Partly Cloudy and Light Fog",
-      "21030"=>"Mostly Cloudy and Light Fog",
-      "21060"=>"Mostly Clear and Fog",
-      "21070"=>"Partly Cloudy and Fog",
-      "21080"=>"Mostly Cloudy and Fog",
-      "20000"=>"Fog",
-      "42040"=>"Partly Cloudy and Drizzle",
-      "42030"=>"Mostly Clear and Drizzle",
-      "42050"=>"Mostly Cloudy and Drizzle",
-      "40000"=>"Drizzle",
-      "42000"=>"Light Rain",
-      "42130"=>"Mostly Clear and Light Rain",
-      "42140"=>"Partly Cloudy and Light Rain",
-      "42150"=>"Mostly Cloudy and Light Rain",
-      "42090"=>"Mostly Clear and Rain",
-      "42080"=>"Partly Cloudy and Rain",
-      "42100"=>"Mostly Cloudy and Rain",
-      "40010"=>"Rain",
-      "42110"=>"Mostly Clear and Heavy Rain",
-      "42020"=>"Partly Cloudy and Heavy Rain",
-      "42120"=>"Mostly Cloudy and Heavy Rain",
-      "42010"=>"Heavy Rain",
-      "51150"=>"Mostly Clear and Flurries",
-      "51160"=>"Partly Cloudy and Flurries",
-      "51170"=>"Mostly Cloudy and Flurries",
-      "50010"=>"Flurries",
-      "51000"=>"Light Snow",
-      "51020"=>"Mostly Clear and Light Snow",
-      "51030"=>"Partly Cloudy and Light Snow",
-      "51040"=>"Mostly Cloudy and Light Snow",
-      "51220"=>"Drizzle and Light Snow",
-      "51050"=>"Mostly Clear and Snow",
-      "51060"=>"Partly Cloudy and Snow",
-      "51070"=>"Mostly Cloudy and Snow",
-      "50000"=>"Snow",
-      "51010"=>"Heavy Snow",
-      "51190"=>"Mostly Clear and Heavy Snow",
-      "51200"=>"Partly Cloudy and Heavy Snow",
-      "51210"=>"Mostly Cloudy and Heavy Snow",
-      "51100"=>"Drizzle and Snow",
-      "51080"=>"Rain and Snow",
-      "51140"=>"Snow and Freezing Rain",
-      "51120"=>"Snow and Ice Pellets",
-      "60000"=>"Freezing Drizzle",
-      "60030"=>"Mostly Clear and Freezing drizzle",
-      "60020"=>"Partly Cloudy and Freezing drizzle",
-      "60040"=>"Mostly Cloudy and Freezing drizzle",
-      "62040"=>"Drizzle and Freezing Drizzle",
-      "62060"=>"Light Rain and Freezing Drizzle",
-      "62050"=>"Mostly Clear and Light Freezing Rain",
-      "62030"=>"Partly Cloudy and Light Freezing Rain",
-      "62090"=>"Mostly Cloudy and Light Freezing Rain",
-      "62000"=>"Light Freezing Rain",
-      "62130"=>"Mostly Clear and Freezing Rain",
-      "62140"=>"Partly Cloudy and Freezing Rain",
-      "62150"=>"Mostly Cloudy and Freezing Rain",
-      "60010"=>"Freezing Rain",
-      "62120"=>"Drizzle and Freezing Rain",
-      "62200"=>"Light Rain and Freezing Rain",
-      "62220"=>"Rain and Freezing Rain",
-      "62070"=>"Mostly Clear and Heavy Freezing Rain",
-      "62020"=>"Partly Cloudy and Heavy Freezing Rain",
-      "62080"=>"Mostly Cloudy and Heavy Freezing Rain",
-      "62010"=>"Heavy Freezing Rain",
-      "71100"=>"Mostly Clear and Light Ice Pellets",
-      "71110"=>"Partly Cloudy and Light Ice Pellets",
-      "71120"=>"Mostly Cloudy and Light Ice Pellets",
-      "71020"=>"Light Ice Pellets",
-      "71080"=>"Mostly Clear and Ice Pellets",
-      "71070"=>"Partly Cloudy and Ice Pellets",
-      "71090"=>"Mostly Cloudy and Ice Pellets",
-      "70000"=>"Ice Pellets",
-      "71050"=>"Drizzle and Ice Pellets",
-      "71060"=>"Freezing Rain and Ice Pellets",
-      "71150"=>"Light Rain and Ice Pellets",
-      "71170"=>"Rain and Ice Pellets",
-      "71030"=>"Freezing Rain and Heavy Ice Pellets",
-      "71130"=>"Mostly Clear and Heavy Ice Pellets",
-      "71140"=>"Partly Cloudy and Heavy Ice Pellets",
-      "71160"=>"Mostly Cloudy and Heavy Ice Pellets",
-      "71010"=>"Heavy Ice Pellets",
-      "80010"=>"Mostly Clear and Thunderstorm",
-      "80030"=>"Partly Cloudy and Thunderstorm",
-      "80020"=>"Mostly Cloudy and Thunderstorm",
-      "80000"=>"Thunderstorm"
-);
+
 
 if($offline == 1){
 include_once("bins-base64.php");
@@ -381,16 +286,12 @@ if ($show_octopus == 1) {
 //bin modals
         $grey_good = ['Non-recyclable waste', 'Plastic bags and polythene', 'Polystyrene', 'Crisp and sweet wrappers', 'Used tissues and paper towels', 'Cling film', 'Tinfoil', 'Lightbulbs', 'Pet litter', 'Nappies', 'Personal hygiene products', 'Food and drinks pouches', 'Hard plastics (toys, coat hangers, CD cases etc.)', 'Padded envelopes', 'Shredded paper'];
         $grey_bad = ['Plastics, cans and glass', 'Paper, card and cardboard', 'Food waste', 'Garden waste', 'Electrical items', 'Textiles and shoes'];
-
         $blue_good = ['Cardboard (flattened)', 'Cereal boxes', 'Large brown cardboard boxes', 'Corrugated cardboard', 'Toilet and kitchen roll tubes', 'Cardboard packaging', 'Paper (clean and dry)', 'Envelopes (with and without windows)', 'Magazines', 'Newspapers', 'Office paper', 'Telephone directories', 'Paperback books', 'Catalogues', 'Junk mail and takeaway menus'];
         $blue_bad = ['Glass', 'Plastics and cans', 'Hardback books', 'Plastic carrier bags', 'Padded envelopes', 'Plastic wrapping and bubble wrap', 'Polystyrene', 'Packaging with food residue', 'Used tissues and kitchen roll', 'Foil wrapping paper', 'Tinfoil', 'Shredded paper'];
-
         $green_good = ['Plastic bottles', 'Plastic pots, tubs and trays', 'Fruit and vegetable punnets', 'Clean takeaway containers', 'Cleaning product bottles', 'Drinks cans (empty and rinsed)', 'Food/pet food tins (empty and rinsed)', 'Biscuit/sweet tins', 'Aerosols', 'Glass bottles and jars', 'Cartons', 'Milk cartons'];
         $green_bad = ['Paper, card and cardboard', 'Food residue', 'Carrier bags', 'Sweet and crisp wrappers', 'Plastic wrapping and bubble wrap', 'Polystyrene Food and drink pouches', 'Hard plastics (toys, coat hangers, CD case etc)', 'Food and drink pouches', 'Light bulbs', 'Pyrex or crockery', 'Mirrors', 'Tinfoil'];
-
         $brown_good = ['Grass cuttings', 'Flowers and plants', 'Weeds', 'Leaves', 'Small branches and twigs', 'Cooked and uncooked food', 'Leftovers', 'Fruit and vegetable peelings', 'Tea bags and coffee grounds', 'Egg shells', 'Out of date food (remove packaging)', 'Bread, pasta and cakes', 'Meat, fish and small bones'];
         $brown_bad = ['Plastic bags', 'Packaging', 'Liquids', 'Fats and oils', 'Rubble and soil', 'Plant pots', 'Wood and fencing', 'Garden furniture', 'Plastics, cans and glass', 'Paper, card and cardboard'];
-
         $brown_extra = '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#brown-modal-extra">How to use the brown bin?</button>';
 
 
@@ -584,140 +485,11 @@ for($i = 0; $i<count($data->data->timelines[0]->intervals); $i++) {
 </div>
 
 
-        
-<script>
-
-    setTimeout(() => {
-        const box = document.getElementById('loading');
-        box.style.display = 'none';
-        // box.style.visibility = 'hidden';
-    }, 300); 
-
-
-    <?php
-    if($offline==1){
-    ?>
-    htmlEl.dataset.theme = 'dark';
-    $('#light').addClass('d-none');
-    $('#dark').addClass('d-none');
-    <?php
-    }else{
-    ?>
-
-    if (currentTheme) {
-    htmlEl.dataset.theme = currentTheme;
-    $('#light').removeClass('d-none');
-    $('#'+currentTheme).addClass('d-none');
-
-    }else{
-            $('#'+currentTheme).removeClass('d-none');
-        $('#light').addClass('d-none');
-
-    }
-    <?php
-    }
-    ?>
-
-<?php 
-if ($show_octopus == 1) {
-?>
-if(dismisser){
-    $('#octopus').addClass('d-none');
-}else{
-    $('#octopus').removeClass('d-none');
-}
-                
-function dismiss(){
-    localStorage.setItem('dismiss', 'yes');
-    $('#octopus').addClass('d-none');
-}
-<?php 
-}
-?>
-
-
-
-                
-
-//today or tomorrow or date format
-
-
-function ordinal_suffix_of(i) {
-    var j = i % 10,
-        k = i % 100;
-    if (j == 1 && k != 11) {
-        return i + "st";
-    }
-    if (j == 2 && k != 12) {
-        return i + "nd";
-    }
-    if (j == 3 && k != 13) {
-        return i + "rd";
-    }
-    return i + "th";
-}
-
-var today = new Date().toDateString();
-var tomorrow = new Date();
-var yesterday = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1)
-tomorrow = tomorrow.toDateString();
-yesterday.setDate(yesterday.getDate() - 1)
-yesterday = yesterday.toDateString();
-                
-
-for(var i=0; i<=3; i++){
-    
-var theDate = document.getElementById("thedate"+i).textContent;
-var utcDate = new Date(theDate);
-var date = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000) //local Date
-var date2 = date.toDateString();
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMonth()];
-//let formatted_date = ordinal_suffix_of(date.getDate()) + " " + months[date.getMonth()] + " " + date.getFullYear();
-
-  if(today === date2){
-    document.getElementById("thedate"+i).textContent='today';
-    document.getElementById("next-collection").textContent = "Today's collection: ";
-  }else if(tomorrow === date2){
-    document.getElementById("thedate"+i).textContent='tomorrow';
-    document.getElementById("next-collection").textContent = "Tomorrow's collection: ";
-  }else if(yesterday === date2){
-    document.getElementById("thedate"+i).textContent='yesterday';
-    document.getElementById("next-collection").textContent = "Yesterday's collection: ";
-  }else{
-    document.getElementById("thedate"+i).textContent=formatted_date;
-    //document.getElementById("next-collection").textContent = "Collection this week: ";
-  }
-    
-}
-
-    </script>
-
 
 
 <?php 
     require_once(__ROOT__.'/bins-main/bottom-js.php'); 
-?>
 
-
-<script defer>
-
-document.addEventListener("DOMContentLoaded", function(){
-  AddToHomeScreen({
-  brandName: "Bins.ren/<?php echo $folder_name; ?>",
-  fontFamily: "Helvetica, Arial, sans-serif"
-  });
-});
-
-
-
-
-
-</script>
-
-
-<?php
     require_once(__ROOT__.'/bins-main/unversioned-b.php');
 ?>
 
