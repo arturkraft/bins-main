@@ -1,4 +1,4 @@
 <?php
 
 $url='https://bins.ren/';
-$bin_locations = ['bridgeofweir', 'brookfield', 'brooklands', 'linwood', 'weirswynd'];
+$bin_locations = ['crosslee', 'bridgeofweir', 'brookfield', 'brooklands', 'houston', 'linwood', 'weirswynd'];
