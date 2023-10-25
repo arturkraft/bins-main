@@ -38,6 +38,8 @@ header('Access-Control-Allow-Origin: https://bins.b-cdn.net');
 require_once(__ROOT__.'/bins-main/html-head.php');
 
 
+
+
 //weather cache
 if( !file_exists($weather_file) ) {
     $API_result = weatherAPI($weather_file, $api_location, $api_key);
@@ -88,7 +90,11 @@ echo '<!-- Render view file loaded and bins are sorted -->';
 
 <div id="loading" class="loading">
   <!-- <img id="loading-image" src="path/to/ajax-loader.gif" alt="Loading..." /> -->
-  <h1>Bins.ren/<?php echo $folder_name; ?></h1>
+  <h1>Bins.ren/<?php 
+      
+      echo $folder_name;
+      
+      ?></h1>
 </div>
 
 <div id="content" class="container-lg pb-5" style="padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);">
@@ -149,7 +155,7 @@ if($offline == 1){
             Next collection:
         </h2>
     </div>
-<?php } elseif($i == 1) { ?>
+<?php   } elseif($i == 1) { ?>
     <div class="row">
         <h2>
             Future collections:
@@ -184,7 +190,7 @@ if($offline == 1){
             
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin1 = $exploded[0]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $cdn_img_url.$row_bin1 : $cdn_img_url.$row_bin1; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" alt="<?php echo $row_bin1; ?>">
+                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" class="bin bin<?php echo $row_bin1; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $cdn_img_url . $current_festivity . '/' .$row_bin1 : $cdn_img_url.$row_bin1; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin1] : $cdn_img_url.$row_bin1.'.png'; ?>" alt="<?php echo $row_bin1; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin1; ?>"><?php echo strtoupper($row_bin1); ?></figcaption>
                 </figure>
             </a>
@@ -193,7 +199,7 @@ if($offline == 1){
         <div class="col col-md-auto">
             <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#<?php echo $row_bin2 = $exploded[1]; ?>-modal">
                 <figure class="figure float-end">
-                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $current_festivity . '/' . $cdn_img_url.$row_bin2 : $cdn_img_url.$row_bin2; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" alt="<?php echo $row_bin2; ?>">
+                    <img src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" class="bin bin<?php echo $row_bin2; ?> figure-img img-fluid" data-hover="<?php echo $current_festivity != $festivity[0] ? $cdn_img_url .$current_festivity . '/' .$row_bin2 : $cdn_img_url.$row_bin2; ?>-2.png" data-src="<?php echo ($offline == 1) ? $bins_base64[$row_bin2] : $cdn_img_url.$row_bin2.'.png'; ?>" alt="<?php echo $row_bin2; ?>">
                     <figcaption class="bin figure-caption text-center <?php echo $row_bin2; ?>"><?php echo strtoupper($row_bin2); ?></figcaption>
                 </figure>
             </a>
@@ -210,6 +216,22 @@ if($offline == 1){
             <?php } ?>
             bin out for collection before 7.00am. Collections can take place until 6.30pm.
         </div>
+              <?php 
+      
+                if ($ad == 1){
+              ?>
+                <div>
+                    <div class="alert alert-secondary animated-box in" role="alert">
+                        <h4 class="d-md-none">&#x1F9FC;&#x1FAE7; Sparkling Sundays in Brookfield!</h4>
+                        <h4 class="d-none d-md-block">&#x1FAE7;&#x1F9FC; Sparkling Sundays in Brookfield! &#x1F9FC;&#x1FAE7;</h4><p> Banish grime, embrace freshness! &pound;2.50 per bin. Spotless, fragrant bins guaranteed. Join satisfied neighbours, message <strong style="font-size: 1.2em">A&C Cleaning Services</strong> on <a href="https://www.facebook.com/groups/774532133340547/">Facebook</a>.</p>
+                        
+                        
+                    </div>
+                </div>
+              <?php
+                }
+
+              ?>
         <hr />
         <?php } ?>
     </div>
