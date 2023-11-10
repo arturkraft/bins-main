@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Bins collection day - <?php echo $location_name; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -150,8 +149,8 @@
 <?php
 if ($offline != 1){
     echo '
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous" defer></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://bins.b-cdn.net/bins-main/js/jquery-ui.min.js"></script>';
 } else {
     include_once 'js-top.ini';
@@ -241,7 +240,7 @@ function weatherModalOpened() {
 if ($offline != 1){
     echo '
     <link rel="stylesheet" href="https://bins.b-cdn.net/bins-main/css/jquery-ui.min.css">
-    <link rel="stylesheet" href="https://bins.b-cdn.net/bins-main/css/styling-min.css">';
+    <link rel="stylesheet" href="https://bins.b-cdn.net/bins-main/css/style-min.css">';
 } else {
     include_once 'css-top.ini';
 }
