@@ -130,9 +130,7 @@ var FullCalendar=function(e){"use strict";var t=function(e,n){return(t=Object.se
     <?php
     } else {
     ?>
-        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
-
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
         
         <style>
             h1,
@@ -286,8 +284,8 @@ $('#tabs').tabs({
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
           validRange: {
-            start: '2022-12-01',
-            end: '2023-12-31'
+            start: '2023-01-01',
+            end: '2024-12-31'
           },
           firstDay: 1,
         aspectRatio: 0.9,
@@ -322,16 +320,24 @@ $('#tabs').tabs({
 
                     },
                     {
-                            start: '2022-12-25',
-                            end: '2022-12-25',
+                            start: '2024-10-31',
+                            end: '2024-10-31',
+                            title: 'Halloween',
+                            display: 'block',
+                            color: '#E66C2C'
+
+                    },
+                    {
+                            start: '2023-12-25',
+                            end: '2023-12-25',
                             title: 'Christmas',
                             display: 'block',
                             color: '#C30F16'
 
                     },
                     {
-                            start: '2023-12-25',
-                            end: '2023-12-25',
+                            start: '2024-12-25',
+                            end: '2024-12-25',
                             title: 'Christmas',
                             display: 'block',
                             color: '#C30F16'
@@ -469,6 +475,11 @@ $('#tabs').tabs({
     ?>
     </script>
     
+    
+       <?php
+    if($offline != 1) {
+    ?>
+    
  <script defer>
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -479,3 +490,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 </script>
+
+<?php
+}
+?>
